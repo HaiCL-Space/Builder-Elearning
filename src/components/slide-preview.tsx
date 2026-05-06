@@ -1,6 +1,14 @@
 import { type SlideElement, type ElementAction } from "@broker/core-sdk"
 import React, { useState } from "react"
 import { MOCK_SLIDES } from "../lib/mock-slides"
+import {
+  TextElement,
+  VideoElement,
+  QuizElement,
+  HotspotElement,
+  SortingElement,
+  MatchingElement,
+} from "./elements"
 
 const SlidePreviewApp = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
@@ -74,6 +82,7 @@ const SlidePreviewApp = () => {
   return (
     <div
       style={{
+        width: "100%",
         maxWidth: "1024px",
         margin: "0 auto",
         padding: "20px",
@@ -181,189 +190,56 @@ const ElementRenderer = ({
   switch (element.type) {
     case "TEXT":
       return (
-        <div style={baseStyle} onClick={handleClick}>
-          {element.data.content}
-        </div>
+        <TextElement
+          element={element}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
       )
 
     case "VIDEO":
       return (
-        <div
-          style={{
-            ...baseStyle,
-            backgroundColor: "#000",
-            color: "#fff",
-            alignItems: "center",
-          }}
-          onClick={handleClick}
-        >
-          <span>🎥 Video: {element.data.src}</span>
-        </div>
+        <VideoElement
+          element={element}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
       )
 
     case "QUIZ":
       return (
-        <div
-          style={{
-            ...baseStyle,
-            backgroundColor: "#fff",
-            padding: "16px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-          }}
-          onClick={handleClick}
-        >
-          <h3 style={{ marginTop: 0 }}>{element.data.question}</h3>
-          {element.data.options.map((opt) => (
-            <div
-              key={opt.id}
-              style={{
-                marginBottom: "8px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <input
-                type="radio"
-                name={element.id}
-                id={opt.id}
-                style={{ cursor: "pointer" }}
-              />
-              <label
-                htmlFor={opt.id}
-                style={{ marginLeft: "8px", cursor: "pointer", flex: 1 }}
-              >
-                {opt.content}
-              </label>
-            </div>
-          ))}
-        </div>
+        <QuizElement
+          element={element}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
       )
 
     case "HOTSPOT":
       return (
-        <div
-          style={{
-            ...baseStyle,
-            backgroundImage: `url(${element.data.imageUri})`,
-            backgroundSize: "cover",
-            border: "2px dashed #007bff",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              top: "10px",
-              left: "10px",
-              backgroundColor: "rgba(255,255,255,0.8)",
-              padding: "4px",
-            }}
-          >
-            👆 Vùng Hotspot
-          </div>
-          {element.data.zones.map((zone) => (
-            <div
-              key={zone.id}
-              onClick={handleClick} // Gắn action vào các vùng zone
-              style={{
-                position: "absolute",
-                left: `${zone.xMin}%`,
-                top: `${zone.yMin}%`,
-                width: `${zone.xMax - zone.xMin}%`,
-                height: `${zone.yMax - zone.yMin}%`,
-                backgroundColor: "rgba(255, 0, 0, 0.3)",
-                cursor: "pointer",
-                border: "1px solid red",
-              }}
-              title={`Zone: ${zone.id}`}
-            />
-          ))}
-        </div>
+        <HotspotElement
+          element={element}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
       )
 
     case "SORTING":
       return (
-        <div
-          style={{
-            ...baseStyle,
-            backgroundColor: "#e9ecef",
-            padding: "16px",
-            borderRadius: "8px",
-          }}
-          onClick={handleClick}
-        >
-          {element.data.items.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                padding: "12px",
-                margin: "8px 0",
-                backgroundColor: "#fff",
-                border: "1px solid #ccc",
-                cursor: "grab",
-              }}
-            >
-              ↕️ {item.content}
-            </div>
-          ))}
-        </div>
+        <SortingElement
+          element={element}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
       )
 
     case "MATCHING":
       return (
-        <div
-          style={{
-            ...baseStyle,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-          onClick={handleClick}
-        >
-          <div
-            style={{
-              width: "45%",
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-            }}
-          >
-            {element.data.leftColumn.map((item) => (
-              <div
-                key={item.id}
-                style={{
-                  padding: "16px",
-                  backgroundColor: "#e3f2fd",
-                  border: "1px solid #90caf9",
-                  textAlign: "center",
-                }}
-              >
-                {item.content}
-              </div>
-            ))}
-          </div>
-          <div
-            style={{
-              width: "45%",
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-            }}
-          >
-            {element.data.rightColumn.map((item) => (
-              <div
-                key={item.id}
-                style={{
-                  padding: "16px",
-                  backgroundColor: "#fce4ec",
-                  border: "1px solid #f48fb1",
-                  textAlign: "center",
-                }}
-              >
-                {item.content}
-              </div>
-            ))}
-          </div>
-        </div>
+        <MatchingElement
+          element={element}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
       )
 
     default:
