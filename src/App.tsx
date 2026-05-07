@@ -1,11 +1,7 @@
-import SlidePreviewApp from "./components/slide-preview"
+import SlideBuilder from "./components/builder"
 
 export function App() {
-  return (
-    // Thêm w-full để báo cho flexbox biết hãy bung rộng 100% màn hình
-    <div className="flex min-h-svh w-full flex-col bg-gray-100 p-6">
-      <SlidePreviewApp />
-    </div>
-  )
+  return <SlideBuilder />
 }
+
 export default App

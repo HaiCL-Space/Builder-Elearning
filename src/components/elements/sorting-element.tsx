@@ -59,7 +59,7 @@ const SortingElement: React.FC<SortingElementProps> = ({
     e.stopPropagation() // Avoid triggering parent onClick actions
     const correctOrder = element.data.correctOrder
     const currentOrder = items.map((item) => item.id)
-    
+
     // Check if every item's ID is in the correct position
     const correct = currentOrder.every((id, idx) => id === correctOrder[idx])
     setIsCorrect(correct)
@@ -103,7 +103,14 @@ const SortingElement: React.FC<SortingElementProps> = ({
       }}
       onClick={handleClick}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          flex: 1,
+        }}
+      >
         {items.map((item, index) => {
           const isDragging = draggedIndex === index
           return (
@@ -128,7 +135,7 @@ const SortingElement: React.FC<SortingElementProps> = ({
                 transition: "transform 0.15s ease, opacity 0.15s ease",
                 opacity: isDragging ? 0.5 : 1,
               }}
-              className="hover:border-zinc-400 hover:shadow-md group"
+              className="group hover:border-zinc-400 hover:shadow-md"
             >
               {/* Grip Icon */}
               <GripVertical
@@ -203,19 +210,30 @@ const SortingElement: React.FC<SortingElementProps> = ({
           >
             {isCorrect ? (
               <>
-                <CheckCircle2 style={{ height: "18px", width: "18px", flexShrink: 0 }} />
-                <span>Tuyệt vời! Bạn đã sắp xếp đúng thứ tự trình tự thời gian.</span>
+                <CheckCircle2
+                  style={{ height: "18px", width: "18px", flexShrink: 0 }}
+                />
+                <span>
+                  Tuyệt vời! Bạn đã sắp xếp đúng thứ tự trình tự thời gian.
+                </span>
               </>
             ) : (
               <>
-                <XCircle style={{ height: "18px", width: "18px", flexShrink: 0 }} />
-                <span>Chưa đúng rồi! Bạn hãy kéo thả để hoán đổi vị trí và thử lại nhé.</span>
+                <XCircle
+                  style={{ height: "18px", width: "18px", flexShrink: 0 }}
+                />
+                <span>
+                  Chưa đúng rồi! Bạn hãy kéo thả để hoán đổi vị trí và thử lại
+                  nhé.
+                </span>
               </>
             )}
           </div>
         )}
 
-        <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+        <div
+          style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}
+        >
           {hasChecked && !isCorrect && (
             <Button
               variant="outline"
@@ -228,7 +246,9 @@ const SortingElement: React.FC<SortingElementProps> = ({
               }}
               className="hover:bg-red-50"
             >
-              <RefreshCw style={{ height: "14px", width: "14px", marginRight: "4px" }} />
+              <RefreshCw
+                style={{ height: "14px", width: "14px", marginRight: "4px" }}
+              />
               Làm lại
             </Button>
           )}
