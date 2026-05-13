@@ -1,7 +1,8 @@
-import React from "react"
+import type React from "react"
 import type { BuilderElement } from "./types"
 import type { HotspotZone } from "./canvas/types"
 import { CanvasElement, CanvasGridOverlay, CanvasHeader } from "./canvas/index"
+import type { ElementAction } from "@broker/core-sdk"
 
 export function Canvas({
   canvasRef,
@@ -18,6 +19,9 @@ export function Canvas({
   onHotspotZoneMouseDown,
   onDeleteElement,
   onResizeMouseDown,
+  isInteractiveMode,
+  onToggleMode,
+  onAction,
 }: {
   canvasRef: React.RefObject<HTMLDivElement | null>
   currentSlideOrder: number
@@ -41,6 +45,9 @@ export function Canvas({
     element: BuilderElement,
     handle: string
   ) => void
+  isInteractiveMode: boolean
+  onToggleMode: (interactive: boolean) => void
+  onAction?: (action: ElementAction) => void
 }) {
   return (
     <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-slate-100 p-6">
@@ -51,6 +58,8 @@ export function Canvas({
         canNext={canNext}
         onPrev={onPrev}
         onNext={onNext}
+        isInteractiveMode={isInteractiveMode}
+        onToggleMode={onToggleMode}
       />
 
       <div
@@ -58,22 +67,25 @@ export function Canvas({
         data-canvas="true"
         className="relative w-full max-w-5xl overflow-hidden rounded-lg border border-slate-300 bg-white shadow-xl"
         style={{ aspectRatio: "16/9" }}
-        onMouseDown={onCanvasMouseDown}
+        onMouseDown={!isInteractiveMode ? onCanvasMouseDown : undefined}
       >
-        <CanvasGridOverlay />
+        {!isInteractiveMode && <CanvasGridOverlay />}
 
         {elements.map((element) => (
           <CanvasElement
             key={element.id}
             element={element}
-            isSelected={selectedElementId === element.id}
+            isSelected={!isInteractiveMode && selectedElementId === element.id}
             onElementMouseDown={onElementMouseDown}
             onHotspotZoneMouseDown={onHotspotZoneMouseDown}
             onDeleteElement={onDeleteElement}
             onResizeMouseDown={onResizeMouseDown}
+            isInteractiveMode={isInteractiveMode}
+            onAction={onAction}
           />
         ))}
       </div>
     </main>
   )
 }
+export default Canvas

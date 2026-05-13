@@ -1,4 +1,4 @@
-import React from "react"
+import type React from "react"
 import type { BuilderElement } from "../types"
 import { ElementPreview } from "../ElementPreview"
 import { DeleteButton } from "./DeleteButton"
@@ -6,6 +6,15 @@ import { ElementTypeBadge } from "./ElementTypeBadge"
 import { HotspotZonesLayer } from "./HotspotZonesLayer"
 import { ResizeHandles } from "./ResizeHandles"
 import type { HotspotZone } from "./types"
+import {
+  TextElement,
+  VideoElement,
+  QuizElement,
+  HotspotElement,
+  SortingElement,
+  MatchingElement,
+} from "../../elements"
+import type { ElementAction } from "@broker/core-sdk"
 
 export function CanvasElement({
   element,
@@ -14,6 +23,8 @@ export function CanvasElement({
   onHotspotZoneMouseDown,
   onDeleteElement,
   onResizeMouseDown,
+  isInteractiveMode,
+  onAction,
 }: {
   element: BuilderElement
   isSelected: boolean
@@ -29,6 +40,8 @@ export function CanvasElement({
     element: BuilderElement,
     handle: string
   ) => void
+  isInteractiveMode: boolean
+  onAction?: (action: ElementAction) => void
 }) {
   const pos = element.position
   const baseStyle: React.CSSProperties = {
@@ -47,20 +60,90 @@ export function CanvasElement({
       | HotspotZone[]
       | undefined) || []
 
+  const handleElementClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (element.actions) {
+      const clickActions = element.actions.filter((a) => a.trigger === "ON_CLICK")
+      clickActions.forEach((action) => onAction?.(action))
+    }
+  }
+
+  const innerWrapperStyle: React.CSSProperties = {
+    width: "100%",
+    height: "100%",
+    position: "relative",
+    boxSizing: "border-box",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  }
+
   return (
     <div
       style={baseStyle}
-      className={`group cursor-move ${
-        isSelected ? "ring-2 ring-blue-500" : "hover:ring-1 hover:ring-blue-300"
-      }`}
-      onMouseDown={(e) => onElementMouseDown(e, element)}
+      className={`group ${
+        isInteractiveMode
+          ? ""
+          : isSelected
+          ? "ring-2 ring-blue-500 shadow-lg"
+          : "cursor-move hover:ring-1 hover:ring-blue-300"
+      } transition-shadow duration-150`}
+      onMouseDown={!isInteractiveMode ? (e) => onElementMouseDown(e, element) : undefined}
     >
-      <div className="pointer-events-none flex h-full w-full items-center justify-center overflow-hidden">
-        <ElementPreview element={element} />
-      </div>
+      {/* Conditionally render preview OR interactive element */}
+      {isInteractiveMode ? (
+        <div className="h-full w-full">
+          {element.type === "TEXT" && (
+            <TextElement
+              element={element as Extract<BuilderElement, { type: "TEXT" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "VIDEO" && (
+            <VideoElement
+              element={element as Extract<BuilderElement, { type: "VIDEO" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "QUIZ" && (
+            <QuizElement
+              element={element as Extract<BuilderElement, { type: "QUIZ" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "HOTSPOT" && (
+            <HotspotElement
+              element={element as Extract<BuilderElement, { type: "HOTSPOT" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "SORTING" && (
+            <SortingElement
+              element={element as Extract<BuilderElement, { type: "SORTING" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "MATCHING" && (
+            <MatchingElement
+              element={element as Extract<BuilderElement, { type: "MATCHING" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+        </div>
+      ) : (
+        <div className="pointer-events-none flex h-full w-full items-center justify-center overflow-hidden">
+          <ElementPreview element={element} />
+        </div>
+      )}
 
-      {/* interactive zones for HOTSPOT (drag/drop) */}
-      {isSelected && element.type === "HOTSPOT" && (
+      {/* interactive zones for HOTSPOT (drag/drop) in Edit mode only */}
+      {!isInteractiveMode && isSelected && element.type === "HOTSPOT" && (
         <HotspotZonesLayer
           element={element}
           zones={zones}
@@ -68,9 +151,20 @@ export function CanvasElement({
         />
       )}
 
-      <ElementTypeBadge type={String(element.type)} />
+      {/* badge on Edit mode only */}
+      {!isInteractiveMode && <ElementTypeBadge type={String(element.type)} />}
 
-      {isSelected && (
+      {/* Lightning indicator on Edit mode if has actions */}
+      {!isInteractiveMode && element.actions && element.actions.length > 0 && (
+        <div
+          title="Có liên kết sự kiện tương tác (Action)"
+          className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white shadow-xs animate-bounce"
+        >
+          ⚡
+        </div>
+      )}
+
+      {!isInteractiveMode && isSelected && (
         <>
           <DeleteButton onDelete={() => onDeleteElement(element.id)} />
           <ResizeHandles
@@ -81,3 +175,4 @@ export function CanvasElement({
     </div>
   )
 }
+export default CanvasElement
