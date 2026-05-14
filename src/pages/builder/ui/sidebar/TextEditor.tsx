@@ -30,7 +30,7 @@ export function TextEditor({
         }
         onChange={(v) => onUpdateData({ content: v })}
       />
-      <div className="grid grid-cols-2 gap-2 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
+      <div className="grid grid-cols-2 gap-3.5 bg-slate-50/50 p-3 rounded-lg border border-slate-100 items-start">
         <NumberField
           label="Cỡ chữ (px)"
           value={Number(
@@ -60,6 +60,7 @@ export function TextEditor({
             )?.backgroundColor as string) || "#ffffff"
           }
           onChange={(v) => onUpdateStyle({ backgroundColor: v })}
+          showAlpha={true}
         />
         <NumberField
           label="Border radius"

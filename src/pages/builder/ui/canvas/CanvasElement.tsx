@@ -50,7 +50,6 @@ export function CanvasElement({
     top: `${pos.y}%`,
     width: `${pos.w}%`,
     height: `${pos.h}%`,
-    overflow: "hidden",
     boxSizing: "border-box",
     ...element.style,
   }
@@ -92,7 +91,7 @@ export function CanvasElement({
     >
       {/* Conditionally render preview OR interactive element */}
       {isInteractiveMode ? (
-        <div className="h-full w-full">
+        <div className="h-full w-full overflow-hidden">
           {element.type === "TEXT" && (
             <TextElement
               element={element as Extract<BuilderElement, { type: "TEXT" }>}
