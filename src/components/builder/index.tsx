@@ -1,12 +1,10 @@
-import React, { useState, useRef, useCallback } from "react"
+import React, { useRef } from "react"
 import type { BuilderElement } from "./types"
-import { MOCK_SLIDES } from "../../lib/mock-slides"
-import { ELEMENT_TEMPLATES } from "./templates"
-import { uid } from "./utils"
 import { LeftSidebar } from "./LeftSidebar"
 import { Canvas } from "./Canvas"
 import { RightSidebar } from "./RightSidebar"
 import { learningEngine, gameEngine } from "@broker/core-sdk"
+import { useBuilderStore } from "./useBuilderStore"
 
 import type { Slide, ElementAction, MultipleChoiceData } from "@broker/core-sdk"
 
@@ -20,204 +18,50 @@ interface HotspotZone {
 }
 
 export function SlideBuilder() {
-  const [slides, setSlides] = useState<Slide[]>(() =>
-    JSON.parse(JSON.stringify(MOCK_SLIDES))
-  )
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+  const slides = useBuilderStore((state) => state.slides)
+  const currentSlideIndex = useBuilderStore((state) => state.currentSlideIndex)
   const currentSlide = slides[currentSlideIndex]
 
-  const [selectedElementId, setSelectedElementId] = useState<string | null>(null)
+  const selectedElementId = useBuilderStore((state) => state.selectedElementId)
   const selectedElement =
     currentSlide.elements.find((e: BuilderElement) => e.id === selectedElementId) || null
 
-  const [isInteractiveMode, setIsInteractiveMode] = useState(false)
-  const [guidelines, setGuidelines] = useState<{ x?: number; y?: number } | null>(null)
-  const [activeTooltip, setActiveTooltip] = useState<{
-    x: number
-    y: number
-    w: number
-    h: number
-  } | null>(null)
+  const isInteractiveMode = useBuilderStore((state) => state.isInteractiveMode)
+  const guidelines = useBuilderStore((state) => state.guidelines)
+  const activeTooltip = useBuilderStore((state) => state.activeTooltip)
 
-  const [draggingId, setDraggingId] = useState<string | null>(null)
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
-  const [resizing, setResizing] = useState<{
-    id: string
-    handle: string
-  } | null>(null)
+  const draggingId = useBuilderStore((state) => state.draggingId)
+  const dragOffset = useBuilderStore((state) => state.dragOffset)
+  const resizing = useBuilderStore((state) => state.resizing)
+  const draggingZone = useBuilderStore((state) => state.draggingZone)
 
-  const [draggingZone, setDraggingZone] = useState<{
-    elementId: string
-    zoneId: string
-    offsetX: number
-    offsetY: number
-  } | null>(null)
+  // Actions from Zustand store
+  const setCurrentSlideIndex = useBuilderStore((state) => state.setCurrentSlideIndex)
+  const setSelectedElementId = useBuilderStore((state) => state.setSelectedElementId)
+  const setGuidelines = useBuilderStore((state) => state.setGuidelines)
+  const setActiveTooltip = useBuilderStore((state) => state.setActiveTooltip)
+  const setDraggingId = useBuilderStore((state) => state.setDraggingId)
+  const setDragOffset = useBuilderStore((state) => state.setDragOffset)
+  const setResizing = useBuilderStore((state) => state.setResizing)
+  const setDraggingZone = useBuilderStore((state) => state.setDraggingZone)
+
+  const updateElement = useBuilderStore((state) => state.updateElement)
+  const updateSelectedPosition = useBuilderStore((state) => state.updateSelectedPosition)
+  const updateSelectedStyle = useBuilderStore((state) => state.updateSelectedStyle)
+  const updateSelectedData = useBuilderStore((state) => state.updateSelectedData)
+  const updateSelectedActions = useBuilderStore((state) => state.updateSelectedActions)
+  const updateSelectedAnimations = useBuilderStore((state) => state.updateSelectedAnimations)
+
+  const handleAddElement = useBuilderStore((state) => state.handleAddElement)
+  const handleDeleteElement = useBuilderStore((state) => state.handleDeleteElement)
+  const handleSelectSlide = useBuilderStore((state) => state.handleSelectSlide)
+  const handleAddSlide = useBuilderStore((state) => state.handleAddSlide)
+  const handleDeleteSlide = useBuilderStore((state) => state.handleDeleteSlide)
+  const handleDuplicateSlide = useBuilderStore((state) => state.handleDuplicateSlide)
+  const handleMoveSlide = useBuilderStore((state) => state.handleMoveSlide)
+  const handleToggleMode = useBuilderStore((state) => state.handleToggleMode)
 
   const canvasRef = useRef<HTMLDivElement>(null)
-
-  const updateElement = useCallback(
-    (
-      slideIndex: number,
-      elementId: string,
-      updater: (el: BuilderElement) => BuilderElement
-    ) => {
-      setSlides((prev) =>
-        prev.map((slide, idx) =>
-          idx === slideIndex
-            ? {
-                ...slide,
-                elements: slide.elements.map((el: BuilderElement) =>
-                  el.id === elementId ? updater(el) : el
-                ),
-              }
-            : slide
-        )
-      )
-    },
-    []
-  )
-
-  const updateSelectedPosition = (patch: Partial<BuilderElement["position"]>) => {
-    if (!selectedElementId) return
-    updateElement(currentSlideIndex, selectedElementId, (el) => ({
-      ...el,
-      position: { ...el.position, ...patch } as BuilderElement["position"],
-    }))
-  }
-
-  const updateSelectedStyle = (patch: Record<string, unknown>) => {
-    if (!selectedElementId) return
-    updateElement(currentSlideIndex, selectedElementId, (el) => ({
-      ...el,
-      style: { ...el.style, ...patch },
-    }))
-  }
-
-  const updateSelectedData = (patch: Record<string, unknown>) => {
-    if (!selectedElementId) return
-    updateElement(currentSlideIndex, selectedElementId, (el) => ({
-      ...el,
-      data: { ...el.data, ...patch },
-    }))
-  }
-
-  const updateSelectedActions = (actions: ElementAction[]) => {
-    if (!selectedElementId) return
-    updateElement(currentSlideIndex, selectedElementId, (el) => ({
-      ...el,
-      actions,
-    }))
-  }
-
-  const updateSelectedAnimations = (patch: { enterAnimation?: BuilderElement["enterAnimation"]; exitAnimation?: BuilderElement["exitAnimation"] }) => {
-    if (!selectedElementId) return
-    updateElement(currentSlideIndex, selectedElementId, (el) => ({
-      ...el,
-      ...patch,
-    }))
-  }
-
-  const handleAddElement = (type: string) => {
-    const template = ELEMENT_TEMPLATES[type]
-    if (!template) return
-    const newEl = {
-      id: `el-${uid()}`,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      type: type as any,
-      position: { x: 20, y: 20, w: 35, h: 25 },
-      style: {
-        borderRadius: 8,
-      },
-      data: {},
-      ...template,
-    } as BuilderElement
-
-    setSlides((prev) =>
-      prev.map((slide, idx) =>
-        idx === currentSlideIndex
-          ? { ...slide, elements: [...slide.elements, newEl] }
-          : slide
-      )
-    )
-    setSelectedElementId(newEl.id)
-  }
-
-  const handleDeleteElement = (id: string) => {
-    setSlides((prev) =>
-      prev.map((slide, idx) =>
-        idx === currentSlideIndex
-          ? { ...slide, elements: slide.elements.filter((e: BuilderElement) => e.id !== id) }
-          : slide
-      )
-    )
-    if (selectedElementId === id) setSelectedElementId(null)
-  }
-
-  /* ==========================================
-     SLIDE MANAGEMENT HANDLERS
-     ========================================== */
-  const handleSelectSlide = (index: number) => {
-    setCurrentSlideIndex(index)
-    setSelectedElementId(null)
-  }
-
-  const handleAddSlide = () => {
-    const nextSlide = {
-      id: `slide-${uid()}`,
-      tenant_id: "tenant-demo",
-      course_id: "course-demo",
-      order: slides.length + 1,
-      elements: [],
-      config: { aspectRatio: "16:9", theme: "light" as const },
-    }
-    setSlides((prev) => [...prev, nextSlide])
-    setCurrentSlideIndex(slides.length)
-    setSelectedElementId(null)
-  }
-
-  const handleDeleteSlide = (index: number) => {
-    if (slides.length <= 1) return
-    setSlides((prev) => prev.filter((_, idx) => idx !== index))
-    if (currentSlideIndex >= index) {
-      setCurrentSlideIndex((prev) => Math.max(0, prev - 1))
-    }
-    setSelectedElementId(null)
-  }
-
-  const handleDuplicateSlide = (index: number) => {
-    const original = slides[index]
-    const cloned = JSON.parse(JSON.stringify(original))
-    cloned.id = `slide-${uid()}`
-    cloned.elements = (cloned.elements as BuilderElement[]).map((el: BuilderElement) => ({
-      ...el,
-      id: `el-${uid()}`,
-    }))
-    setSlides((prev) => {
-      const next = [...prev]
-      next.splice(index + 1, 0, cloned)
-      return next.map((s, idx) => ({ ...s, order: idx + 1 }))
-    })
-    setCurrentSlideIndex(index + 1)
-    setSelectedElementId(null)
-  }
-
-  const handleMoveSlide = (index: number, direction: "up" | "down") => {
-    const targetIdx = direction === "up" ? index - 1 : index + 1
-    if (targetIdx < 0 || targetIdx >= slides.length) return
-    setSlides((prev) => {
-      const next = [...prev]
-      const temp = next[index]
-      next[index] = next[targetIdx]
-      next[targetIdx] = temp
-      return next.map((s, idx) => ({ ...s, order: idx + 1 }))
-    })
-    setCurrentSlideIndex(targetIdx)
-  }
-
-  const handleToggleMode = (interactive: boolean) => {
-    setIsInteractiveMode(interactive)
-    setSelectedElementId(null)
-  }
 
   /* ==========================================
      COORDINATES & MOUSE EVENTS WITH SNAPPING
