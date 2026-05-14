@@ -1,7 +1,7 @@
-import SlideBuilder from "./components/builder"
+import { BuilderPage } from "./pages/builder"
 
 export function App() {
-  return <SlideBuilder />
+  return <BuilderPage />
 }
 
 export default App

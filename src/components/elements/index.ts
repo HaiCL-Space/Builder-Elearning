@@ -1,6 +1,0 @@
-export { default as TextElement } from "./text-element"
-export { default as VideoElement } from "./video-element"
-export { default as QuizElement } from "./quiz-element"
-export { default as HotspotElement } from "./hotspot-element"
-export { default as SortingElement } from "./sorting-element"
-export { default as MatchingElement } from "./matching-element"
