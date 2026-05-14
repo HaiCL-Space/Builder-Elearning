@@ -59,11 +59,17 @@ export function CanvasElement({
       | HotspotZone[]
       | undefined) || []
 
-  const handleElementClick = (e: React.MouseEvent) => {
+  const handleElementClick = (e: React.MouseEvent, userAnswer?: string) => {
     e.stopPropagation()
     if (element.actions) {
       const clickActions = element.actions.filter((a) => a.trigger === "ON_CLICK")
-      clickActions.forEach((action) => onAction?.(action))
+      clickActions.forEach((action) => {
+        // Nếu là Hotspot, truyền thêm userAnswer vào payload để SlideBuilder xử lý
+        const actionWithAnswer = userAnswer
+          ? { ...action, payload: { ...action.payload, userAnswer } }
+          : action
+        onAction?.(actionWithAnswer as ElementAction)
+      })
     }
   }
 

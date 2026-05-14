@@ -4,7 +4,7 @@ import React from "react"
 interface HotspotElementProps {
   element: Extract<SlideElement, { type: "HOTSPOT" }>
   baseStyle: React.CSSProperties
-  handleClick: (e: React.MouseEvent) => void
+  handleClick: (e: React.MouseEvent, zoneId?: string) => void
 }
 
 const HotspotElement: React.FC<HotspotElementProps> = ({
@@ -12,6 +12,8 @@ const HotspotElement: React.FC<HotspotElementProps> = ({
   baseStyle,
   handleClick,
 }) => {
+  const zones = element.data.zones || []
+
   return (
     <div
       style={{
@@ -28,14 +30,15 @@ const HotspotElement: React.FC<HotspotElementProps> = ({
           left: "10px",
           backgroundColor: "rgba(255,255,255,0.8)",
           padding: "4px",
+          pointerEvents: "none",
         }}
       >
         👆 Vùng Hotspot
       </div>
-      {element.data.zones.map((zone) => (
+      {zones.map((zone) => (
         <div
           key={zone.id}
-          onClick={handleClick} // Gắn action vào các vùng zone
+          onClick={(e) => handleClick(e, zone.id)} // Truyền zone.id khi click
           style={{
             position: "absolute",
             left: `${zone.xMin}%`,
