@@ -66,10 +66,10 @@ export function useActionRunner() {
       let userAnswerDesc = ""
 
       if (targetEl.type === "QUIZ") {
-        const selectedRadio = document.querySelector(
-          `input[name="${targetId}"]:checked`
-        ) as HTMLInputElement
-        const userAnswer = selectedRadio ? selectedRadio.value : null
+        const selectedItem = document.querySelector(
+          `[data-quiz-id="${targetId}"] [data-state="checked"]`
+        ) as HTMLButtonElement | null
+        const userAnswer = selectedItem?.value || null
 
         if (!userAnswer) {
           alert("Vui lòng chọn một phương án trả lời trước khi kiểm tra!")

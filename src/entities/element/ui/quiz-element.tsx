@@ -38,7 +38,7 @@ const QuizElement: React.FC<QuizElementProps> = ({
       >
         {element.data.question}
       </h3>
-      <RadioGroup name={element.id}>
+      <RadioGroup name={element.id} data-quiz-id={element.id}>
         {element.data.options.map((opt) => (
           <div
             key={opt.id}
