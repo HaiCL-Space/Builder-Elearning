@@ -33,8 +33,10 @@ export const MOCK_SLIDES: Slide[] = [
         style: { borderRadius: 8, border: "2px solid #ccc" },
         enterAnimation: { type: "fade-in", duration: 800, delay: 300 },
         data: {
-          src: "https://example.com/videos/intro.mp4",
-          poster: "https://example.com/images/poster.jpg",
+          src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+          poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
+          autoPlay: false,
+          muted: false,
         },
       },
       {
@@ -235,6 +237,44 @@ export const MOCK_SLIDES: Slide[] = [
             ["en-2", "vi-3"],
             ["en-3", "vi-1"],
           ],
+        },
+      }
+    ]
+  },
+  {
+    id: "slide-live-006",
+    tenant_id: "tenant-abc",
+    course_id: "course-101",
+    order: 6,
+    elements: [
+      {
+        id: "el-text-live-title",
+        type: "TEXT",
+        position: { x: 10, y: 5, w: 80, h: 10 },
+        style: { fontSize: 24, fontWeight: "bold", textAlign: "center", color: "#e11d48" },
+        data: {
+          content: "🔴 PHÁT TRỰC TIẾP TỪ YOUTUBE",
+        },
+      },
+      {
+        id: "el-video-live",
+        type: "VIDEO",
+        position: { x: 10, y: 20, w: 80, h: 60 },
+        style: { borderRadius: 12, border: "4px solid #e11d48", boxShadow: "0 10px 25px -5px rgba(225, 29, 72, 0.3)" },
+        data: {
+          src: "https://www.youtube.com/watch?v=jfKfPfyJRdk", // Sample Lo-fi live (usually)
+          isLive: true,
+          autoPlay: true,
+          muted: true,
+        },
+      },
+      {
+        id: "el-text-live-desc",
+        type: "TEXT",
+        position: { x: 20, y: 85, w: 60, h: 10 },
+        style: { textAlign: "center", fontSize: 14, color: "#64748b" },
+        data: {
+          content: "Nhấn vào video để xem luồng trực tiếp đang diễn ra.",
         },
       },
     ],

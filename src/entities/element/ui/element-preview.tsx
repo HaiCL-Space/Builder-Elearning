@@ -1,4 +1,5 @@
 import type { BuilderElement } from "@/pages/builder/model/types"
+import { type VideoData } from "@broker/core-sdk"
 import {
   HelpCircle,
   MousePointerClick,
@@ -57,7 +58,7 @@ export function ElementPreview({ element }: { element: BuilderElement }) {
       )
 
     case "VIDEO": {
-      const data = element.data as { src?: string; poster?: string }
+      const data = element.data as VideoData
       const src = data.src || ""
       const poster = data.poster || ""
       return (
