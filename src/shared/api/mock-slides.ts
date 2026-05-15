@@ -238,7 +238,36 @@ export const MOCK_SLIDES: Slide[] = [
             ["en-3", "vi-1"],
           ],
         },
-      }
+      },
+      {
+        id: "el-btn-submit-matching",
+        type: "TEXT",
+        position: { x: 40, y: 90, w: 20, h: 8 },
+        style: {
+          backgroundColor: "#8b5cf6",
+          color: "#FFF",
+          textAlign: "center",
+          borderRadius: 8,
+          fontSize: 14,
+          fontWeight: "bold",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        },
+        data: {
+          content: "Kiểm tra kết quả",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.EVALUATE_ANSWER,
+            payload: {
+              targetElementId: "el-matching-vocab",
+              conceptId: "concept-vocab-en",
+            },
+          },
+        ],
+      },
     ]
   },
   {

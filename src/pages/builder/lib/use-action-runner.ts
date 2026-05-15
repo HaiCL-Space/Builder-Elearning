@@ -100,8 +100,27 @@ export function useActionRunner() {
         isCorrect = true
         userAnswerDesc = "Sắp xếp mốc thời gian lịch sử"
       } else if (targetEl.type === "MATCHING") {
-        isCorrect = true
-        userAnswerDesc = "Các liên kết cặp từ ghép"
+        const matchingEl = document.querySelector(`[data-matching-id="${targetId}"]`)
+        const userMatchesRaw = matchingEl?.getAttribute("data-user-matches")
+        const userMatches: [string, string][] = userMatchesRaw ? JSON.parse(userMatchesRaw) : []
+        
+        const matchingData = targetEl.data as unknown as {
+          leftColumn: { id: string; content: string }[]
+          rightColumn: { id: string; content: string }[]
+          correctPairs: [string, string][]
+        }
+
+        if (userMatches.length < matchingData.leftColumn.length) {
+          alert("Vui lòng nối tất cả các cặp từ trước khi kiểm tra!")
+          return
+        }
+
+        // Check if all user matches are in correctPairs
+        isCorrect = userMatches.every(([uL, uR]) => 
+          matchingData.correctPairs.some(([cL, cR]) => cL === uL && cR === uR)
+        )
+        
+        userAnswerDesc = `Đã nối ${userMatches.length} cặp từ`
       } else {
         isCorrect = true
         userAnswerDesc = "Trả lời tự do"

@@ -73,7 +73,7 @@ export function Canvas({
 
         {elements.map((element) => (
           <CanvasElement
-            key={element.id}
+            key={`${element.id}-${isInteractiveMode}`}
             element={element}
             isSelected={!isInteractiveMode && selectedElementId === element.id}
             onElementMouseDown={onElementMouseDown}
