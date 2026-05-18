@@ -1,4 +1,7 @@
 import type React from "react"
+import { useEffect } from "react"
+import { motion, useAnimation, type TargetAndTransition } from "framer-motion"
+import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 import type { BuilderElement } from "@/pages/builder/model/types"
 import { ElementPreview } from "@/entities/element/ui/element-preview"
 import { DeleteButton } from "./DeleteButton"
@@ -15,6 +18,39 @@ import {
   MatchingElement,
 } from "@/entities/element"
 import type { ElementAction } from "@broker/core-sdk"
+
+type AnimationConfig = NonNullable<BuilderElement["enterAnimation"]> | NonNullable<BuilderElement["exitAnimation"]>
+
+const getAnimationVariants = (
+  anim: AnimationConfig | undefined,
+  isEnter: boolean
+): { initial?: TargetAndTransition; animate?: TargetAndTransition; exit?: TargetAndTransition } | undefined => {
+  if (!anim) return undefined
+  const duration = (anim.duration || 500) / 1000
+  const delay = (anim.delay || 0) / 1000
+
+  if (isEnter) {
+    switch (anim.type) {
+      case "fade-in": return { initial: { opacity: 0 }, animate: { opacity: 1, transition: { duration, delay } } }
+      case "slide-up": return { initial: { opacity: 0, y: 50 }, animate: { opacity: 1, y: 0, transition: { duration, delay } } }
+      case "zoom-in": return { initial: { opacity: 0, scale: 0.5 }, animate: { opacity: 1, scale: 1, transition: { duration, delay } } }
+      case "bounce": return {
+        initial: { y: "-25%" },
+        animate: { y: ["-25%", "0%", "-10%", "0%"], transition: { duration, delay, times: [0, 0.5, 0.75, 1], ease: "easeInOut" } }
+      }
+    }
+  } else {
+    switch (anim.type) {
+      case "fade-in": return { exit: { opacity: 0, transition: { duration, delay } } }
+      case "slide-up": return { exit: { opacity: 0, y: 50, transition: { duration, delay } } }
+      case "zoom-in": return { exit: { opacity: 0, scale: 0.5, transition: { duration, delay } } }
+      case "bounce": return {
+        exit: { y: ["0%", "-10%", "0%", "25%"], opacity: [1, 1, 1, 0], transition: { duration, delay, times: [0, 0.25, 0.5, 1], ease: "easeInOut" } }
+      }
+    }
+  }
+  return undefined
+}
 
 export function CanvasElement({
   element,
@@ -43,6 +79,31 @@ export function CanvasElement({
   isInteractiveMode: boolean
   onAction?: (action: ElementAction) => void
 }) {
+  const controls = useAnimation()
+  const testAnimationElementId = useBuilderStore((s) => s.testAnimationElementId)
+  const testAnimationKey = useBuilderStore((s) => s.testAnimationKey)
+
+  useEffect(() => {
+    if (!isInteractiveMode && testAnimationElementId === element.id && testAnimationKey > 0) {
+      const runTest = async () => {
+        const enterVar = getAnimationVariants(element.enterAnimation, true)
+        const exitVar = getAnimationVariants(element.exitAnimation, false)
+
+        if (enterVar?.initial) {
+          await controls.start(enterVar.initial, { duration: 0 })
+        }
+        if (enterVar?.animate) {
+          await controls.start(enterVar.animate)
+        }
+        if (exitVar?.exit) {
+          await controls.start(exitVar.exit)
+          // Reset
+          await controls.start({ opacity: 1, scale: 1, y: 0, x: 0 }, { duration: 0.2 })
+        }
+      }
+      runTest()
+    }
+  }, [testAnimationElementId, testAnimationKey, element.id, element.enterAnimation, element.exitAnimation, controls, isInteractiveMode])
   const pos = element.position
   const baseStyle: React.CSSProperties = {
     position: "absolute",
@@ -83,9 +144,16 @@ export function CanvasElement({
     justifyContent: "center",
   }
 
+  const enterVar = getAnimationVariants(element.enterAnimation, true)
+  const exitVar = getAnimationVariants(element.exitAnimation, false)
+
   return (
-    <div
+    <motion.div
+      data-element-id={element.id}
       style={baseStyle}
+      initial={isInteractiveMode && enterVar ? enterVar.initial : false}
+      animate={isInteractiveMode && enterVar ? enterVar.animate : controls}
+      exit={isInteractiveMode && exitVar ? exitVar.exit : undefined}
       className={`group ${
         isInteractiveMode
           ? ""
@@ -177,7 +245,7 @@ export function CanvasElement({
           />
         </>
       )}
-    </div>
+    </motion.div>
   )
 }
 export default CanvasElement

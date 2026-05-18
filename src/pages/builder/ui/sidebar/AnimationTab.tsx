@@ -1,6 +1,7 @@
 import type { BuilderElement } from "@/pages/builder/model/types"
 import { Sparkles, Play } from "lucide-react"
 import { SelectField, NumberField } from "@/shared/ui/fields"
+import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 
 interface AnimationTabProps {
   selectedElement: BuilderElement
@@ -145,18 +146,7 @@ export function AnimationTab({
       <button
         type="button"
         onClick={() => {
-          const canvasEl = document.querySelector(
-            `[style*="left: ${selectedElement.position.x}%"]`
-          )
-          if (canvasEl) {
-            const animType = selectedElement.enterAnimation?.type
-            if (animType) {
-              canvasEl.classList.add("animate-pulse")
-              setTimeout(() => {
-                canvasEl.classList.remove("animate-pulse")
-              }, 1000)
-            }
-          }
+          useBuilderStore.getState().triggerTestAnimation(selectedElement.id)
         }}
         className="w-full flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-bold rounded-lg bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-100"
       >

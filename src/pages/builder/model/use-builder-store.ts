@@ -30,6 +30,10 @@ interface BuilderState {
     offsetY: number
   } | null
 
+  testAnimationElementId: string | null
+  testAnimationKey: number
+  triggerTestAnimation: (id: string) => void
+
   // Basic Setters
   setSlides: (slides: Slide[] | ((prev: Slide[]) => Slide[])) => void
   setCurrentSlideIndex: (index: number | ((prev: number) => number)) => void
@@ -93,6 +97,14 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   dragOffset: { x: 0, y: 0 },
   resizing: null,
   draggingZone: null,
+  testAnimationElementId: null,
+  testAnimationKey: 0,
+
+  triggerTestAnimation: (id) =>
+    set((state) => ({
+      testAnimationElementId: id,
+      testAnimationKey: state.testAnimationKey + 1,
+    })),
 
   // Basic Setters
   setSlides: (slides) =>
@@ -180,8 +192,7 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     if (!template) return
     const newEl = {
       id: `el-${uid()}`,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      type: type as any,
+      type: type as BuilderElement["type"],
       position: { x: 20, y: 20, w: 35, h: 25 },
       style: {
         borderRadius: 8,

@@ -1,4 +1,5 @@
-import { LayoutTemplate, ChevronLeft, ChevronRight, PenTool, Play } from "lucide-react"
+import { LayoutTemplate, ChevronLeft, ChevronRight, PenTool, Play, Download } from "lucide-react"
+import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 
 export function CanvasHeader({
   currentSlideOrder,
@@ -19,6 +20,18 @@ export function CanvasHeader({
   isInteractiveMode: boolean
   onToggleMode: (interactive: boolean) => void
 }) {
+  const slides = useBuilderStore((state) => state.slides)
+
+  const handleExportJson = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(slides, null, 2))
+    const downloadAnchorNode = document.createElement("a")
+    downloadAnchorNode.setAttribute("href", dataStr)
+    downloadAnchorNode.setAttribute("download", "slides_export.json")
+    document.body.appendChild(downloadAnchorNode)
+    downloadAnchorNode.click()
+    downloadAnchorNode.remove()
+  }
+
   return (
     <div className="mb-4 flex w-full max-w-5xl items-center justify-between gap-4 bg-white px-4 py-2 rounded-xl border border-slate-200/80 shadow-xs">
       {/* Left side: Slide info */}
@@ -63,6 +76,14 @@ export function CanvasHeader({
 
       {/* Right side: Nav controls */}
       <div className="flex items-center gap-2">
+        <button
+          onClick={handleExportJson}
+          className="inline-flex h-8 px-3 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 font-medium text-xs transition hover:bg-slate-50 hover:text-blue-600 mr-2"
+          title="Export JSON"
+        >
+          <Download className="h-4 w-4" />
+          <span>Export JSON</span>
+        </button>
         <button
           onClick={onPrev}
           disabled={!canPrev}
