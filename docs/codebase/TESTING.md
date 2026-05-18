@@ -4,39 +4,39 @@
 
 ### 1) Test Stack and Commands
 
-- Primary test framework: [TODO] (Not found in package.json)
-- Assertion/mocking tools: [TODO]
+- Primary test framework: None configured yet.
+- Assertion/mocking tools: None.
 - Commands:
 
 ```bash
-[TODO] # No test command found in package.json scripts
+# [ASK USER] What testing framework should we set up?
 ```
 
 ### 2) Test Layout
 
-- Test file placement pattern: [TODO]
-- Naming convention: [TODO]
-- Setup files and where they run: [TODO]
+- Test file placement pattern: [ASK USER]
+- Naming convention: [ASK USER]
+- Setup files and where they run: [ASK USER]
 
 ### 3) Test Scope Matrix
 
 | Scope | Covered? | Typical target | Notes |
 |-------|----------|----------------|-------|
-| Unit | [TODO] | [TODO] | [TODO] |
-| Integration | [TODO] | [TODO] | [TODO] |
-| E2E | [TODO] | [TODO] | [TODO] |
+| Unit | No | `shared/lib/utils` | [ASK USER] |
+| Integration | No | `pages/builder` | [ASK USER] |
+| E2E | No | App workflows | [ASK USER] |
 
 ### 4) Mocking and Isolation Strategy
 
-- Main mocking approach: [TODO]
-- Isolation guarantees: [TODO]
-- Common failure mode in tests: [TODO]
+- Main mocking approach: [ASK USER]
+- Isolation guarantees: [ASK USER]
+- Common failure mode in tests: [ASK USER]
 
 ### 5) Coverage and Quality Signals
 
-- Coverage tool + threshold: [TODO]
-- Current reported coverage: [TODO]
-- Known gaps/flaky areas: [TODO]
+- Coverage tool + threshold: [ASK USER]
+- Current reported coverage: N/A
+- Known gaps/flaky areas: Currently 100% gap (no tests).
 
 ### 6) Evidence
 

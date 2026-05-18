@@ -6,7 +6,7 @@
 
 | System | Type (API/DB/Queue/etc) | Purpose | Auth model | Criticality | Evidence |
 |--------|---------------------------|---------|------------|-------------|----------|
-| [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] |
+| `@broker/core-sdk` | Types/Runtime | Core domain models | [ASK USER] | High | `AGENTS.md` |
 
 ### 2) Data Stores
 
@@ -16,21 +16,21 @@
 
 ### 3) Secrets and Credentials Handling
 
-- Credential sources: [TODO]
-- Hardcoding checks: [TODO]
-- Rotation or lifecycle notes: [TODO]
+- Credential sources: [ASK USER]
+- Hardcoding checks: [ASK USER]
+- Rotation or lifecycle notes: [ASK USER]
 
 ### 4) Reliability and Failure Behavior
 
-- Retry/backoff behavior: [TODO]
-- Timeout policy: [TODO]
-- Circuit-breaker or fallback behavior: [TODO]
+- Retry/backoff behavior: [ASK USER]
+- Timeout policy: [ASK USER]
+- Circuit-breaker or fallback behavior: [ASK USER]
 
 ### 5) Observability for Integrations
 
-- Logging around external calls: [TODO]
-- Metrics/tracing coverage: [TODO]
-- Missing visibility gaps: [TODO]
+- Logging around external calls: [ASK USER]
+- Metrics/tracing coverage: [ASK USER]
+- Missing visibility gaps: [ASK USER]
 
 ### 6) Evidence
 

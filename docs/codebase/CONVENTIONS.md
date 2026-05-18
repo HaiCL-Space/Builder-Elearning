@@ -6,10 +6,10 @@
 
 | Item | Rule | Example | Evidence |
 |------|------|---------|----------|
-| Files (Components) | PascalCase | `App.tsx`, `main.tsx` (exception for entry) | `src/App.tsx` |
-| Functions/methods | [TODO] | [TODO] | [TODO] |
-| Types/interfaces | [TODO] | [TODO] | [TODO] |
-| Constants/env vars | [TODO] | [TODO] | [TODO] |
+| Files (Components) | kebab-case or PascalCase | `App.tsx`, `main.tsx` (FSD typically uses kebab-case for directories) | `src/App.tsx` |
+| Functions/methods | camelCase | `handleAction()` | `src/pages/builder/lib/use-action-runner.ts` |
+| Types/interfaces | PascalCase | `Slide` | `@broker/core-sdk` imports |
+| Constants/env vars | UPPER_SNAKE_CASE | `MOCK_SLIDES` | `src/pages/builder/model/use-builder-store.ts` |
 
 ### 2) Formatting and Linting
 
@@ -20,21 +20,21 @@
 
 ### 3) Import and Module Conventions
 
-- Import grouping/order: [TODO]
-- Alias vs relative import policy: `@/` is used for absolute paths from `src`.
-- Public exports/barrel policy: FSD encourages barrel files (index.ts) at layer boundaries, but exact local usage [TODO].
+- Import grouping/order: [ASK USER]
+- Alias vs relative import policy: `@/` is used for absolute paths from `src` (configured in `vite.config.ts` and `tsconfig.json`).
+- Public exports/barrel policy: FSD encourages barrel files (`index.ts`) at layer boundaries.
 
 ### 4) Error and Logging Conventions
 
-- Error strategy by layer: [TODO]
-- Logging style and required context fields: [TODO]
-- Sensitive-data redaction rules: [TODO]
+- Error strategy by layer: [ASK USER]
+- Logging style and required context fields: [ASK USER]
+- Sensitive-data redaction rules: [ASK USER]
 
 ### 5) Testing Conventions
 
-- Test file naming/location rule: [TODO]
-- Mocking strategy norm: [TODO]
-- Coverage expectation: [TODO]
+- Test file naming/location rule: [ASK USER] No testing configured yet.
+- Mocking strategy norm: [ASK USER]
+- Coverage expectation: [ASK USER]
 
 ### 6) Evidence
 

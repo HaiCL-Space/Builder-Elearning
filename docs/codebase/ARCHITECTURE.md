@@ -34,8 +34,9 @@ Initialization starts in Vite's `index.html` loading `main.tsx`, which mounts th
 
 ### 5) Known Architectural Risks
 
-- [TODO] Risk of cross-imports violating FSD principles.
-- [TODO] Global state size if builder complexity grows heavily.
+- Cross-imports violating FSD principles (especially between entities/shared).
+- Global state size if builder complexity grows heavily.
+- `useActionRunner.ts` logic might tightly couple builder UI and interaction execution.
 
 ### 6) Evidence
 
