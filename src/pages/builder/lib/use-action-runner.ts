@@ -1,6 +1,6 @@
 import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
-import { learningEngine, gameEngine } from "@broker/core-sdk"
-import type { ElementAction, MultipleChoiceData, Slide } from "@broker/core-sdk"
+import { learningEngine, gameEngine } from "broker-core-sdk"
+import type { ElementAction, MultipleChoiceData, Slide } from "broker-core-sdk"
 import type { BuilderElement } from "@/pages/builder/model/types"
 
 export function useActionRunner() {

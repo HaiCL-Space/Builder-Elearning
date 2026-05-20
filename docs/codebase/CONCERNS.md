@@ -7,7 +7,7 @@
 | Severity | Concern | Evidence | Impact | Suggested action |
 |----------|---------|----------|--------|------------------|
 | High | Missing Test Suite | `package.json` lacks test scripts | Reduced confidence during refactoring | Introduce Vitest/Jest and Testing Library |
-| Medium | Undeclared dependency | `AGENTS.md` | Build failure or missing types | Add `@broker/core-sdk` to `package.json` |
+
 
 ### 2) Technical Debt
 

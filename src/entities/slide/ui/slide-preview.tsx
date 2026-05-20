@@ -1,4 +1,4 @@
-import { type SlideElement, type ElementAction } from "@broker/core-sdk"
+import { type SlideElement, type ElementAction } from "broker-core-sdk"
 import React, { useState } from "react"
 import { MOCK_SLIDES } from "@/shared/api/mock-slides"
 import {

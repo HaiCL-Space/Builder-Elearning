@@ -1,4 +1,4 @@
-import { type SlideElement } from "@broker/core-sdk"
+import { type SlideElement } from "broker-core-sdk"
 import React from "react"
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group"
 import { Label } from "@/shared/ui/label"

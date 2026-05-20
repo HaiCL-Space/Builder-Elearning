@@ -12,7 +12,7 @@ This file provides guidance to agents when working with code in this repository.
 - Builder state is centralized in Zustand store `useBuilderStore` (`src/pages/builder/model/use-builder-store.ts`); slide data bootstrapped by deep-cloning `MOCK_SLIDES` (`JSON.parse(JSON.stringify(...))`).
 - Action execution gated by `isInteractiveMode` in `useActionRunner.handleAction()`; actions no-op when false (`src/pages/builder/lib/use-action-runner.ts`).
 - UID helper duplicated: `uid()` exists in both `src/shared/lib/utils.ts` + `src/shared/lib/builder-utils.ts` (different formats) → don’t mix unless intended.
-- Code imports external types/runtime from `@broker/core-sdk` (e.g. `Slide`, engines) but it’s not declared in `package.json` → install/add dep or fix import source before build.
+- Code imports external types/runtime from `broker-core-sdk` (e.g. `Slide`, engines), which is declared as a dependency in `package.json`.
 
 Evidence:
 

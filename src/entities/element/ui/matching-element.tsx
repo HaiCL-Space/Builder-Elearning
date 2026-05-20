@@ -1,4 +1,4 @@
-import { type SlideElement } from "@broker/core-sdk"
+import { type SlideElement } from "broker-core-sdk"
 import React, { useState, useRef, useEffect, useMemo, useCallback } from "react"
 import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 import { cn } from "@/shared/lib/utils"

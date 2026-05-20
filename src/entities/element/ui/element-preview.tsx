@@ -1,5 +1,5 @@
 import type { BuilderElement } from "@/pages/builder/model/types"
-import { type VideoData } from "@broker/core-sdk"
+import { type VideoData } from "broker-core-sdk"
 import {
   HelpCircle,
   MousePointerClick,

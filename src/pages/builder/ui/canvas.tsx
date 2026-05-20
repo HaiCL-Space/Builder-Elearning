@@ -2,7 +2,7 @@ import type React from "react"
 import type { BuilderElement } from "@/pages/builder/model/types"
 import type { HotspotZone } from "./canvas/types"
 import { CanvasElement, CanvasGridOverlay, CanvasHeader } from "./canvas/index"
-import type { ElementAction } from "@broker/core-sdk"
+import type { ElementAction } from "broker-core-sdk"
 
 export function Canvas({
   canvasRef,

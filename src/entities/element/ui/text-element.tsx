@@ -1,4 +1,4 @@
-import { type SlideElement } from "@broker/core-sdk"
+import { type SlideElement } from "broker-core-sdk"
 import React from "react"
 
 interface TextElementProps {

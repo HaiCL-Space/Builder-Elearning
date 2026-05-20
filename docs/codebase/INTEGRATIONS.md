@@ -6,7 +6,7 @@
 
 | System | Type (API/DB/Queue/etc) | Purpose | Auth model | Criticality | Evidence |
 |--------|---------------------------|---------|------------|-------------|----------|
-| `@broker/core-sdk` | Types/Runtime | Core domain models | [ASK USER] | High | `AGENTS.md` |
+| `broker-core-sdk` | Types/Runtime | Core domain models | [ASK USER] | High | `AGENTS.md` |
 
 ### 2) Data Stores
 

@@ -10,7 +10,7 @@ import {
   PanelLeft,
 } from "lucide-react"
 import { ELEMENT_TYPES } from "@/pages/builder/model/templates"
-import type { Slide } from "@broker/core-sdk"
+import type { Slide } from "broker-core-sdk"
 
 interface LeftSidebarProps {
   slides: Slide[]

@@ -1,4 +1,4 @@
-import { type SlideElement } from "@broker/core-sdk"
+import { type SlideElement } from "broker-core-sdk"
 import React, { useState } from "react"
 import { GripVertical, CheckCircle2, XCircle, RefreshCw } from "lucide-react"
 import { Button } from "@/shared/ui/button"

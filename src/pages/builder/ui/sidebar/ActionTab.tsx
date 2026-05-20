@@ -1,5 +1,5 @@
 import type { BuilderElement } from "@/pages/builder/model/types"
-import type { Slide, ElementAction } from "@broker/core-sdk"
+import type { Slide, ElementAction } from "broker-core-sdk"
 import { Zap, Plus } from "lucide-react"
 import { SelectField, TextField } from "@/shared/ui/fields"
 import type React from "react"

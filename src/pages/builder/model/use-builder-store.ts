@@ -3,7 +3,7 @@ import type { BuilderElement } from "@/pages/builder/model/types"
 import { MOCK_SLIDES } from "@/shared/api/mock-slides"
 import { ELEMENT_TEMPLATES } from "@/pages/builder/model/templates"
 import { uid } from "@/shared/lib/utils"
-import type { Slide, ElementAction } from "@broker/core-sdk"
+import type { Slide, ElementAction } from "broker-core-sdk"
 
 interface BuilderState {
   slides: Slide[]
@@ -164,7 +164,7 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     updateElement(currentSlideIndex, selectedElementId, (el) => ({
       ...el,
       data: { ...el.data, ...patch },
-    }))
+    } as unknown as BuilderElement))
   },
 
   updateSelectedActions: (actions) => {

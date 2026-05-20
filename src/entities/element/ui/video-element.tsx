@@ -1,4 +1,4 @@
-import { type SlideElement, type VideoData } from "@broker/core-sdk"
+import { type SlideElement, type VideoData } from "broker-core-sdk"
 import React from "react"
 import { cn } from "@/shared/lib/utils"
 

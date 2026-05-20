@@ -1,5 +1,5 @@
 import type React from "react"
-import type { SlideElement } from "@broker/core-sdk"
+import type { SlideElement } from "broker-core-sdk"
 
 export type BuilderElement = SlideElement
 

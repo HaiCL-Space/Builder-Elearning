@@ -1,4 +1,4 @@
-import { ACTION_TRIGGERS, ACTION_TYPES, type Slide } from "@broker/core-sdk"
+import { ACTION_TRIGGERS, ACTION_TYPES, type Slide } from "broker-core-sdk"
 
 export const MOCK_SLIDES: Slide[] = [
   // ==========================================

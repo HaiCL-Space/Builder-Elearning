@@ -1,4 +1,4 @@
-import { type VideoData } from "@broker/core-sdk"
+import { type VideoData } from "broker-core-sdk"
 import type { BuilderElement } from "@/pages/builder/model/types"
 import { TextField } from "@/shared/ui/fields"
 

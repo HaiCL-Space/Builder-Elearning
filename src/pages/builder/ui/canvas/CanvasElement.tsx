@@ -17,7 +17,7 @@ import {
   SortingElement,
   MatchingElement,
 } from "@/entities/element"
-import type { ElementAction } from "@broker/core-sdk"
+import type { ElementAction } from "broker-core-sdk"
 
 type AnimationConfig = NonNullable<BuilderElement["enterAnimation"]> | NonNullable<BuilderElement["exitAnimation"]>
 

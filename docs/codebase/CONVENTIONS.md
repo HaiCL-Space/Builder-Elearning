@@ -8,7 +8,7 @@
 |------|------|---------|----------|
 | Files (Components) | kebab-case or PascalCase | `App.tsx`, `main.tsx` (FSD typically uses kebab-case for directories) | `src/App.tsx` |
 | Functions/methods | camelCase | `handleAction()` | `src/pages/builder/lib/use-action-runner.ts` |
-| Types/interfaces | PascalCase | `Slide` | `@broker/core-sdk` imports |
+| Types/interfaces | PascalCase | `Slide` | `broker-core-sdk` imports |
 | Constants/env vars | UPPER_SNAKE_CASE | `MOCK_SLIDES` | `src/pages/builder/model/use-builder-store.ts` |
 
 ### 2) Formatting and Linting

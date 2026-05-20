@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { SlidersHorizontal, Trash2, Sparkles, Zap } from "lucide-react"
 import type { BuilderElement } from "@/pages/builder/model/types"
-import type { Slide } from "@broker/core-sdk"
+import type { Slide } from "broker-core-sdk"
 import { NumberField } from "@/shared/ui/fields"
 
 // Import sub-components from sidebar/ folder
@@ -14,7 +14,7 @@ import { HotspotEditor } from "./sidebar/HotspotEditor"
 import { AnimationTab } from "./sidebar/AnimationTab"
 import { ActionTab } from "./sidebar/ActionTab"
 
-import type { ElementAction } from "@broker/core-sdk"
+import type { ElementAction } from "broker-core-sdk"
 
 export function RightSidebar({
   selectedElement,
