@@ -41,11 +41,11 @@ export function ElementPreview({ element }: { element: BuilderElement }) {
     case "TEXT":
       return (
         <div
-          className="flex h-full w-full items-center justify-center px-4 py-2"
+          className="flex h-full w-full flex-col justify-center px-4 py-2"
           style={{
             fontSize: styleObj.fontSize ?? 16,
             color: styleObj.color || "#333",
-            textAlign: styleObj.textAlign || "center",
+            textAlign: (styleObj.textAlign as React.CSSProperties["textAlign"]) || "center",
             backgroundColor: styleObj.backgroundColor || "transparent",
             fontFamily: styleObj.fontFamily || "inherit",
             fontWeight: styleObj.fontWeight || "normal",
