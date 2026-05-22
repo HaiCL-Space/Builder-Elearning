@@ -1,12 +1,12 @@
 import { type SlideElement } from "broker-core-sdk"
 import React, { useState, useRef, useEffect, useMemo, useCallback } from "react"
-import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 import { cn } from "@/shared/lib/utils"
 
 interface MatchingElementProps {
   element: Extract<SlideElement, { type: "MATCHING" }>
   baseStyle: React.CSSProperties
   handleClick: (e: React.MouseEvent) => void
+  isInteractive?: boolean
 }
 
 interface Point {
@@ -18,12 +18,12 @@ const MatchingElement: React.FC<MatchingElementProps> = ({
   element,
   baseStyle,
   handleClick,
+  isInteractive = true,
 }) => {
-  const isInteractiveMode = useBuilderStore((state) => state.isInteractiveMode)
   const [leftSelected, setLeftSelected] = useState<string | null>(null)
   const [rightSelected, setRightSelected] = useState<string | null>(null)
   const [matches, setMatches] = useState<[string, string][]>(() => 
-    !isInteractiveMode ? (element.data.correctPairs || []) : []
+    !isInteractive ? (element.data.correctPairs || []) : []
   )
   const [lineCoords, setLineCoords] = useState<{ [key: string]: { start: Point; end: Point } }>({})
   
@@ -31,18 +31,18 @@ const MatchingElement: React.FC<MatchingElementProps> = ({
   const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
   const [prevElementId, setPrevElementId] = useState(element.id)
-  const [prevInteractive, setPrevInteractive] = useState(isInteractiveMode)
+  const [prevInteractive, setPrevInteractive] = useState(isInteractive)
   const [prevCorrectPairs, setPrevCorrectPairs] = useState(element.data.correctPairs)
 
   if (
     element.id !== prevElementId ||
-    isInteractiveMode !== prevInteractive ||
+    isInteractive !== prevInteractive ||
     JSON.stringify(element.data.correctPairs) !== JSON.stringify(prevCorrectPairs)
   ) {
     setPrevElementId(element.id)
-    setPrevInteractive(isInteractiveMode)
+    setPrevInteractive(isInteractive)
     setPrevCorrectPairs(element.data.correctPairs)
-    setMatches(!isInteractiveMode ? (element.data.correctPairs || []) : [])
+    setMatches(!isInteractive ? (element.data.correctPairs || []) : [])
     setLeftSelected(null)
     setRightSelected(null)
   }
@@ -84,7 +84,7 @@ const MatchingElement: React.FC<MatchingElementProps> = ({
   }, [updateLineCoords])
 
   const handleItemClick = (id: string, side: "left" | "right") => {
-    if (!isInteractiveMode) return
+    if (!isInteractive) return
 
     if (side === "left") {
       const nextLeft = id === leftSelected ? null : id
@@ -209,7 +209,7 @@ const MatchingElement: React.FC<MatchingElementProps> = ({
               )}
               style={{
                 backgroundColor: isSelected ? "#6366f1" : matchedColor ? matchedColor : undefined,
-                cursor: isInteractiveMode ? "pointer" : "default",
+                cursor: isInteractive ? "pointer" : "default",
               }}
             >
               {item.content}
@@ -254,7 +254,7 @@ const MatchingElement: React.FC<MatchingElementProps> = ({
               )}
               style={{
                 backgroundColor: isSelected ? "#ec4899" : matchedColor ? matchedColor : undefined,
-                cursor: isInteractiveMode ? "pointer" : "default",
+                cursor: isInteractive ? "pointer" : "default",
               }}
             >
               {item.content}

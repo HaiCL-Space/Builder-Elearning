@@ -2,21 +2,20 @@ import { type SlideElement } from "broker-core-sdk"
 import React, { useState } from "react"
 import { GripVertical, CheckCircle2, XCircle, RefreshCw } from "lucide-react"
 import { Button } from "@/shared/ui/button"
-import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 
 interface SortingElementProps {
   element: Extract<SlideElement, { type: "SORTING" }>
   baseStyle: React.CSSProperties
   handleClick: (e: React.MouseEvent) => void
+  isInteractive?: boolean
 }
 
 const SortingElement: React.FC<SortingElementProps> = ({
   element,
   baseStyle,
   handleClick,
+  isInteractive = true,
 }) => {
-  const isInteractiveMode = useBuilderStore((state) => state.isInteractiveMode)
-
   // Local state to manage the order of items for interactive play
   const [items, setItems] = useState(element.data.items)
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
@@ -30,7 +29,7 @@ const SortingElement: React.FC<SortingElementProps> = ({
   // Reset state when element changes or sidebar items change in design mode
   if (
     element.id !== prevElementId ||
-    (!isInteractiveMode && JSON.stringify(element.data.items) !== JSON.stringify(prevItems))
+    (!isInteractive && JSON.stringify(element.data.items) !== JSON.stringify(prevItems))
   ) {
     setPrevElementId(element.id)
     setPrevItems(element.data.items)
@@ -40,7 +39,7 @@ const SortingElement: React.FC<SortingElementProps> = ({
   }
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
-    if (!isInteractiveMode) return
+    if (!isInteractive) return
     setDraggedIndex(index)
     setHasChecked(false) // Reset checking status on new drag
     // For HTML5 Drag and Drop transfer
@@ -125,7 +124,7 @@ const SortingElement: React.FC<SortingElementProps> = ({
           return (
             <div
               key={item.id}
-              draggable={isInteractiveMode}
+              draggable={isInteractive}
               onDragStart={(e) => handleDragStart(e, index)}
               onDragOver={(e) => handleDragOver(e, index)}
               onDragEnd={handleDragEnd}
@@ -137,7 +136,7 @@ const SortingElement: React.FC<SortingElementProps> = ({
                 boxShadow: isDragging
                   ? "none"
                   : "0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)",
-                cursor: !isInteractiveMode ? "default" : isDragging ? "grabbing" : "grab",
+                cursor: !isInteractive ? "default" : isDragging ? "grabbing" : "grab",
                 display: "flex",
                 alignItems: "center",
                 gap: "12px",
@@ -145,7 +144,7 @@ const SortingElement: React.FC<SortingElementProps> = ({
                 opacity: isDragging ? 0.5 : 1,
               }}
               className={`group ${
-                isInteractiveMode ? "hover:border-zinc-400 hover:shadow-md" : ""
+                isInteractive ? "hover:border-zinc-400 hover:shadow-md" : ""
               }`}
             >
               {/* Grip Icon */}
@@ -242,7 +241,7 @@ const SortingElement: React.FC<SortingElementProps> = ({
           </div>
         )}
 
-        {isInteractiveMode && (
+        {isInteractive && (
           <div
             style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}
           >

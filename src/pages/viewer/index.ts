@@ -1,0 +1,1 @@
+export { default as ViewerPage } from "./ui/viewer-page"

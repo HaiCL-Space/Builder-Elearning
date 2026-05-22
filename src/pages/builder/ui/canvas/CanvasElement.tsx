@@ -215,6 +215,7 @@ export function CanvasElement({
               element={element as Extract<BuilderElement, { type: "SORTING" }>}
               baseStyle={innerWrapperStyle}
               handleClick={handleElementClick}
+              isInteractive={isInteractiveMode}
             />
           )}
           {element.type === "MATCHING" && (
@@ -222,6 +223,7 @@ export function CanvasElement({
               element={element as Extract<BuilderElement, { type: "MATCHING" }>}
               baseStyle={innerWrapperStyle}
               handleClick={handleElementClick}
+              isInteractive={isInteractiveMode}
             />
           )}
           {element.type === "MEMORY_CARD" && (
