@@ -360,7 +360,7 @@ export const MOCK_SLIDES: Slide[] = [
       {
         id: "el-text-title-4",
         type: "TEXT",
-        position: { x: 10, y: 5, w: 80, h: 10 },
+        position: { x: 10, y: 3, w: 80, h: 12 },
         style: {
           fontSize: 24,
           textAlign: "center",
@@ -395,7 +395,7 @@ export const MOCK_SLIDES: Slide[] = [
       {
         id: "el-sorting-payment",
         type: "SORTING",
-        position: { x: 15, y: 24, w: 70, h: 52 },
+        position: { x: 15, y: 24, w: 70, h: 55   },
         style: {
           borderRadius: 16,
           opacity: 1,
@@ -414,7 +414,7 @@ export const MOCK_SLIDES: Slide[] = [
       {
         id: "el-btn-next-4",
         type: "TEXT",
-        position: { x: 41, y: 80, w: 18, h: 9 },
+        position: { x: 41, y: 85, w: 18, h: 9 },
         style: {
           backgroundColor: "#0284c7", // sky-600
           color: "#ffffff",
@@ -487,7 +487,7 @@ export const MOCK_SLIDES: Slide[] = [
       {
         id: "el-swipe-subdivision",
         type: "SWIPE",
-        position: { x: 20, y: 36, w: 60, h: 42 },
+        position: { x: 20, y: 33, w: 60, h: 58 },
         style: {
           borderRadius: 16,
           opacity: 1,
@@ -502,7 +502,7 @@ export const MOCK_SLIDES: Slide[] = [
       {
         id: "el-btn-next-5",
         type: "TEXT",
-        position: { x: 41, y: 81, w: 18, h: 9 },
+        position: { x: 41, y: 92, w: 18, h: 8 },
         style: {
           backgroundColor: "#c084fc", // purple-400
           color: "#090514",
