@@ -25,7 +25,6 @@ interface HotspotZone {
   yMin: number
   xMax: number
   yMax: number
-  label?: string
 }
 
 export function ElementPreview({ element }: { element: BuilderElement }) {
@@ -200,7 +199,7 @@ export function ElementPreview({ element }: { element: BuilderElement }) {
                   width: `${w}%`,
                   height: `${h}%`,
                 }}
-                title={`Zone: ${z.label || z.id}`}
+                title={`Zone: ${z.id}`}
               />
             )
           })}

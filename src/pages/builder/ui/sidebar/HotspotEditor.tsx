@@ -8,7 +8,6 @@ interface HotspotZone {
   yMin: number
   xMax: number
   yMax: number
-  label?: string
 }
 
 interface HotspotEditorProps {
@@ -60,7 +59,6 @@ export function HotspotEditor({
                 yMin: 15,
                 xMax: 40,
                 yMax: 40,
-                label: "Vùng mới",
               }
               onUpdateData({ zones: [...prev, next] })
             }}
@@ -89,7 +87,7 @@ export function HotspotEditor({
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <div className="min-w-0">
                       <div className="truncate text-xs font-bold text-slate-700">
-                        {z.label || z.id}
+                        {z.id}
                       </div>
                       <div className="text-[9px] text-slate-400">
                         ID: {z.id}
@@ -132,11 +130,6 @@ export function HotspotEditor({
                   </div>
 
                   <div className="grid grid-cols-2 gap-1.5 border-t border-slate-100 pt-2 mt-1">
-                    <TextField
-                      label="Tên hiển thị"
-                      value={(z.label || "") as string}
-                      onChange={(v) => updateZone({ label: v })}
-                    />
                     <TextField
                       label="Mã ID"
                       value={z.id}

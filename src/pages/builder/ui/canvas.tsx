@@ -3,6 +3,7 @@ import type { BuilderElement } from "@/pages/builder/model/types"
 import type { HotspotZone } from "./canvas/types"
 import { CanvasElement, CanvasGridOverlay, CanvasHeader } from "./canvas/index"
 import type { ElementAction } from "broker-core-sdk"
+import { THEME_BACKGROUNDS } from "@/shared/lib/builder-utils"
 
 export function Canvas({
   canvasRef,
@@ -22,6 +23,7 @@ export function Canvas({
   isInteractiveMode,
   onToggleMode,
   onAction,
+  theme,
 }: {
   canvasRef: React.RefObject<HTMLDivElement | null>
   currentSlideOrder: number
@@ -48,7 +50,10 @@ export function Canvas({
   isInteractiveMode: boolean
   onToggleMode: (interactive: boolean) => void
   onAction?: (action: ElementAction) => void
+  theme?: string
 }) {
+  const themeBg = THEME_BACKGROUNDS[theme || "light"] || THEME_BACKGROUNDS.light
+
   return (
     <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-slate-100 p-6">
       <CanvasHeader
@@ -65,8 +70,8 @@ export function Canvas({
       <div
         ref={canvasRef}
         data-canvas="true"
-        className="relative w-full max-w-5xl overflow-hidden rounded-lg border border-slate-300 bg-white shadow-xl"
-        style={{ aspectRatio: "16/9" }}
+        className="relative w-full max-w-5xl overflow-hidden rounded-lg border border-slate-300 shadow-xl"
+        style={{ aspectRatio: "16/9", ...themeBg }}
         onMouseDown={!isInteractiveMode ? onCanvasMouseDown : undefined}
       >
         {!isInteractiveMode && <CanvasGridOverlay />}

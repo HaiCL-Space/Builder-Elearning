@@ -2,68 +2,88 @@ import { ACTION_TRIGGERS, ACTION_TYPES, type Slide } from "broker-core-sdk"
 
 export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
-  // SLIDE 1: GIỚI THIỆU (TEXT + VIDEO + ACTION NEXT) - THEME LIGHT
+  // SLIDE 1: GIỚI THIỆU CHUNG (THEME DARK)
   // =========================================================================
   {
-    id: "slide-intro-001",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
+    id: "slide-bds-intro",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
     order: 1,
-    config: { aspectRatio: "16:9", theme: "light" },
+    config: { aspectRatio: "16:9", theme: "dark" },
     elements: [
       {
         id: "el-text-title-1",
         type: "TEXT",
-        position: { x: 10, y: 8, w: 80, h: 16 },
+        position: { x: 10, y: 15, w: 80, h: 22 },
         style: {
-          fontSize: 34,
+          fontSize: 32,
           textAlign: "center",
-          color: "#1e293b", // slate-800
+          color: "#fbbf24", // Gold color for dark theme
           backgroundColor: "transparent",
           borderRadius: 0,
           opacity: 1,
           zIndex: 10,
         },
-        enterAnimation: { type: "slide-up", duration: 600, delay: 0 },
+        enterAnimation: { type: "slide-up", duration: 800, delay: 0 },
         exitAnimation: { type: "fade-in", duration: 300, delay: 0 },
         data: {
-          content: "Chào mừng đến với Khóa học Tương tác Thế hệ mới!",
+          content: "LUẬT KINH DOANH BẤT ĐỘNG SẢN 2023",
         },
       },
       {
-        id: "el-video-intro-1",
-        type: "VIDEO",
-        position: { x: 15, y: 28, w: 70, h: 48 },
+        id: "el-text-subtitle-1",
+        type: "TEXT",
+        position: { x: 10, y: 38, w: 80, h: 16 },
         style: {
-          opacity: 1,
-          zIndex: 5,
+          fontSize: 18,
+          textAlign: "center",
+          color: "#ffffff",
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 0.9,
+          zIndex: 10,
         },
-        enterAnimation: { type: "zoom-in", duration: 800, delay: 200 },
-        exitAnimation: { type: "fade-in", duration: 400, delay: 0 },
+        enterAnimation: { type: "slide-up", duration: 800, delay: 200 },
+        exitAnimation: { type: "fade-in", duration: 300, delay: 0 },
         data: {
-          src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-          poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
-          autoPlay: false,
-          muted: false,
-          loop: true,
+          content: "Đề cương bài học chuyên sâu về cột mốc hoàn thiện thể chế & chuyên nghiệp hóa thị trường",
+        },
+      },
+      {
+        id: "el-text-info-1",
+        type: "TEXT",
+        position: { x: 15, y: 56, w: 70, h: 10 },
+        style: {
+          fontSize: 14,
+          textAlign: "center",
+          color: "#94a3b8", // Muted slate-400
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 0.8,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "slide-up", duration: 800, delay: 400 },
+        exitAnimation: { type: "fade-in", duration: 300, delay: 0 },
+        data: {
+          content: "Hiệu lực thi hành: Từ ngày 01/08/2024 (Sửa đổi bổ sung bởi Luật số 43/2024/QH15)",
         },
       },
       {
         id: "el-btn-next-1",
         type: "TEXT",
-        position: { x: 40, y: 82, w: 20, h: 10 },
+        position: { x: 38, y: 72, w: 24, h: 10 },
         style: {
-          backgroundColor: "#2563eb", // blue-600
+          backgroundColor: "#d97706", // warm amber-600
           color: "#ffffff",
-          fontSize: 16,
+          fontSize: 15,
           textAlign: "center",
           borderRadius: 8,
           opacity: 1,
           zIndex: 10,
         },
-        enterAnimation: { type: "slide-up", duration: 500, delay: 400 },
+        enterAnimation: { type: "bounce", duration: 600, delay: 600 },
         data: {
-          content: "Bắt đầu bài học ->",
+          content: "Bắt đầu khóa học ➔",
         },
         actions: [
           {
@@ -77,68 +97,84 @@ export const MOCK_SLIDES: Slide[] = [
   },
 
   // =========================================================================
-  // SLIDE 2: BÀI TẬP TRẮC NGHIỆM (QUIZ + NÚT SUBMIT RIÊNG LẺ) - THEME DARK
+  // SLIDE 2: NGUYÊN TẮC HOẠT ĐỘNG & KHÁI NIỆM (THEME LIGHT)
   // =========================================================================
   {
-    id: "slide-quiz-002",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
+    id: "slide-bds-principles",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
     order: 2,
-    config: { aspectRatio: "16:9", theme: "dark" },
+    config: { aspectRatio: "16:9", theme: "light" },
     elements: [
       {
-        id: "el-text-quiz-title",
+        id: "el-text-title-2",
         type: "TEXT",
         position: { x: 10, y: 5, w: 80, h: 10 },
         style: {
-          fontSize: 26,
+          fontSize: 24,
           textAlign: "center",
-          color: "#f8fafc", // slate-50
+          color: "#1e3a8a", // Navy color for light theme
           backgroundColor: "transparent",
           borderRadius: 0,
           opacity: 1,
           zIndex: 10,
         },
-        enterAnimation: { type: "fade-in", duration: 500, delay: 0 },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
         data: {
-          content: "🤔 CÂU HỎI TRẮC NGHIỆM LỊCH SỬ",
+          content: "1. KHÁI NIỆM CỐT LÕI & NGUYÊN TẮC TỐI CAO",
         },
       },
       {
-        id: "el-quiz-math-1",
-        type: "QUIZ",
-        position: { x: 15, y: 18, w: 70, h: 56 },
+        id: "el-text-info-2",
+        type: "TEXT",
+        position: { x: 10, y: 16, w: 80, h: 22 },
         style: {
-          borderRadius: 16,
+          fontSize: 13,
+          color: "#334155",
+          backgroundColor: "#f1f5f9",
+          borderRadius: 12,
           opacity: 1,
           zIndex: 5,
         },
-        enterAnimation: { type: "slide-up", duration: 700, delay: 150 },
+        enterAnimation: { type: "fade-in", duration: 600, delay: 150 },
         data: {
-          question: "Thủ đô của Việt Nam là thành phố nào?",
-          options: [
-            { id: "opt-1", content: "Thành phố Hồ Chí Minh" },
-            { id: "opt-2", content: "Hà Nội" },
-            { id: "opt-3", content: "Đà Nẵng" },
-            { id: "opt-4", content: "Huế" },
-          ],
-          correctId: "opt-2",
+          content: "• Kinh doanh BĐS: Hoạt động bỏ vốn để tạo lập nhà ở, công trình xây dựng, quyền sử dụng đất đã có hạ tầng kỹ thuật trong dự án nhằm mục đích tìm kiếm lợi nhuận.\n• 3 Nguyên tắc (Điều 4): (1) Công khai, minh bạch; (2) Tự do thỏa thuận không vi phạm điều cấm của luật; (3) BĐS đưa vào kinh doanh phải đủ điều kiện luật định.",
         },
       },
       {
-        id: "el-btn-submit-quiz",
+        id: "el-quiz-principles",
+        type: "QUIZ",
+        position: { x: 10, y: 40, w: 80, h: 40 },
+        style: {
+          borderRadius: 12,
+          opacity: 1,
+          zIndex: 5,
+        },
+        enterAnimation: { type: "slide-up", duration: 600, delay: 300 },
+        data: {
+          question: "Điểm thay đổi đột phá thể hiện sự tôn trọng tự do ý chí trong nguyên tắc hoạt động kinh doanh BĐS của Luật 2023 là gì?",
+          options: [
+            { id: "opt-a", content: "Chuyển từ 'không trái quy định pháp luật' sang 'không vi phạm điều cấm của luật'" },
+            { id: "opt-b", content: "Bắt buộc mọi giao dịch nhà đất phải thực hiện qua sàn giao dịch tập trung" },
+            { id: "opt-c", content: "Cho phép doanh nghiệp tự do kinh doanh ngoài phạm vi quốc phòng, an ninh mà không cần bất kỳ điều kiện gì" },
+          ],
+          correctId: "opt-a",
+        },
+      },
+      {
+        id: "el-btn-submit-2",
         type: "TEXT",
-        position: { x: 40, y: 78, w: 20, h: 9 },
+        position: { x: 30, y: 84, w: 18, h: 9 },
         style: {
           backgroundColor: "#10b981", // emerald-500
           color: "#ffffff",
-          fontSize: 15,
+          fontSize: 13,
           textAlign: "center",
-          borderRadius: 12,
+          borderRadius: 8,
           opacity: 1,
           zIndex: 10,
         },
-        enterAnimation: { type: "bounce", duration: 600, delay: 300 },
+        enterAnimation: { type: "bounce", duration: 500, delay: 450 },
         data: {
           content: "Kiểm tra đáp án",
         },
@@ -147,9 +183,34 @@ export const MOCK_SLIDES: Slide[] = [
             trigger: ACTION_TRIGGERS.ON_CLICK,
             type: ACTION_TYPES.EVALUATE_ANSWER,
             payload: {
-              targetElementId: "el-quiz-math-1",
-              conceptId: "concept-geography-vn",
+              targetElementId: "el-quiz-principles",
+              conceptId: "concept-law-principles",
             },
+          },
+        ],
+      },
+      {
+        id: "el-btn-next-2",
+        type: "TEXT",
+        position: { x: 52, y: 84, w: 18, h: 9 },
+        style: {
+          backgroundColor: "#2563eb", // blue-600
+          color: "#ffffff",
+          fontSize: 13,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 500 },
+        data: {
+          content: "Tiếp theo ➔",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
           },
         ],
       },
@@ -157,21 +218,21 @@ export const MOCK_SLIDES: Slide[] = [
   },
 
   // =========================================================================
-  // SLIDE 3: TƯƠNG TÁC ĐIỂM NÓNG (HOTSPOT + TOGGLE VISIBILITY) - THEME SUNSET
+  // SLIDE 3: NĂNG LỰC TÀI CHÍNH CHỦ ĐẦU TƯ (THEME SUNSET)
   // =========================================================================
   {
-    id: "slide-hotspot-003",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
+    id: "slide-bds-finance",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
     order: 3,
     config: { aspectRatio: "16:9", theme: "sunset" },
     elements: [
       {
-        id: "el-text-hotspot-title",
+        id: "el-text-title-3",
         type: "TEXT",
         position: { x: 10, y: 5, w: 80, h: 10 },
         style: {
-          fontSize: 26,
+          fontSize: 24,
           textAlign: "center",
           color: "#7c2d12", // orange-950
           backgroundColor: "transparent",
@@ -179,17 +240,17 @@ export const MOCK_SLIDES: Slide[] = [
           opacity: 1,
           zIndex: 10,
         },
-        enterAnimation: { type: "fade-in", duration: 500, delay: 0 },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
         data: {
-          content: "🫀 KHÁM PHÁ CẤU TRÚC GIẢI PHẪU TIM",
+          content: "2. NĂNG LỰC TÀI CHÍNH CỦA CHỦ ĐẦU TƯ DỰ ÁN",
         },
       },
       {
-        id: "el-text-hotspot-subtitle",
+        id: "el-text-subtitle-3",
         type: "TEXT",
-        position: { x: 15, y: 15, w: 70, h: 6 },
+        position: { x: 10, y: 15, w: 80, h: 8 },
         style: {
-          fontSize: 15,
+          fontSize: 14,
           textAlign: "center",
           color: "#9a3412", // orange-800
           backgroundColor: "transparent",
@@ -199,75 +260,109 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          content: "Nhấn trực tiếp vào vùng Tâm thất trái trên mô hình để xem thông tin chi tiết.",
+          content: "Ghép nối quy mô sử dụng đất và giới hạn với tỷ lệ vốn chủ sở hữu / đặt cọc tương ứng theo Luật 2023:",
         },
       },
       {
-        id: "el-hotspot-anatomy",
-        type: "HOTSPOT",
-        position: { x: 15, y: 24, w: 42, h: 64 },
+        id: "el-matching-finance",
+        type: "MATCHING",
+        position: { x: 10, y: 24, w: 80, h: 52 },
         style: {
-          borderRadius: 16,
+          borderRadius: 12,
           opacity: 1,
           zIndex: 5,
         },
-        enterAnimation: { type: "zoom-in", duration: 600, delay: 200 },
+        enterAnimation: { type: "slide-up", duration: 600, delay: 200 },
         data: {
-          imageUri: "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=600&q=80",
-          zones: [
-            { id: "zone-right-atrium", xMin: 20, yMin: 25, xMax: 45, yMax: 48 },
-            { id: "zone-left-ventricle", xMin: 50, yMin: 52, xMax: 82, yMax: 85 },
+          leftColumn: [
+            { id: "fn-l1", content: "Dự án sử dụng đất quy mô dưới 20 ha" },
+            { id: "fn-l2", content: "Dự án sử dụng đất quy mô từ 20 ha trở lên" },
+            { id: "fn-l3", content: "Hạn mức nhận tiền đặt cọc trước khi ký hợp đồng" },
           ],
-          correctZoneId: "zone-left-ventricle",
+          rightColumn: [
+            { id: "fn-r1", content: "Vốn chủ sở hữu tối thiểu 15% tổng vốn" },
+            { id: "fn-r2", content: "Tối đa 5% giá bán, cho thuê mua" },
+            { id: "fn-r3", content: "Vốn chủ sở hữu tối thiểu 20% tổng vốn" },
+          ],
+          correctPairs: [
+            ["fn-l1", "fn-r3"],
+            ["fn-l2", "fn-r1"],
+            ["fn-l3", "fn-r2"],
+          ],
+        },
+      },
+      {
+        id: "el-btn-submit-3",
+        type: "TEXT",
+        position: { x: 30, y: 79, w: 18, h: 9 },
+        style: {
+          backgroundColor: "#c2410c", // orange-700
+          color: "#ffffff",
+          fontSize: 13,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "bounce", duration: 500, delay: 350 },
+        data: {
+          content: "Nộp bài tự động",
         },
         actions: [
           {
             trigger: ACTION_TRIGGERS.ON_CLICK,
-            type: ACTION_TYPES.TOGGLE_VISIBILITY,
+            type: ACTION_TYPES.EVALUATE_ANSWER,
             payload: {
-              targetElementId: "el-feedback-text",
-              action: "SHOW",
+              targetElementId: "el-matching-finance",
+              conceptId: "concept-law-finance",
             },
           },
         ],
       },
       {
-        id: "el-feedback-text",
+        id: "el-btn-next-3",
         type: "TEXT",
-        position: { x: 60, y: 35, w: 26, h: 42 },
+        position: { x: 52, y: 79, w: 18, h: 9 },
         style: {
-          backgroundColor: "#ffedd5", // orange-100
-          color: "#9a3412", // orange-800
-          fontSize: 16,
+          backgroundColor: "#2563eb", // blue-600
+          color: "#ffffff",
+          fontSize: 13,
           textAlign: "center",
-          borderRadius: 16,
-          opacity: 0, // Mặc định ẩn
-          zIndex: 8,
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
         },
-        enterAnimation: { type: "fade-in", duration: 400, delay: 0 },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
         data: {
-          content: "🎉 Chính xác!\n\nĐây chính là Tâm thất trái (Left Ventricle), buồng tim có thành dày nhất chịu trách nhiệm bơm máu giàu oxy đi nuôi khắp cơ thể.",
+          content: "Tiếp theo ➔",
         },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
+          },
+        ],
       },
     ],
   },
 
   // =========================================================================
-  // SLIDE 4: TRÒ CHƠI SẮP XẾP (SORTING + NÚT NGHE NHẠC LỆNH) - THEME OCEAN
+  // SLIDE 4: TIẾN ĐỘ THANH TOÁN (THEME OCEAN)
   // =========================================================================
   {
-    id: "slide-sorting-004",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
+    id: "slide-bds-payments",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
     order: 4,
     config: { aspectRatio: "16:9", theme: "ocean" },
     elements: [
       {
-        id: "el-text-instruction-sort",
+        id: "el-text-title-4",
         type: "TEXT",
         position: { x: 10, y: 5, w: 80, h: 10 },
         style: {
-          fontSize: 26,
+          fontSize: 24,
           textAlign: "center",
           color: "#0c4a6e", // sky-950
           backgroundColor: "transparent",
@@ -277,158 +372,67 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
         data: {
-          content: "📅 SẮP XẾP TIẾN TRÌNH LỊCH SỬ VIỆT NAM",
+          content: "3. HẠN MỨC THANH TOÁN BĐS HÌNH THÀNH TRONG TƯƠNG LAI",
         },
       },
       {
-        id: "el-text-audio-hint",
+        id: "el-text-instr-4",
         type: "TEXT",
-        position: { x: 25, y: 16, w: 18, h: 8 },
-        style: {
-          backgroundColor: "#e0f2fe", // sky-100
-          color: "#0369a1", // sky-700
-          fontSize: 13,
-          textAlign: "center",
-          borderRadius: 12,
-          opacity: 1,
-          zIndex: 10,
-        },
-        enterAnimation: { type: "fade-in", duration: 500, delay: 200 },
-        data: {
-          content: "🎵 Nghe nhạc nền",
-        },
-        actions: [
-          {
-            trigger: ACTION_TRIGGERS.ON_CLICK,
-            type: ACTION_TYPES.PLAY_MEDIA,
-            payload: {
-              mediaUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-              loop: false,
-            },
-          },
-        ],
-      },
-      {
-        id: "el-text-instruction-sub",
-        type: "TEXT",
-        position: { x: 45, y: 17, w: 30, h: 6 },
+        position: { x: 10, y: 15, w: 80, h: 8 },
         style: {
           fontSize: 14,
           color: "#0284c7", // sky-600
           backgroundColor: "transparent",
-          textAlign: "left",
           borderRadius: 0,
           opacity: 1,
           zIndex: 10,
         },
-        enterAnimation: { type: "fade-in", duration: 500, delay: 250 },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          content: "Kéo thả các sự kiện dưới đây theo đúng trình tự lịch sử từ trước đến sau:",
+          content: "Kéo thả các sự kiện dưới đây theo đúng trình tự tiến độ thanh toán tối đa của khách hàng từ trước đến sau:",
         },
       },
       {
-        id: "el-sorting-history",
+        id: "el-sorting-payment",
         type: "SORTING",
-        position: { x: 15, y: 26, w: 70, h: 62 },
-        style: {
-          borderRadius: 20,
-          opacity: 1,
-          zIndex: 5,
-        },
-        enterAnimation: { type: "slide-up", duration: 700, delay: 300 },
-        data: {
-          items: [
-            { id: "evt-1", content: "Chiến thắng Điện Biên Phủ vang dội năm châu (1954)" },
-            { id: "evt-2", content: "Nhà nước Âu Lạc được thành lập bởi An Dương Vương" },
-            { id: "evt-3", content: "Giải phóng hoàn toàn miền Nam, thống nhất đất nước (1975)" },
-          ],
-          correctOrder: ["evt-2", "evt-1", "evt-3"],
-        },
-      },
-    ],
-  },
-
-  // =========================================================================
-  // SLIDE 5: TRÒ CHƠI NỐI TỪ (MATCHING) - THEME NEON
-  // =========================================================================
-  {
-    id: "slide-matching-005",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
-    order: 5,
-    config: { aspectRatio: "16:9", theme: "neon" },
-    elements: [
-      {
-        id: "el-text-instruction-match",
-        type: "TEXT",
-        position: { x: 10, y: 5, w: 80, h: 10 },
-        style: {
-          fontSize: 26,
-          textAlign: "center",
-          color: "#a855f7", // purple-500
-          backgroundColor: "transparent",
-          borderRadius: 0,
-          opacity: 1,
-          zIndex: 10,
-        },
-        enterAnimation: { type: "bounce", duration: 600, delay: 0 },
-        data: {
-          content: "⚡ THỬ THÁCH NỐI TỪ VỰNG ANH - VIỆT",
-        },
-      },
-      {
-        id: "el-matching-vocab",
-        type: "MATCHING",
-        position: { x: 10, y: 18, w: 80, h: 62 },
+        position: { x: 15, y: 24, w: 70, h: 52 },
         style: {
           borderRadius: 16,
           opacity: 1,
           zIndex: 5,
         },
-        enterAnimation: { type: "slide-up", duration: 800, delay: 150 },
+        enterAnimation: { type: "slide-up", duration: 600, delay: 200 },
         data: {
-          leftColumn: [
-            { id: "en-1", content: "Apple" },
-            { id: "en-2", content: "Banana" },
-            { id: "en-3", content: "Cat" },
+          items: [
+            { id: "evt-1", content: "Đặt cọc giữ chỗ khi nhà ở đủ điều kiện kinh doanh (Tối đa 5% giá trị)" },
+            { id: "evt-2", content: "Thanh toán đợt đầu bao gồm cả tiền đặt cọc đã đóng trước đó (Tối đa 30% giá trị)" },
+            { id: "evt-3", content: "Thanh toán lũy kế trước khi chủ đầu tư bàn giao nhà ở thương mại (Tối đa 70% giá trị)" },
           ],
-          rightColumn: [
-            { id: "vi-1", content: "Con Mèo" },
-            { id: "vi-2", content: "Quả Táo" },
-            { id: "vi-3", content: "Quả Chuối" },
-          ],
-          correctPairs: [
-            ["en-1", "vi-2"],
-            ["en-2", "vi-3"],
-            ["en-3", "vi-1"],
-          ],
+          correctOrder: ["evt-1", "evt-2", "evt-3"],
         },
       },
       {
-        id: "el-btn-submit-matching",
+        id: "el-btn-next-4",
         type: "TEXT",
-        position: { x: 40, y: 83, w: 20, h: 9 },
+        position: { x: 41, y: 80, w: 18, h: 9 },
         style: {
-          backgroundColor: "#c084fc", // purple-400
-          color: "#090514",
-          fontSize: 15,
+          backgroundColor: "#0284c7", // sky-600
+          color: "#ffffff",
+          fontSize: 13,
           textAlign: "center",
-          borderRadius: 12,
+          borderRadius: 8,
           opacity: 1,
           zIndex: 10,
         },
-        enterAnimation: { type: "zoom-in", duration: 500, delay: 350 },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
         data: {
-          content: "Nộp bài tự động",
+          content: "Tiếp theo ➔",
         },
         actions: [
           {
             trigger: ACTION_TRIGGERS.ON_CLICK,
-            type: ACTION_TYPES.EVALUATE_ANSWER,
-            payload: {
-              targetElementId: "el-matching-vocab",
-              conceptId: "concept-vocab-en",
-            },
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
           },
         ],
       },
@@ -436,21 +440,109 @@ export const MOCK_SLIDES: Slide[] = [
   },
 
   // =========================================================================
-  // SLIDE 6: PHÁT TRỰC TIẾP TỪ YOUTUBE - THEME CLASSIC
+  // SLIDE 5: SIẾT CHẶT PHÂN LÔ BÁN NỀN (THEME NEON)
   // =========================================================================
   {
-    id: "slide-live-006",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
+    id: "slide-bds-subdivision",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
+    order: 5,
+    config: { aspectRatio: "16:9", theme: "neon" },
+    elements: [
+      {
+        id: "el-text-title-5",
+        type: "TEXT",
+        position: { x: 10, y: 5, w: 80, h: 10 },
+        style: {
+          fontSize: 24,
+          textAlign: "center",
+          color: "#fbbf24", // amber-400
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
+        data: {
+          content: "4. CẤM PHÂN LÔ BÁN NỀN TẠI 105 ĐÔ THỊ",
+        },
+      },
+      {
+        id: "el-text-desc-5",
+        type: "TEXT",
+        position: { x: 15, y: 16, w: 70, h: 18 },
+        style: {
+          fontSize: 13,
+          color: "#e2e8f0",
+          backgroundColor: "rgba(18, 10, 42, 0.6)",
+          borderRadius: 12,
+          opacity: 1,
+          zIndex: 5,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
+        data: {
+          content: "Luật 2023 cấm phân lô, bán nền tại các phường, quận, thành phố thuộc đô thị loại đặc biệt, loại I, loại II và loại III (tổng cộng 105 thành phố, thị xã). Tại các vùng còn lại, đất nền chỉ được bán khi đã hoàn thành xây dựng hạ tầng kỹ thuật đồng bộ và do chủ đầu tư trực tiếp chuyển nhượng.",
+        },
+      },
+      {
+        id: "el-swipe-subdivision",
+        type: "SWIPE",
+        position: { x: 20, y: 36, w: 60, h: 42 },
+        style: {
+          borderRadius: 16,
+          opacity: 1,
+          zIndex: 5,
+        },
+        enterAnimation: { type: "bounce", duration: 800, delay: 200 },
+        data: {
+          statement: "Hành vi cá nhân tự ý phân lô, tách thửa đất nền để tự do bán không cần lập dự án đầu tư theo quy hoạch ở khu vực nông thôn (đô thị loại IV, V) là được phép theo Luật 2023.",
+          correctDirection: "left", // False statement, only official developers of approved projects can sell subdivided plots
+        },
+      },
+      {
+        id: "el-btn-next-5",
+        type: "TEXT",
+        position: { x: 41, y: 81, w: 18, h: 9 },
+        style: {
+          backgroundColor: "#c084fc", // purple-400
+          color: "#090514",
+          fontSize: 13,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
+        data: {
+          content: "Tiếp theo ➔",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
+          },
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // SLIDE 6: CHUYÊN NGHIỆP HÓA MÔI GIỚI (THEME CLASSIC)
+  // =========================================================================
+  {
+    id: "slide-bds-brokerage",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
     order: 6,
     config: { aspectRatio: "16:9", theme: "classic" },
     elements: [
       {
-        id: "el-text-live-title",
+        id: "el-text-title-6",
         type: "TEXT",
-        position: { x: 10, y: 6, w: 80, h: 10 },
+        position: { x: 10, y: 5, w: 80, h: 10 },
         style: {
-          fontSize: 26,
+          fontSize: 24,
           textAlign: "center",
           color: "#be123c", // rose-700
           backgroundColor: "transparent",
@@ -460,284 +552,160 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
         data: {
-          content: "🔴 PHÁT TRỰC TIẾP TÀI LIỆU HỌC TẬP",
+          content: "5. CHUYÊN NGHIỆP HÓA MÔI GIỚI BẤT ĐỘNG SẢN",
         },
       },
       {
-        id: "el-video-live",
-        type: "VIDEO",
-        position: { x: 15, y: 18, w: 70, h: 54 },
-        style: {
-          opacity: 1,
-          zIndex: 5,
-        },
-        enterAnimation: { type: "zoom-in", duration: 800, delay: 200 },
-        data: {
-          src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-          isLive: true,
-          autoPlay: true,
-          muted: true,
-          loop: false,
-        },
-      },
-      {
-        id: "el-text-live-desc",
+        id: "el-text-desc-6",
         type: "TEXT",
-        position: { x: 15, y: 76, w: 70, h: 18 },
+        position: { x: 15, y: 16, w: 70, h: 16 },
         style: {
-          textAlign: "center",
-          fontSize: 14,
+          fontSize: 13,
           color: "#4f4f4f",
           backgroundColor: "#f5f5f5",
-          borderRadius: 8,
-          opacity: 1,
-          zIndex: 10,
-        },
-        enterAnimation: { type: "fade-in", duration: 600, delay: 450 },
-        data: {
-          content: "Luồng video đang được phát trực tiếp tự động với chế độ không tiếng để tránh gây phiền nhiễu. Bạn có thể bật âm thanh hoặc phóng to màn hình bằng thanh điều khiển phía trên.",
-        },
-      },
-    ],
-  },
-
-  // =========================================================================
-  // SLIDE 7: TRÒ CHƠI LẬT THẺ NHỚ (MEMORY CARD) - THEME LIGHT
-  // =========================================================================
-  {
-    id: "slide-memory-007",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
-    order: 7,
-    config: { aspectRatio: "16:9", theme: "light" },
-    elements: [
-      {
-        id: "el-text-memory-title",
-        type: "TEXT",
-        position: { x: 10, y: 5, w: 80, h: 10 },
-        style: {
-          fontSize: 26,
-          textAlign: "center",
-          color: "#312e81", // indigo-950
-          backgroundColor: "transparent",
-          borderRadius: 0,
-          opacity: 1,
-          zIndex: 10,
-        },
-        enterAnimation: { type: "fade-in", duration: 500, delay: 0 },
-        data: {
-          content: "🧠 THỬ THÁCH TRÍ NHỚ TÌM CẶP TỪ ĐỒNG NGHĨA",
-        },
-      },
-      {
-        id: "el-memory-cards-game",
-        type: "MEMORY_CARD",
-        position: { x: 15, y: 18, w: 70, h: 72 },
-        style: {
-          borderRadius: 20,
+          borderRadius: 10,
           opacity: 1,
           zIndex: 5,
         },
-        enterAnimation: { type: "slide-up", duration: 800, delay: 200 },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          cards: [
-            { id: "c1", value: "Happy" },
-            { id: "c2", value: "Glad" },
-            { id: "c3", value: "Sad" },
-            { id: "c4", value: "Unhappy" },
-          ],
-        },
-      },
-    ],
-  },
-
-  // =========================================================================
-  // SLIDE 8: ĐIỀN VÀO CHỖ TRỐNG (FILL BLANK) - THEME DARK
-  // =========================================================================
-  {
-    id: "slide-fill-blank-008",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
-    order: 8,
-    config: { aspectRatio: "16:9", theme: "dark" },
-    elements: [
-      {
-        id: "el-text-fb-title",
-        type: "TEXT",
-        position: { x: 10, y: 5, w: 80, h: 10 },
-        style: {
-          fontSize: 26,
-          textAlign: "center",
-          color: "#bae6fd", // sky-200
-          backgroundColor: "transparent",
-          borderRadius: 0,
-          opacity: 1,
-          zIndex: 10,
-        },
-        enterAnimation: { type: "fade-in", duration: 500, delay: 0 },
-        data: {
-          content: "✍️ KIỂM TRA HIỂU BIẾT THIÊN VĂN HỌC",
+          content: "Cá nhân hành nghề môi giới bắt buộc phải có chứng chỉ hành nghề và phải làm việc chính quy tại một doanh nghiệp môi giới hoặc sàn giao dịch bất động sản hợp pháp. Cá nhân cấm hành nghề môi giới độc lập tự do như trước.",
         },
       },
       {
-        id: "el-fill-blank-science",
+        id: "el-fb-brokerage",
         type: "FILL_BLANK",
-        position: { x: 15, y: 20, w: 70, h: 64 },
+        position: { x: 15, y: 35, w: 70, h: 42 },
         style: {
-          borderRadius: 24,
-          opacity: 1,
-          zIndex: 5,
-        },
-        enterAnimation: { type: "zoom-in", duration: 600, delay: 150 },
-        data: {
-          question: "Hành tinh nào nằm ở vị trí gần Mặt trời nhất trong Hệ Mặt trời?",
-          correctAnswers: ["Sao Thủy", "Mercury", "sao thủy", "mercury"],
-          caseSensitive: false,
-        },
-      },
-    ],
-  },
-
-  // =========================================================================
-  // SLIDE 9: QUẸT THẺ ĐÚNG/SAI (SWIPE) - THEME NEON
-  // =========================================================================
-  {
-    id: "slide-swipe-009",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
-    order: 9,
-    config: { aspectRatio: "16:9", theme: "neon" },
-    elements: [
-      {
-        id: "el-text-swipe-title",
-        type: "TEXT",
-        position: { x: 10, y: 5, w: 80, h: 10 },
-        style: {
-          fontSize: 26,
-          textAlign: "center",
-          color: "#fbbf24", // amber-400
-          backgroundColor: "transparent",
-          borderRadius: 0,
-          opacity: 1,
-          zIndex: 10,
-        },
-        enterAnimation: { type: "fade-in", duration: 500, delay: 0 },
-        data: {
-          content: "⚡ THỬ THÁCH QUYẾT ĐỊNH ĐÚNG / SAI NHANH",
-        },
-      },
-      {
-        id: "el-swipe-geography",
-        type: "SWIPE",
-        position: { x: 25, y: 18, w: 50, h: 70 },
-        style: {
-          borderRadius: 24,
-          opacity: 1,
-          zIndex: 5,
-        },
-        enterAnimation: { type: "bounce", duration: 800, delay: 200 },
-        data: {
-          statement: "Thành phố Sydney là thủ đô chính thức của nước Úc.",
-          correctDirection: "left", // False statement (Canberra is the capital)
-        },
-      },
-    ],
-  },
-
-  // =========================================================================
-  // SLIDE 10: BẤT NGỜ THỜI GIAN (TIMED SPRINT) - THEME SUNSET
-  // =========================================================================
-  {
-    id: "slide-sprint-010",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
-    order: 10,
-    config: { aspectRatio: "16:9", theme: "sunset" },
-    elements: [
-      {
-        id: "el-text-sprint-title",
-        type: "TEXT",
-        position: { x: 10, y: 5, w: 80, h: 10 },
-        style: {
-          fontSize: 26,
-          textAlign: "center",
-          color: "#991b1b", // red-800
-          backgroundColor: "transparent",
-          borderRadius: 0,
-          opacity: 1,
-          zIndex: 10,
-        },
-        enterAnimation: { type: "fade-in", duration: 500, delay: 0 },
-        data: {
-          content: "🔥 CHẠY ĐUA CÙNG THỜI GIAN: TOÁN HỌC NHANH",
-        },
-      },
-      {
-        id: "el-sprint-math",
-        type: "TIMED_SPRINT",
-        position: { x: 18, y: 18, w: 64, h: 70 },
-        style: {
-          borderRadius: 24,
-          opacity: 1,
-          zIndex: 5,
-        },
-        enterAnimation: { type: "slide-up", duration: 700, delay: 150 },
-        data: {
-          question: "Kết quả chính xác của phép tính sau đây: 7 x 8 - 9 = ?",
-          options: [
-            { id: "ts-opt1", content: "45" },
-            { id: "ts-opt2", content: "47" },
-            { id: "ts-opt3", content: "49" },
-          ],
-          correctId: "ts-opt2",
-          duration: 10,
-        },
-      },
-    ],
-  },
-
-  // =========================================================================
-  // SLIDE 11: GHÉP CHỮ (WORD SCRAMBLE) - THEME OCEAN
-  // =========================================================================
-  {
-    id: "slide-scramble-011",
-    tenant_id: "tenant-abc",
-    course_id: "course-101",
-    order: 11,
-    config: { aspectRatio: "16:9", theme: "ocean" },
-    elements: [
-      {
-        id: "el-text-scramble-title",
-        type: "TEXT",
-        position: { x: 10, y: 5, w: 80, h: 10 },
-        style: {
-          fontSize: 26,
-          textAlign: "center",
-          color: "#581c87", // purple-900
-          backgroundColor: "transparent",
-          borderRadius: 0,
-          opacity: 1,
-          zIndex: 10,
-        },
-        enterAnimation: { type: "fade-in", duration: 500, delay: 0 },
-        data: {
-          content: "🔤 THỬ THÁCH GIẢI MÃ CHỮ CÁI XÁO TRỘN",
-        },
-      },
-      {
-        id: "el-scramble-vocab",
-        type: "WORD_SCRAMBLE",
-        position: { x: 15, y: 20, w: 70, h: 64 },
-        style: {
-          borderRadius: 24,
+          borderRadius: 16,
           opacity: 1,
           zIndex: 5,
         },
         enterAnimation: { type: "zoom-in", duration: 600, delay: 200 },
         data: {
-          scrambledWord: "NLOODN",
-          correctWord: "LONDON",
+          question: "Theo quy định tài chính mới, lệ phí chính thức cấp Chứng chỉ hành nghề môi giới bất động sản là bao nhiêu đồng? (Ví dụ: 300000)",
+          correctAnswers: ["300000", "300.000", "ba trăm nghìn", "ba trăm ngàn"],
           caseSensitive: false,
+        },
+      },
+      {
+        id: "el-btn-next-6",
+        type: "TEXT",
+        position: { x: 41, y: 80, w: 18, h: 9 },
+        style: {
+          backgroundColor: "#be123c", // rose-700
+          color: "#ffffff",
+          fontSize: 13,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
+        data: {
+          content: "Tiếp theo ➔",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
+          },
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // SLIDE 7: KHUYẾN NGHỊ THỰC TIỄN & ĐIỂM NÓNG (THEME DARK)
+  // =========================================================================
+  {
+    id: "slide-bds-recommendations",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
+    order: 7,
+    config: { aspectRatio: "16:9", theme: "dark" },
+    elements: [
+      {
+        id: "el-text-title-7",
+        type: "TEXT",
+        position: { x: 10, y: 5, w: 80, h: 8 },
+        style: {
+          fontSize: 24,
+          textAlign: "center",
+          color: "#fbbf24", // Gold
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
+        data: {
+          content: "6. KHUYẾN NGHỊ PHÁP LÝ & ĐIỂM NÓNG THỰC TIỄN",
+        },
+      },
+      {
+        id: "el-text-subtitle-7",
+        type: "TEXT",
+        position: { x: 10, y: 14, w: 80, h: 6 },
+        style: {
+          fontSize: 14,
+          textAlign: "center",
+          color: "#94a3b8",
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
+        data: {
+          content: "Nhấn vào vùng hình ảnh khu bất động sản để hiển thị khuyến nghị chi tiết:",
+        },
+      },
+      {
+        id: "el-hotspot-stakeholders",
+        type: "HOTSPOT",
+        position: { x: 10, y: 22, w: 42, h: 68 },
+        style: {
+          borderRadius: 16,
+          opacity: 1,
+          zIndex: 5,
+        },
+        enterAnimation: { type: "zoom-in", duration: 600, delay: 200 },
+        data: {
+          imageUri: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80",
+          zones: [
+            { id: "zone-developer", xMin: 5, yMin: 5, xMax: 95, yMax: 95 },
+          ],
+          correctZoneId: "zone-developer",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.TOGGLE_VISIBILITY,
+            payload: {
+              targetElementId: "el-feedback-card",
+              action: "SHOW",
+            },
+          },
+        ],
+      },
+      {
+        id: "el-feedback-card",
+        type: "TEXT",
+        position: { x: 54, y: 22, w: 36, h: 68 },
+        style: {
+          backgroundColor: "#1e293b",
+          color: "#f8fafc",
+          fontSize: 13,
+          borderRadius: 16,
+          opacity: 0, // Mặc định ẩn, click hotspot sẽ hiện
+          zIndex: 10,
+          border: "1px solid #334155",
+        },
+        enterAnimation: { type: "fade-in", duration: 400, delay: 0 },
+        data: {
+          content: "💡 KHUYẾN NGHỊ THỰC TIỄN:\n\n• CHỦ ĐẦU TƯ: Duy trì tỷ lệ vốn chủ sở hữu đạt chuẩn (15%-20%) theo luật, tuyệt đối không huy động cọc quá 5% trước khi dự án đủ pháp lý kinh doanh.\n\n• NGƯỜI MUA: Cảnh giác pháp lý, luôn kiểm tra sự hiện diện của Thư bảo lãnh nghĩa vụ tài chính từ ngân hàng thương mại trước khi ký hợp đồng và giải ngân tiền.",
         },
       },
     ],

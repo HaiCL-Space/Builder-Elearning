@@ -5,12 +5,14 @@ interface HotspotElementProps {
   element: Extract<SlideElement, { type: "HOTSPOT" }>
   baseStyle: React.CSSProperties
   handleClick: (e: React.MouseEvent, zoneId?: string) => void
+  isInteractive?: boolean
 }
 
 const HotspotElement: React.FC<HotspotElementProps> = ({
   element,
   baseStyle,
   handleClick,
+  isInteractive = true,
 }) => {
   const zones = element.data.zones || []
 
@@ -20,21 +22,23 @@ const HotspotElement: React.FC<HotspotElementProps> = ({
         ...baseStyle,
         backgroundImage: `url(${element.data.imageUri})`,
         backgroundSize: "cover",
-        border: "2px dashed #007bff",
+        border: isInteractive ? "none" : "2px dashed #007bff",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          top: "10px",
-          left: "10px",
-          backgroundColor: "rgba(255,255,255,0.8)",
-          padding: "4px",
-          pointerEvents: "none",
-        }}
-      >
-        👆 Vùng Hotspot
-      </div>
+      {!isInteractive && (
+        <div
+          style={{
+            position: "absolute",
+            top: "10px",
+            left: "10px",
+            backgroundColor: "rgba(255,255,255,0.8)",
+            padding: "4px",
+            pointerEvents: "none",
+          }}
+        >
+          👆 Vùng Hotspot
+        </div>
+      )}
       {zones.map((zone) => (
         <div
           key={zone.id}
@@ -45,11 +49,11 @@ const HotspotElement: React.FC<HotspotElementProps> = ({
             top: `${zone.yMin}%`,
             width: `${zone.xMax - zone.xMin}%`,
             height: `${zone.yMax - zone.yMin}%`,
-            backgroundColor: "rgba(255, 0, 0, 0.3)",
+            backgroundColor: isInteractive ? "transparent" : "rgba(255, 0, 0, 0.3)",
             cursor: "pointer",
-            border: "1px solid red",
+            border: isInteractive ? "none" : "1px solid red",
           }}
-          title={`Zone: ${zone.id}`}
+          title={isInteractive ? undefined : `Zone: ${zone.id}`}
         />
       ))}
     </div>

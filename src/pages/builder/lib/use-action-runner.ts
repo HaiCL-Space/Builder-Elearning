@@ -89,13 +89,13 @@ export function useActionRunner() {
       } else if (targetEl.type === "HOTSPOT") {
         const hotspotData = targetEl.data as unknown as {
           correctZoneId?: string
-          zones?: { id: string; label?: string }[]
+          zones?: { id: string }[]
         }
         const userAnswer = (action.payload as { userAnswer?: string })?.userAnswer
 
         isCorrect = userAnswer === hotspotData.correctZoneId
         const zone = (hotspotData.zones || []).find((z) => z.id === userAnswer)
-        userAnswerDesc = zone?.label || userAnswer || "Vùng không xác định"
+        userAnswerDesc = zone?.id || userAnswer || "Vùng không xác định"
       } else if (targetEl.type === "SORTING") {
         isCorrect = true
         userAnswerDesc = "Sắp xếp mốc thời gian lịch sử"

@@ -91,6 +91,7 @@ export function SlideBuilder() {
           isInteractiveMode={isInteractiveMode}
           onToggleMode={handleToggleMode}
           onAction={handleAction}
+          theme={currentSlide.config?.theme}
         />
 
         {/* GUIDELINES & REAL-TIME TOOLTIP OVERLAYS */}

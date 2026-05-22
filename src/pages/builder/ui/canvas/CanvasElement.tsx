@@ -28,7 +28,8 @@ type AnimationConfig = NonNullable<BuilderElement["enterAnimation"]> | NonNullab
 
 const getAnimationVariants = (
   anim: AnimationConfig | undefined,
-  isEnter: boolean
+  isEnter: boolean,
+  targetOpacity = 1
 ): { initial?: TargetAndTransition; animate?: TargetAndTransition; exit?: TargetAndTransition } | undefined => {
   if (!anim) return undefined
   const duration = (anim.duration || 500) / 1000
@@ -36,12 +37,12 @@ const getAnimationVariants = (
 
   if (isEnter) {
     switch (anim.type) {
-      case "fade-in": return { initial: { opacity: 0 }, animate: { opacity: 1, transition: { duration, delay } } }
-      case "slide-up": return { initial: { opacity: 0, y: 50 }, animate: { opacity: 1, y: 0, transition: { duration, delay } } }
-      case "zoom-in": return { initial: { opacity: 0, scale: 0.5 }, animate: { opacity: 1, scale: 1, transition: { duration, delay } } }
+      case "fade-in": return { initial: { opacity: 0 }, animate: { opacity: targetOpacity, transition: { duration, delay } } }
+      case "slide-up": return { initial: { opacity: 0, y: 50 }, animate: { opacity: targetOpacity, y: 0, transition: { duration, delay } } }
+      case "zoom-in": return { initial: { opacity: 0, scale: 0.5 }, animate: { opacity: targetOpacity, scale: 1, transition: { duration, delay } } }
       case "bounce": return {
-        initial: { y: "-25%" },
-        animate: { y: ["-25%", "0%", "-10%", "0%"], transition: { duration, delay, times: [0, 0.5, 0.75, 1], ease: "easeInOut" } }
+        initial: { y: "-25%", opacity: 0 },
+        animate: { y: ["-25%", "0%", "-10%", "0%"], opacity: targetOpacity, transition: { duration, delay, times: [0, 0.5, 0.75, 1], ease: "easeInOut" } }
       }
     }
   } else {
@@ -149,8 +150,9 @@ export function CanvasElement({
     justifyContent: "center",
   }
 
-  const enterVar = getAnimationVariants(element.enterAnimation, true)
-  const exitVar = getAnimationVariants(element.exitAnimation, false)
+  const targetOpacity = element.style?.opacity !== undefined ? parseFloat(String(element.style.opacity)) : 1
+  const enterVar = getAnimationVariants(element.enterAnimation, true, targetOpacity)
+  const exitVar = getAnimationVariants(element.exitAnimation, false, targetOpacity)
 
   return (
     <motion.div
@@ -197,6 +199,7 @@ export function CanvasElement({
               element={element as Extract<BuilderElement, { type: "HOTSPOT" }>}
               baseStyle={innerWrapperStyle}
               handleClick={handleElementClick}
+              isInteractive={isInteractiveMode}
             />
           )}
           {element.type === "SORTING" && (

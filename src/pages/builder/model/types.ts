@@ -15,5 +15,4 @@ export type HotspotZone = {
   yMin: number
   xMax: number
   yMax: number
-  label?: string
 }

@@ -1,6 +1,7 @@
 import { type SlideElement, type ElementAction } from "broker-core-sdk"
 import React, { useState } from "react"
 import { MOCK_SLIDES } from "@/shared/api/mock-slides"
+import { THEME_BACKGROUNDS } from "@/shared/lib/builder-utils"
 import {
   TextElement,
   VideoElement,
@@ -14,6 +15,7 @@ import {
   TimedSprintElement,
   WordScrambleElement,
 } from "@/entities/element"
+
 
 const SlidePreviewApp = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
@@ -84,6 +86,8 @@ const SlidePreviewApp = () => {
     }
   }
 
+  const themeBg = THEME_BACKGROUNDS[currentSlide.config?.theme || "light"] || THEME_BACKGROUNDS.light
+
   return (
     <div
       style={{
@@ -127,10 +131,10 @@ const SlidePreviewApp = () => {
           position: "relative",
           width: "100%",
           aspectRatio: "16/9",
-          backgroundColor: "#f8f9fa",
           border: "1px solid #ddd",
           boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
           overflow: "hidden",
+          ...themeBg,
         }}
       >
         {currentSlide.elements.map((element) => {
@@ -171,9 +175,14 @@ const ElementRenderer = ({
     element.actions?.filter((a) => a.trigger === "ON_CLICK") || []
 
   // 2. Hàm xử lý khi user click vào phần tử
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent, userAnswer?: string) => {
     e.stopPropagation() // Ngăn chặn sự kiện sủi bọt (bubbling)
-    clickActions.forEach((action) => onAction(action))
+    clickActions.forEach((action) => {
+      const actionWithAnswer = userAnswer
+        ? { ...action, payload: { ...action.payload, userAnswer } }
+        : action
+      onAction(actionWithAnswer as ElementAction)
+    })
   }
 
   const baseStyle: React.CSSProperties = {
@@ -226,6 +235,7 @@ const ElementRenderer = ({
           element={element}
           baseStyle={baseStyle}
           handleClick={handleClick}
+          isInteractive={true}
         />
       )
 
