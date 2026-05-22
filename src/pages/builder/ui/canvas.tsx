@@ -18,6 +18,7 @@ export function Canvas({
   onCanvasMouseDown,
   onElementMouseDown,
   onHotspotZoneMouseDown,
+  onHotspotZoneResizeMouseDown,
   onDeleteElement,
   onResizeMouseDown,
   isInteractiveMode,
@@ -41,6 +42,13 @@ export function Canvas({
     element: BuilderElement,
     zone: HotspotZone
   ) => void
+  onHotspotZoneResizeMouseDown: (
+    e: React.MouseEvent,
+    element: BuilderElement,
+    zone: HotspotZone,
+    handle: string
+  ) => void
+
   onDeleteElement: (id: string) => void
   onResizeMouseDown: (
     e: React.MouseEvent,
@@ -83,10 +91,12 @@ export function Canvas({
             isSelected={!isInteractiveMode && selectedElementId === element.id}
             onElementMouseDown={onElementMouseDown}
             onHotspotZoneMouseDown={onHotspotZoneMouseDown}
+            onHotspotZoneResizeMouseDown={onHotspotZoneResizeMouseDown}
             onDeleteElement={onDeleteElement}
             onResizeMouseDown={onResizeMouseDown}
             isInteractiveMode={isInteractiveMode}
             onAction={onAction}
+
           />
         ))}
       </div>

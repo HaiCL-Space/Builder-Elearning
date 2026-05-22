@@ -44,10 +44,12 @@ export function SlideBuilder() {
     handleCanvasMouseDown,
     handleElementMouseDown,
     handleHotspotZoneMouseDown,
+    handleHotspotZoneResizeMouseDown,
     handleResizeMouseDown,
     handleMouseMove,
     handleMouseUp,
   } = useCanvasEvents(canvasRef)
+
 
   const { handleAction } = useActionRunner()
 
@@ -86,7 +88,9 @@ export function SlideBuilder() {
           onCanvasMouseDown={handleCanvasMouseDown}
           onElementMouseDown={handleElementMouseDown}
           onHotspotZoneMouseDown={handleHotspotZoneMouseDown}
+          onHotspotZoneResizeMouseDown={handleHotspotZoneResizeMouseDown}
           onDeleteElement={handleDeleteElement}
+
           onResizeMouseDown={handleResizeMouseDown}
           isInteractiveMode={isInteractiveMode}
           onToggleMode={handleToggleMode}

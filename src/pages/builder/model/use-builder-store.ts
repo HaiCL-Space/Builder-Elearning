@@ -29,6 +29,12 @@ interface BuilderState {
     offsetX: number
     offsetY: number
   } | null
+  resizingZone: {
+    elementId: string
+    zoneId: string
+    handle: string
+  } | null
+
 
   testAnimationElementId: string | null
   testAnimationKey: number
@@ -59,6 +65,14 @@ interface BuilderState {
       offsetY: number
     } | null
   ) => void
+  setResizingZone: (
+    zone: {
+      elementId: string
+      zoneId: string
+      handle: string
+    } | null
+  ) => void
+
 
   // Core Operations
   updateElement: (
@@ -97,6 +111,8 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   dragOffset: { x: 0, y: 0 },
   resizing: null,
   draggingZone: null,
+  resizingZone: null,
+
   testAnimationElementId: null,
   testAnimationKey: 0,
 
@@ -124,6 +140,8 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   setDragOffset: (offset) => set({ dragOffset: offset }),
   setResizing: (resizing) => set({ resizing }),
   setDraggingZone: (zone) => set({ draggingZone: zone }),
+  setResizingZone: (resizingZone) => set({ resizingZone }),
+
 
   // Core Operations
   updateElement: (slideIndex, elementId, updater) =>

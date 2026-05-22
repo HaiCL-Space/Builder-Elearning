@@ -11,15 +11,18 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
   const dragOffset = useBuilderStore((state) => state.dragOffset)
   const resizing = useBuilderStore((state) => state.resizing)
   const draggingZone = useBuilderStore((state) => state.draggingZone)
+  const resizingZone = useBuilderStore((state) => state.resizingZone)
 
   const setDraggingId = useBuilderStore((state) => state.setDraggingId)
   const setDragOffset = useBuilderStore((state) => state.setDragOffset)
   const setResizing = useBuilderStore((state) => state.setResizing)
   const setDraggingZone = useBuilderStore((state) => state.setDraggingZone)
+  const setResizingZone = useBuilderStore((state) => state.setResizingZone)
   const setGuidelines = useBuilderStore((state) => state.setGuidelines)
   const setActiveTooltip = useBuilderStore((state) => state.setActiveTooltip)
   const setSelectedElementId = useBuilderStore((state) => state.setSelectedElementId)
   const updateElement = useBuilderStore((state) => state.updateElement)
+
 
   const getRelativePos = (e: React.MouseEvent | MouseEvent) => {
     if (!canvasRef.current) return { x: 0, y: 0 }
@@ -76,6 +79,22 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
       offsetY: pos.y - zone.yMin,
     })
   }
+
+  const handleHotspotZoneResizeMouseDown = (
+    e: React.MouseEvent,
+    element: BuilderElement,
+    zone: HotspotZone,
+    handle: string
+  ) => {
+    e.stopPropagation()
+    setSelectedElementId(element.id)
+    setResizingZone({
+      elementId: element.id,
+      zoneId: zone.id,
+      handle,
+    })
+  }
+
 
   const handleResizeMouseDown = (
     e: React.MouseEvent,
@@ -223,6 +242,49 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
       })
     }
 
+    if (resizingZone) {
+      const element = currentSlide.elements.find((x: BuilderElement) => x.id === resizingZone.elementId)
+      if (element) {
+        const pos = getRelativePosInElement(e, element)
+
+        updateElement(currentSlideIndex, resizingZone.elementId, (el) => {
+          if (el.type !== "HOTSPOT") return el
+
+          const data = (el.data || {}) as unknown as {
+            zones?: Array<HotspotZone>
+          }
+
+          const zones = (data.zones || []).map((z: HotspotZone) => {
+            if (z.id !== resizingZone.zoneId) return z
+
+            const nextZ = { ...z }
+            const handle = resizingZone.handle
+
+            if (handle.includes("e")) {
+              nextZ.xMax = Math.max(nextZ.xMin + 2, Math.min(100, pos.x))
+            }
+            if (handle.includes("s")) {
+              nextZ.yMax = Math.max(nextZ.yMin + 2, Math.min(100, pos.y))
+            }
+            if (handle.includes("w")) {
+              nextZ.xMin = Math.max(0, Math.min(nextZ.xMax - 2, pos.x))
+            }
+            if (handle.includes("n")) {
+              nextZ.yMin = Math.max(0, Math.min(nextZ.yMax - 2, pos.y))
+            }
+
+            return nextZ
+          })
+
+          return {
+            ...el,
+            data: { ...(el.data as object), zones },
+          } as unknown as BuilderElement
+        })
+      }
+    }
+
+
     if (resizing) {
       const pos = getRelativePos(e)
       updateElement(currentSlideIndex, resizing.id, (el) => {
@@ -257,17 +319,21 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
   const handleMouseUp = () => {
     setDraggingId(null)
     setDraggingZone(null)
+    setResizingZone(null)
     setResizing(null)
     setGuidelines(null)
     setActiveTooltip(null)
   }
 
+
   return {
     handleCanvasMouseDown,
     handleElementMouseDown,
     handleHotspotZoneMouseDown,
+    handleHotspotZoneResizeMouseDown,
     handleResizeMouseDown,
     handleMouseMove,
     handleMouseUp,
   }
 }
+

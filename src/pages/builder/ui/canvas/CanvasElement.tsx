@@ -63,6 +63,7 @@ export function CanvasElement({
   isSelected,
   onElementMouseDown,
   onHotspotZoneMouseDown,
+  onHotspotZoneResizeMouseDown,
   onDeleteElement,
   onResizeMouseDown,
   isInteractiveMode,
@@ -76,6 +77,12 @@ export function CanvasElement({
     element: BuilderElement,
     zone: HotspotZone
   ) => void
+  onHotspotZoneResizeMouseDown: (
+    e: React.MouseEvent,
+    element: BuilderElement,
+    zone: HotspotZone,
+    handle: string
+  ) => void
   onDeleteElement: (id: string) => void
   onResizeMouseDown: (
     e: React.MouseEvent,
@@ -83,6 +90,7 @@ export function CanvasElement({
     handle: string
   ) => void
   isInteractiveMode: boolean
+
   onAction?: (action: ElementAction) => void
 }) {
   const controls = useAnimation()
@@ -254,7 +262,7 @@ export function CanvasElement({
         </div>
       ) : (
         <div className="pointer-events-none flex h-full w-full items-center justify-center overflow-hidden">
-          <ElementPreview element={element} />
+          <ElementPreview element={element} hideZones={isSelected} />
         </div>
       )}
 
@@ -264,8 +272,10 @@ export function CanvasElement({
           element={element}
           zones={zones}
           onZoneMouseDown={onHotspotZoneMouseDown}
+          onZoneResizeMouseDown={onHotspotZoneResizeMouseDown}
         />
       )}
+
 
       {/* badge on Edit mode only */}
       {!isInteractiveMode && <ElementTypeBadge type={String(element.type)} />}

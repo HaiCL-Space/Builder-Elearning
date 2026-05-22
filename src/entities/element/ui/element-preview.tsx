@@ -27,7 +27,14 @@ interface HotspotZone {
   yMax: number
 }
 
-export function ElementPreview({ element }: { element: BuilderElement }) {
+export function ElementPreview({
+  element,
+  hideZones = false,
+}: {
+  element: BuilderElement
+  hideZones?: boolean
+}) {
+
   const styleObj = element.style || {}
 
   switch (element.type) {
@@ -181,28 +188,30 @@ export function ElementPreview({ element }: { element: BuilderElement }) {
           )}
 
           {/* Zones layout overlay */}
-          {zones.map((z: HotspotZone) => {
-            const w = Math.max(0, z.xMax - z.xMin)
-            const h = Math.max(0, z.yMax - z.yMin)
-            const isCorrect = hotspotData.correctZoneId && z.id === hotspotData.correctZoneId
-            return (
-              <div
-                key={z.id}
-                className={`absolute box-border rounded-xs border-2 ${
-                  isCorrect
-                    ? "border-emerald-500 bg-emerald-500/20"
-                    : "border-rose-500 bg-rose-500/20"
-                } transition-all duration-150`}
-                style={{
-                  left: `${z.xMin}%`,
-                  top: `${z.yMin}%`,
-                  width: `${w}%`,
-                  height: `${h}%`,
-                }}
-                title={`Zone: ${z.id}`}
-              />
-            )
-          })}
+          {!hideZones &&
+            zones.map((z: HotspotZone) => {
+              const w = Math.max(0, z.xMax - z.xMin)
+              const h = Math.max(0, z.yMax - z.yMin)
+              const isCorrect = hotspotData.correctZoneId && z.id === hotspotData.correctZoneId
+              return (
+                <div
+                  key={z.id}
+                  className={`absolute box-border rounded-xs border-2 ${
+                    isCorrect
+                      ? "border-emerald-500 bg-emerald-500/20"
+                      : "border-rose-500 bg-rose-500/20"
+                  } transition-all duration-150`}
+                  style={{
+                    left: `${z.xMin}%`,
+                    top: `${z.yMin}%`,
+                    width: `${w}%`,
+                    height: `${h}%`,
+                  }}
+                  title={`Zone: ${z.id}`}
+                />
+              )
+            })}
+
 
           <div className="pointer-events-none absolute top-1.5 left-1.5 rounded-md bg-black/60 px-2 py-0.5 text-[8px] font-bold tracking-wider text-white uppercase backdrop-blur-xs">
             Hotspot preview
