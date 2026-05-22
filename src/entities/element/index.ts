@@ -5,3 +5,8 @@ export { default as QuizElement } from "./ui/quiz-element";
 export { default as SortingElement } from "./ui/sorting-element";
 export { default as TextElement } from "./ui/text-element";
 export { default as VideoElement } from "./ui/video-element";
+export { default as MemoryCardElement } from "./ui/memory-card-element";
+export { default as FillBlankElement } from "./ui/fill-blank-element";
+export { default as SwipeElement } from "./ui/swipe-element";
+export { default as TimedSprintElement } from "./ui/timed-sprint-element";
+export { default as WordScrambleElement } from "./ui/word-scramble-element";

@@ -16,6 +16,11 @@ import {
   HotspotElement,
   SortingElement,
   MatchingElement,
+  MemoryCardElement,
+  FillBlankElement,
+  SwipeElement,
+  TimedSprintElement,
+  WordScrambleElement,
 } from "@/entities/element"
 import type { ElementAction } from "broker-core-sdk"
 
@@ -204,6 +209,41 @@ export function CanvasElement({
           {element.type === "MATCHING" && (
             <MatchingElement
               element={element as Extract<BuilderElement, { type: "MATCHING" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "MEMORY_CARD" && (
+            <MemoryCardElement
+              element={element as Extract<BuilderElement, { type: "MEMORY_CARD" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "FILL_BLANK" && (
+            <FillBlankElement
+              element={element as Extract<BuilderElement, { type: "FILL_BLANK" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "SWIPE" && (
+            <SwipeElement
+              element={element as Extract<BuilderElement, { type: "SWIPE" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "TIMED_SPRINT" && (
+            <TimedSprintElement
+              element={element as Extract<BuilderElement, { type: "TIMED_SPRINT" }>}
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "WORD_SCRAMBLE" && (
+            <WordScrambleElement
+              element={element as Extract<BuilderElement, { type: "WORD_SCRAMBLE" }>}
               baseStyle={innerWrapperStyle}
               handleClick={handleElementClick}
             />

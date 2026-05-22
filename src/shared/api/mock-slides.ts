@@ -308,4 +308,161 @@ export const MOCK_SLIDES: Slide[] = [
       },
     ],
   },
+  // ==========================================
+  // SLIDE 7: TRÒ CHƠI LẬT THẺ NHỚ (MEMORY CARD)
+  // ==========================================
+  {
+    id: "slide-memory-007",
+    tenant_id: "tenant-abc",
+    course_id: "course-101",
+    order: 7,
+    elements: [
+      {
+        id: "el-text-memory-title",
+        type: "TEXT",
+        position: { x: 10, y: 5, w: 80, h: 10 },
+        style: { fontSize: 22, fontWeight: "bold", textAlign: "center", color: "#4f46e5" },
+        data: {
+          content: "🧠 THỬ THÁCH TRÍ NHỚ ĐỒNG NGHĨA",
+        },
+      },
+      {
+        id: "el-memory-cards-game",
+        type: "MEMORY_CARD",
+        position: { x: 20, y: 20, w: 60, h: 70 },
+        data: {
+          cards: [
+            { id: "c1", value: "Happy" },
+            { id: "c2", value: "Glad" },
+            { id: "c3", value: "Sad" },
+            { id: "c4", value: "Unhappy" },
+          ],
+        },
+      },
+    ],
+  },
+  // ==========================================
+  // SLIDE 8: ĐIỀN VÀO CHỖ TRỐNG (FILL BLANK)
+  // ==========================================
+  {
+    id: "slide-fill-blank-008",
+    tenant_id: "tenant-abc",
+    course_id: "course-101",
+    order: 8,
+    elements: [
+      {
+        id: "el-text-fb-title",
+        type: "TEXT",
+        position: { x: 10, y: 5, w: 80, h: 10 },
+        style: { fontSize: 22, fontWeight: "bold", textAlign: "center", color: "#0284c7" },
+        data: {
+          content: "✍️ KIỂM TRA HIỂU BIẾT THIÊN VĂN",
+        },
+      },
+      {
+        id: "el-fill-blank-science",
+        type: "FILL_BLANK",
+        position: { x: 20, y: 20, w: 60, h: 60 },
+        data: {
+          question: "Hành tinh nào gần Mặt trời nhất trong Hệ Mặt trời?",
+          correctAnswers: ["Sao Thủy", "Mercury", "sao thủy", "mercury"],
+          caseSensitive: false,
+        },
+      },
+    ],
+  },
+  // ==========================================
+  // SLIDE 9: QUẸT THẺ ĐÚNG/SAI (SWIPE)
+  // ==========================================
+  {
+    id: "slide-swipe-009",
+    tenant_id: "tenant-abc",
+    course_id: "course-101",
+    order: 9,
+    elements: [
+      {
+        id: "el-text-swipe-title",
+        type: "TEXT",
+        position: { x: 10, y: 5, w: 80, h: 10 },
+        style: { fontSize: 22, fontWeight: "bold", textAlign: "center", color: "#d97706" },
+        data: {
+          content: "⚡ QUYẾT ĐỊNH NHANH CHÓNG",
+        },
+      },
+      {
+        id: "el-swipe-geography",
+        type: "SWIPE",
+        position: { x: 25, y: 20, w: 50, h: 65 },
+        data: {
+          statement: "Thành phố Sydney là thủ đô của nước Úc.",
+          correctDirection: "left", // False statement (Canberra is the capital)
+        },
+      },
+    ],
+  },
+  // ==========================================
+  // SLIDE 10: BẤT NGỜ THỜI GIAN (TIMED SPRINT)
+  // ==========================================
+  {
+    id: "slide-sprint-010",
+    tenant_id: "tenant-abc",
+    course_id: "course-101",
+    order: 10,
+    elements: [
+      {
+        id: "el-text-sprint-title",
+        type: "TEXT",
+        position: { x: 10, y: 5, w: 80, h: 10 },
+        style: { fontSize: 22, fontWeight: "bold", textAlign: "center", color: "#e11d48" },
+        data: {
+          content: "🔥 CHẠY ĐUA TÌM ĐÁP ÁN TOÁN HỌC",
+        },
+      },
+      {
+        id: "el-sprint-math",
+        type: "TIMED_SPRINT",
+        position: { x: 20, y: 20, w: 60, h: 65 },
+        data: {
+          question: "Kết quả của phép tính: 7 x 8 - 9 = ?",
+          options: [
+            { id: "ts-opt1", content: "45" },
+            { id: "ts-opt2", content: "47" },
+            { id: "ts-opt3", content: "49" },
+          ],
+          correctId: "ts-opt2",
+          duration: 10,
+        },
+      },
+    ],
+  },
+  // ==========================================
+  // SLIDE 11: GHÉP CHỮ (WORD SCRAMBLE)
+  // ==========================================
+  {
+    id: "slide-scramble-011",
+    tenant_id: "tenant-abc",
+    course_id: "course-101",
+    order: 11,
+    elements: [
+      {
+        id: "el-text-scramble-title",
+        type: "TEXT",
+        position: { x: 10, y: 5, w: 80, h: 10 },
+        style: { fontSize: 22, fontWeight: "bold", textAlign: "center", color: "#9333ea" },
+        data: {
+          content: "🔤 GIẢI MÃ CHỮ CÁI XÁO TRỘN",
+        },
+      },
+      {
+        id: "el-scramble-vocab",
+        type: "WORD_SCRAMBLE",
+        position: { x: 20, y: 20, w: 60, h: 60 },
+        data: {
+          scrambledWord: "NLOODN",
+          correctWord: "LONDON",
+          caseSensitive: false,
+        },
+      },
+    ],
+  },
 ]

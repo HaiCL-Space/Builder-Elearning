@@ -8,6 +8,11 @@ import {
   HotspotElement,
   SortingElement,
   MatchingElement,
+  MemoryCardElement,
+  FillBlankElement,
+  SwipeElement,
+  TimedSprintElement,
+  WordScrambleElement,
 } from "@/entities/element"
 
 const SlidePreviewApp = () => {
@@ -242,8 +247,53 @@ const ElementRenderer = ({
         />
       )
 
+    case "MEMORY_CARD":
+      return (
+        <MemoryCardElement
+          element={element as Extract<SlideElement, { type: "MEMORY_CARD" }>}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
+      )
+
+    case "FILL_BLANK":
+      return (
+        <FillBlankElement
+          element={element as Extract<SlideElement, { type: "FILL_BLANK" }>}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
+      )
+
+    case "SWIPE":
+      return (
+        <SwipeElement
+          element={element as Extract<SlideElement, { type: "SWIPE" }>}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
+      )
+
+    case "TIMED_SPRINT":
+      return (
+        <TimedSprintElement
+          element={element as Extract<SlideElement, { type: "TIMED_SPRINT" }>}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
+      )
+
+    case "WORD_SCRAMBLE":
+      return (
+        <WordScrambleElement
+          element={element as Extract<SlideElement, { type: "WORD_SCRAMBLE" }>}
+          baseStyle={baseStyle}
+          handleClick={handleClick}
+        />
+      )
+
     default:
-      return <div style={baseStyle}>[Unsupported Element: {element.type}]</div>
+      return <div style={baseStyle}>[Unsupported Element: {(element as unknown as { type: string }).type}]</div>
   }
 }
 

@@ -1,5 +1,5 @@
 import type { BuilderElement } from "@/pages/builder/model/types"
-import { type VideoData } from "broker-core-sdk"
+import { type VideoData, type SlideElement } from "broker-core-sdk"
 import {
   HelpCircle,
   MousePointerClick,
@@ -9,6 +9,11 @@ import {
   Play,
   GripVertical,
 } from "lucide-react"
+import MemoryCardElement from "./memory-card-element"
+import FillBlankElement from "./fill-blank-element"
+import SwipeElement from "./swipe-element"
+import TimedSprintElement from "./timed-sprint-element"
+import WordScrambleElement from "./word-scramble-element"
 
 interface QuizOption {
   id: string
@@ -306,10 +311,70 @@ export function ElementPreview({ element }: { element: BuilderElement }) {
       )
     }
 
+    case "MEMORY_CARD": {
+      return (
+        <div className="pointer-events-none w-full h-full">
+          <MemoryCardElement
+            element={element as unknown as Extract<SlideElement, { type: "MEMORY_CARD" }>}
+            baseStyle={{ width: "100%", height: "100%" }}
+            handleClick={() => {}}
+          />
+        </div>
+      )
+    }
+
+    case "FILL_BLANK": {
+      return (
+        <div className="pointer-events-none w-full h-full">
+          <FillBlankElement
+            element={element as unknown as Extract<SlideElement, { type: "FILL_BLANK" }>}
+            baseStyle={{ width: "100%", height: "100%" }}
+            handleClick={() => {}}
+          />
+        </div>
+      )
+    }
+
+    case "SWIPE": {
+      return (
+        <div className="pointer-events-none w-full h-full">
+          <SwipeElement
+            element={element as unknown as Extract<SlideElement, { type: "SWIPE" }>}
+            baseStyle={{ width: "100%", height: "100%" }}
+            handleClick={() => {}}
+          />
+        </div>
+      )
+    }
+
+    case "TIMED_SPRINT": {
+      return (
+        <div className="pointer-events-none w-full h-full">
+          <TimedSprintElement
+            element={element as unknown as Extract<SlideElement, { type: "TIMED_SPRINT" }>}
+            baseStyle={{ width: "100%", height: "100%" }}
+            handleClick={() => {}}
+          />
+        </div>
+      )
+    }
+
+    case "WORD_SCRAMBLE": {
+      return (
+        <div className="pointer-events-none w-full h-full">
+          <WordScrambleElement
+            element={element as unknown as Extract<SlideElement, { type: "WORD_SCRAMBLE" }>}
+            baseStyle={{ width: "100%", height: "100%" }}
+            handleClick={() => {}}
+          />
+        </div>
+      )
+    }
+
     default:
       return (
         <div className="flex h-full w-full items-center justify-center bg-gray-50 text-[10px] text-gray-400">
-          {element.type}
+          {(element as unknown as { type: string }).type}
         </div>
       )
   }
