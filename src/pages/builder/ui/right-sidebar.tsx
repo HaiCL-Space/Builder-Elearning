@@ -11,6 +11,11 @@ import { QuizEditor } from "./sidebar/QuizEditor"
 import { MatchingEditor } from "./sidebar/MatchingEditor"
 import { SortingEditor } from "./sidebar/SortingEditor"
 import { HotspotEditor } from "./sidebar/HotspotEditor"
+import { MemoryCardEditor } from "./sidebar/MemoryCardEditor"
+import { FillBlankEditor } from "./sidebar/FillBlankEditor"
+import { SwipeEditor } from "./sidebar/SwipeEditor"
+import { TimedSprintEditor } from "./sidebar/TimedSprintEditor"
+import { WordScrambleEditor } from "./sidebar/WordScrambleEditor"
 import { AnimationTab } from "./sidebar/AnimationTab"
 import { ActionTab } from "./sidebar/ActionTab"
 
@@ -181,6 +186,46 @@ export function RightSidebar({
                   />
                 )}
 
+                {selectedElement.type === "MEMORY_CARD" && (
+                  <MemoryCardEditor
+                    selectedElement={selectedElement}
+                    onUpdateData={onUpdateData}
+                    onUpdateStyle={onUpdateStyle}
+                  />
+                )}
+
+                {selectedElement.type === "FILL_BLANK" && (
+                  <FillBlankEditor
+                    selectedElement={selectedElement}
+                    onUpdateData={onUpdateData}
+                    onUpdateStyle={onUpdateStyle}
+                  />
+                )}
+
+                {selectedElement.type === "SWIPE" && (
+                  <SwipeEditor
+                    selectedElement={selectedElement}
+                    onUpdateData={onUpdateData}
+                    onUpdateStyle={onUpdateStyle}
+                  />
+                )}
+
+                {selectedElement.type === "TIMED_SPRINT" && (
+                  <TimedSprintEditor
+                    selectedElement={selectedElement}
+                    onUpdateData={onUpdateData}
+                    onUpdateStyle={onUpdateStyle}
+                  />
+                )}
+
+                {selectedElement.type === "WORD_SCRAMBLE" && (
+                  <WordScrambleEditor
+                    selectedElement={selectedElement}
+                    onUpdateData={onUpdateData}
+                    onUpdateStyle={onUpdateStyle}
+                  />
+                )}
+
                 {/* --- CHỈNH SỬA HIỂN THỊ CHUNG --- */}
                 <div className="space-y-3.5 border-t border-slate-100 pt-3.5">
                   <label className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
@@ -188,38 +233,34 @@ export function RightSidebar({
                   </label>
                   <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
                     <label className="text-xs font-semibold text-slate-600">Độ mờ (Opacity)</label>
-                    <input
-                      type="range"
-                      min={0}
-                      max={1}
-                      step={0.05}
-                      value={
-                        parseFloat(
-                          ((
-                            selectedElement.style as unknown as {
-                              opacity?: number | string
+                    {(() => {
+                      const opacityVal =
+                        selectedElement.style &&
+                        (selectedElement.style as Record<string, any>).opacity !== undefined
+                          ? parseFloat(String((selectedElement.style as Record<string, any>).opacity))
+                          : 1
+                      const safeOpacity = isNaN(opacityVal) ? 1 : opacityVal
+                      return (
+                        <>
+                          <input
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.05}
+                            value={safeOpacity}
+                            onChange={(e) =>
+                              onUpdateStyle({
+                                opacity: parseFloat(e.target.value),
+                              })
                             }
-                          )?.opacity as string) ?? "1"
-                        ) || 1
-                      }
-                      onChange={(e) =>
-                        onUpdateStyle({
-                          opacity: parseFloat(e.target.value),
-                        })
-                      }
-                      className="flex-1 accent-blue-500 cursor-pointer h-1.5 bg-slate-200 rounded-lg"
-                    />
-                    <span className="w-8 text-right text-[11px] font-bold text-slate-600 tabular-nums">
-                      {(
-                        parseFloat(
-                          (
-                            selectedElement.style as unknown as {
-                              opacity?: number | string
-                            }
-                          )?.opacity as string
-                        ) ?? 1
-                      ).toFixed(2)}
-                    </span>
+                            className="flex-1 accent-blue-500 cursor-pointer h-1.5 bg-slate-200 rounded-lg"
+                          />
+                          <span className="w-8 text-right text-[11px] font-bold text-slate-600 tabular-nums">
+                            {safeOpacity.toFixed(2)}
+                          </span>
+                        </>
+                      )
+                    })()}
                   </div>
                   <NumberField
                     label="Z-Index (Độ cao chồng xếp)"
