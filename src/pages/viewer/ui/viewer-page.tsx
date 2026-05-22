@@ -1,9 +1,10 @@
 import { useState } from "react"
-import { ACTION_TYPES, type ElementAction } from "broker-core-sdk"
+import { ACTION_TYPES, learningEngine, gameEngine, type ElementAction, type MultipleChoiceData } from "broker-core-sdk"
 import { MOCK_SLIDES } from "@/shared/api/mock-slides"
 import { THEME_BACKGROUNDS } from "@/shared/lib/builder-utils"
 import CanvasElement from "@/pages/builder/ui/canvas/CanvasElement"
 import type { BuilderElement } from "@/pages/builder/model/types"
+import { CustomAlertDialog } from "@/shared/ui/custom-alert-dialog"
 
 function getInitiallyHiddenElements(slide: (typeof MOCK_SLIDES)[number]) {
   const initiallyHidden = new Set<string>()
@@ -21,6 +22,19 @@ export function ViewerPage() {
   const [hiddenElements, setHiddenElements] = useState<Set<string>>(() =>
     getInitiallyHiddenElements(currentSlide)
   )
+  const [activeAlert, setActiveAlert] = useState<{
+    isOpen: boolean
+    type: "success" | "error" | "warning" | "info"
+    title: string
+    message: string
+    spacedRepetition?: {
+      conceptId: string
+      userAnswerDesc: string
+      days: number
+      nextReviewDateStr: string
+      isMastered: boolean
+    }
+  } | null>(null)
 
   const handleNext = () => {
     setCurrentSlideIndex((index) => {
@@ -61,11 +75,110 @@ export function ViewerPage() {
         break
       }
 
-      case ACTION_TYPES.EVALUATE_ANSWER:
-        alert(
-          `[Viewer] Đang chấm điểm cho Element: ${action.payload.targetElementId}\nCập nhật tiến trình cho Concept: ${action.payload.conceptId}`
-        )
+      case ACTION_TYPES.EVALUATE_ANSWER: {
+        const targetId = action.payload?.targetElementId
+        if (!targetId) return
+        const conceptId = action.payload?.conceptId || "concept-default"
+        const targetEl = currentSlide.elements.find((el) => el.id === targetId)
+
+        if (!targetEl) return
+
+        let isCorrect = false
+        let userAnswerDesc = ""
+
+        if (targetEl.type === "QUIZ") {
+          const selectedItem = document.querySelector(
+            `[data-quiz-id="${targetId}"] [data-state="checked"]`
+          ) as HTMLButtonElement | null
+          const userAnswer = selectedItem?.value || null
+
+          if (!userAnswer) {
+            setActiveAlert({
+              isOpen: true,
+              type: "warning",
+              title: "Chưa chọn câu trả lời",
+              message: "Vui lòng chọn một phương án trả lời trước khi kiểm tra!"
+            })
+            return
+          }
+
+          isCorrect = gameEngine.validateGameResult(
+            "QUIZ",
+            userAnswer,
+            targetEl.data as unknown as MultipleChoiceData
+          )
+          const quizData = targetEl.data as unknown as {
+            options?: { id: string; content: string }[]
+          }
+          const opt = (quizData.options || []).find((o) => o.id === userAnswer)
+          userAnswerDesc = opt ? opt.content : userAnswer
+        } else if (targetEl.type === "HOTSPOT") {
+          const hotspotData = targetEl.data as unknown as {
+            correctZoneId?: string
+            zones?: { id: string }[]
+          }
+          const userAnswer = (action.payload as { userAnswer?: string })?.userAnswer
+
+          isCorrect = userAnswer === hotspotData.correctZoneId
+          const zone = (hotspotData.zones || []).find((z) => z.id === userAnswer)
+          userAnswerDesc = zone?.id || userAnswer || "Vùng không xác định"
+        } else if (targetEl.type === "SORTING") {
+          isCorrect = true
+          userAnswerDesc = "Sắp xếp mốc thời gian lịch sử"
+        } else if (targetEl.type === "MATCHING") {
+          const matchingEl = document.querySelector(`[data-matching-id="${targetId}"]`)
+          const userMatchesRaw = matchingEl?.getAttribute("data-user-matches")
+          const userMatches: [string, string][] = userMatchesRaw ? JSON.parse(userMatchesRaw) : []
+          
+          const matchingData = targetEl.data as unknown as {
+            leftColumn: { id: string; content: string }[]
+            rightColumn: { id: string; content: string }[]
+            correctPairs: [string, string][]
+          }
+
+          if (userMatches.length < matchingData.leftColumn.length) {
+            setActiveAlert({
+              isOpen: true,
+              type: "warning",
+              title: "Chưa hoàn thành ghép nối",
+              message: "Vui lòng nối tất cả các cặp từ trước khi kiểm tra!"
+            })
+            return
+          }
+
+          // Check if all user matches are in correctPairs
+          isCorrect = userMatches.every(([uL, uR]) => 
+            matchingData.correctPairs.some(([cL, cR]) => cL === uL && cR === uR)
+          )
+          
+          userAnswerDesc = `Đã nối ${userMatches.length} cặp từ`
+        } else {
+          isCorrect = true
+          userAnswerDesc = "Trả lời tự do"
+        }
+
+        // Spaced Repetition calculation
+        const days = learningEngine.calculateNextReview(isCorrect, "High")
+        const isMastered = learningEngine.checkMastery(isCorrect ? 3 : 0, "High")
+
+        const nextReviewDate = new Date()
+        nextReviewDate.setDate(nextReviewDate.getDate() + days)
+
+        setActiveAlert({
+          isOpen: true,
+          type: isCorrect ? "success" : "error",
+          title: isCorrect ? "🎉 CHÍNH XÁC! Bạn trả lời xuất sắc!" : "❌ SAI RỒI. Hãy thử lại nhé!",
+          message: "",
+          spacedRepetition: {
+            conceptId,
+            userAnswerDesc,
+            days,
+            nextReviewDateStr: nextReviewDate.toLocaleDateString("vi-VN"),
+            isMastered
+          }
+        })
         break
+      }
 
       case ACTION_TYPES.PLAY_MEDIA:
         console.log("Phát media:", action.payload.mediaUrl)
@@ -155,6 +268,17 @@ export function ViewerPage() {
           ))}
         </div>
       </div>
+
+      {activeAlert && (
+        <CustomAlertDialog
+          isOpen={activeAlert.isOpen}
+          type={activeAlert.type}
+          title={activeAlert.title}
+          message={activeAlert.message}
+          spacedRepetition={activeAlert.spacedRepetition}
+          onClose={() => setActiveAlert(prev => prev ? { ...prev, isOpen: false } : null)}
+        />
+      )}
     </div>
   )
 }

@@ -40,6 +40,33 @@ interface BuilderState {
   testAnimationKey: number
   triggerTestAnimation: (id: string) => void
 
+  activeAlert: {
+    isOpen: boolean
+    type: "success" | "error" | "warning" | "info"
+    title: string
+    message: string
+    spacedRepetition?: {
+      conceptId: string
+      userAnswerDesc: string
+      days: number
+      nextReviewDateStr: string
+      isMastered: boolean
+    }
+  } | null
+  setAlert: (alert: {
+    type: "success" | "error" | "warning" | "info"
+    title: string
+    message: string
+    spacedRepetition?: {
+      conceptId: string
+      userAnswerDesc: string
+      days: number
+      nextReviewDateStr: string
+      isMastered: boolean
+    }
+  } | null) => void
+  closeAlert: () => void
+
   // Basic Setters
   setSlides: (slides: Slide[] | ((prev: Slide[]) => Slide[])) => void
   setCurrentSlideIndex: (index: number | ((prev: number) => number)) => void
@@ -121,6 +148,14 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       testAnimationElementId: id,
       testAnimationKey: state.testAnimationKey + 1,
     })),
+
+  activeAlert: null,
+  setAlert: (alert) => set({
+    activeAlert: alert ? { ...alert, isOpen: true } : null
+  }),
+  closeAlert: () => set((state) => ({
+    activeAlert: state.activeAlert ? { ...state.activeAlert, isOpen: false } : null
+  })),
 
   // Basic Setters
   setSlides: (slides) =>

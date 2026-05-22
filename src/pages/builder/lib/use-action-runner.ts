@@ -10,6 +10,7 @@ export function useActionRunner() {
   
   const setCurrentSlideIndex = useBuilderStore((state) => state.setCurrentSlideIndex)
   const updateElement = useBuilderStore((state) => state.updateElement)
+  const setAlert = useBuilderStore((state) => state.setAlert)
 
   const handleAction = (action: ElementAction) => {
     if (!isInteractiveMode) return
@@ -72,7 +73,11 @@ export function useActionRunner() {
         const userAnswer = selectedItem?.value || null
 
         if (!userAnswer) {
-          alert("Vui lòng chọn một phương án trả lời trước khi kiểm tra!")
+          setAlert({
+            type: "warning",
+            title: "Chưa chọn câu trả lời",
+            message: "Vui lòng chọn một phương án trả lời trước khi kiểm tra!"
+          })
           return
         }
 
@@ -111,7 +116,11 @@ export function useActionRunner() {
         }
 
         if (userMatches.length < matchingData.leftColumn.length) {
-          alert("Vui lòng nối tất cả các cặp từ trước khi kiểm tra!")
+          setAlert({
+            type: "warning",
+            title: "Chưa hoàn thành ghép nối",
+            message: "Vui lòng nối tất cả các cặp từ trước khi kiểm tra!"
+          })
           return
         }
 
@@ -133,19 +142,18 @@ export function useActionRunner() {
       const nextReviewDate = new Date()
       nextReviewDate.setDate(nextReviewDate.getDate() + days)
 
-      alert(
-        `${
-          isCorrect ? "🎉 CHÍNH XÁC! Bạn trả lời xuất sắc!" : "❌ SAI RỒI. Hãy thử lại nhé!"
-        }\n\n` +
-          `[Phân tích thuật toán Spaced Repetition - Core SDK]:\n` +
-          `• Học phần: ${conceptId}\n` +
-          `• Phương án chọn: "${userAnswerDesc}"\n` +
-          `• Kế hoạch giãn cách ôn tập: +${days} ngày\n` +
-          `• Ngày ôn tập dự phòng: ${nextReviewDate.toLocaleDateString("vi-VN")}\n` +
-          `• Trạng thái Mastery (Thành thạo): ${
-            isMastered ? "Đạt ✅" : "Chưa đạt ⚠️ (Cần trả lời đúng liên tục 3 lần)"
-          }`
-      )
+      setAlert({
+        type: isCorrect ? "success" : "error",
+        title: isCorrect ? "CHÍNH XÁC! Bạn trả lời xuất sắc!" : "CHƯA CHÍNH XÁC. Hãy thử lại nhé!",
+        message: "",
+        spacedRepetition: {
+          conceptId,
+          userAnswerDesc,
+          days,
+          nextReviewDateStr: nextReviewDate.toLocaleDateString("vi-VN"),
+          isMastered
+        }
+      })
     }
   }
 

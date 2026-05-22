@@ -6,6 +6,7 @@ import { RightSidebar } from "@/pages/builder/ui/right-sidebar"
 import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 import { useCanvasEvents } from "@/pages/builder/lib/use-canvas-events"
 import { useActionRunner } from "@/pages/builder/lib/use-action-runner"
+import { CustomAlertDialog } from "@/shared/ui/custom-alert-dialog"
 
 export function SlideBuilder() {
   const slides = useBuilderStore((state) => state.slides)
@@ -19,6 +20,8 @@ export function SlideBuilder() {
   const isInteractiveMode = useBuilderStore((state) => state.isInteractiveMode)
   const guidelines = useBuilderStore((state) => state.guidelines)
   const activeTooltip = useBuilderStore((state) => state.activeTooltip)
+  const activeAlert = useBuilderStore((state) => state.activeAlert)
+  const closeAlert = useBuilderStore((state) => state.closeAlert)
 
   // Actions from Zustand store
   const setCurrentSlideIndex = useBuilderStore((state) => state.setCurrentSlideIndex)
@@ -142,6 +145,17 @@ export function SlideBuilder() {
         onUpdateActions={updateSelectedActions}
         onUpdateAnimations={updateSelectedAnimations}
       />
+
+      {activeAlert && (
+        <CustomAlertDialog
+          isOpen={activeAlert.isOpen}
+          type={activeAlert.type}
+          title={activeAlert.title}
+          message={activeAlert.message}
+          spacedRepetition={activeAlert.spacedRepetition}
+          onClose={closeAlert}
+        />
+      )}
     </div>
   )
 }

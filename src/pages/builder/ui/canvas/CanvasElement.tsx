@@ -41,8 +41,12 @@ const getAnimationVariants = (
       case "slide-up": return { initial: { opacity: 0, y: 50 }, animate: { opacity: targetOpacity, y: 0, transition: { duration, delay } } }
       case "zoom-in": return { initial: { opacity: 0, scale: 0.5 }, animate: { opacity: targetOpacity, scale: 1, transition: { duration, delay } } }
       case "bounce": return {
-        initial: { y: "-25%", opacity: 0 },
-        animate: { y: ["-25%", "0%", "-10%", "0%"], opacity: targetOpacity, transition: { duration, delay, times: [0, 0.5, 0.75, 1], ease: "easeInOut" } }
+        initial: { y: -50, opacity: 0 },
+        animate: {
+          y: [-50, 0, -15, 0],
+          opacity: [0, targetOpacity, targetOpacity, targetOpacity],
+          transition: { duration, delay, times: [0, 0.5, 0.75, 1], ease: "easeInOut" }
+        }
       }
     }
   } else {
@@ -51,7 +55,11 @@ const getAnimationVariants = (
       case "slide-up": return { exit: { opacity: 0, y: 50, transition: { duration, delay } } }
       case "zoom-in": return { exit: { opacity: 0, scale: 0.5, transition: { duration, delay } } }
       case "bounce": return {
-        exit: { y: ["0%", "-10%", "0%", "25%"], opacity: [1, 1, 1, 0], transition: { duration, delay, times: [0, 0.25, 0.5, 1], ease: "easeInOut" } }
+        exit: {
+          y: [0, -15, 0, 50],
+          opacity: [targetOpacity, targetOpacity, targetOpacity, 0],
+          transition: { duration, delay, times: [0, 0.25, 0.5, 1], ease: "easeInOut" }
+        }
       }
     }
   }
@@ -96,12 +104,13 @@ export function CanvasElement({
   const controls = useAnimation()
   const testAnimationElementId = useBuilderStore((s) => s.testAnimationElementId)
   const testAnimationKey = useBuilderStore((s) => s.testAnimationKey)
+  const targetOpacity = element.style?.opacity !== undefined ? parseFloat(String(element.style.opacity)) : 1
 
   useEffect(() => {
     if (!isInteractiveMode && testAnimationElementId === element.id && testAnimationKey > 0) {
       const runTest = async () => {
-        const enterVar = getAnimationVariants(element.enterAnimation, true)
-        const exitVar = getAnimationVariants(element.exitAnimation, false)
+        const enterVar = getAnimationVariants(element.enterAnimation, true, targetOpacity)
+        const exitVar = getAnimationVariants(element.exitAnimation, false, targetOpacity)
 
         if (enterVar?.initial) {
           await controls.start(enterVar.initial, { duration: 0 })
@@ -112,12 +121,12 @@ export function CanvasElement({
         if (exitVar?.exit) {
           await controls.start(exitVar.exit)
           // Reset
-          await controls.start({ opacity: 1, scale: 1, y: 0, x: 0 }, { duration: 0.2 })
+          await controls.start({ opacity: targetOpacity, scale: 1, y: 0, x: 0 }, { duration: 0.2 })
         }
       }
       runTest()
     }
-  }, [testAnimationElementId, testAnimationKey, element.id, element.enterAnimation, element.exitAnimation, controls, isInteractiveMode])
+  }, [testAnimationElementId, testAnimationKey, element.id, element.enterAnimation, element.exitAnimation, controls, isInteractiveMode, targetOpacity])
   const pos = element.position
   const baseStyle: React.CSSProperties = {
     position: "absolute",
@@ -158,7 +167,6 @@ export function CanvasElement({
     justifyContent: "center",
   }
 
-  const targetOpacity = element.style?.opacity !== undefined ? parseFloat(String(element.style.opacity)) : 1
   const enterVar = getAnimationVariants(element.enterAnimation, true, targetOpacity)
   const exitVar = getAnimationVariants(element.exitAnimation, false, targetOpacity)
 
