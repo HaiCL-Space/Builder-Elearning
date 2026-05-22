@@ -22,11 +22,30 @@ const MatchingElement: React.FC<MatchingElementProps> = ({
   const isInteractiveMode = useBuilderStore((state) => state.isInteractiveMode)
   const [leftSelected, setLeftSelected] = useState<string | null>(null)
   const [rightSelected, setRightSelected] = useState<string | null>(null)
-  const [matches, setMatches] = useState<[string, string][]>([])
+  const [matches, setMatches] = useState<[string, string][]>(() => 
+    !isInteractiveMode ? (element.data.correctPairs || []) : []
+  )
   const [lineCoords, setLineCoords] = useState<{ [key: string]: { start: Point; end: Point } }>({})
   
   const containerRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+
+  const [prevElementId, setPrevElementId] = useState(element.id)
+  const [prevInteractive, setPrevInteractive] = useState(isInteractiveMode)
+  const [prevCorrectPairs, setPrevCorrectPairs] = useState(element.data.correctPairs)
+
+  if (
+    element.id !== prevElementId ||
+    isInteractiveMode !== prevInteractive ||
+    JSON.stringify(element.data.correctPairs) !== JSON.stringify(prevCorrectPairs)
+  ) {
+    setPrevElementId(element.id)
+    setPrevInteractive(isInteractiveMode)
+    setPrevCorrectPairs(element.data.correctPairs)
+    setMatches(!isInteractiveMode ? (element.data.correctPairs || []) : [])
+    setLeftSelected(null)
+    setRightSelected(null)
+  }
 
   const colors = useMemo(() => ["#6366f1", "#ec4899", "#22c55e", "#eab308", "#a855f7", "#f97316"], [])
 

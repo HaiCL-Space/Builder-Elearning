@@ -2,6 +2,7 @@ import { type SlideElement } from "broker-core-sdk"
 import React, { useState } from "react"
 import { GripVertical, CheckCircle2, XCircle, RefreshCw } from "lucide-react"
 import { Button } from "@/shared/ui/button"
+import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 
 interface SortingElementProps {
   element: Extract<SlideElement, { type: "SORTING" }>
@@ -14,24 +15,32 @@ const SortingElement: React.FC<SortingElementProps> = ({
   baseStyle,
   handleClick,
 }) => {
+  const isInteractiveMode = useBuilderStore((state) => state.isInteractiveMode)
+
   // Local state to manage the order of items for interactive play
   const [items, setItems] = useState(element.data.items)
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
   const [prevElementId, setPrevElementId] = useState(element.id)
+  const [prevItems, setPrevItems] = useState(element.data.items)
 
   // Checking states
   const [hasChecked, setHasChecked] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
 
-  // Reset state when element changes during render (React-recommended pattern to avoid useEffect cascade)
-  if (element.id !== prevElementId) {
+  // Reset state when element changes or sidebar items change in design mode
+  if (
+    element.id !== prevElementId ||
+    (!isInteractiveMode && JSON.stringify(element.data.items) !== JSON.stringify(prevItems))
+  ) {
     setPrevElementId(element.id)
+    setPrevItems(element.data.items)
     setItems(element.data.items)
     setHasChecked(false)
     setIsCorrect(false)
   }
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
+    if (!isInteractiveMode) return
     setDraggedIndex(index)
     setHasChecked(false) // Reset checking status on new drag
     // For HTML5 Drag and Drop transfer
@@ -116,7 +125,7 @@ const SortingElement: React.FC<SortingElementProps> = ({
           return (
             <div
               key={item.id}
-              draggable
+              draggable={isInteractiveMode}
               onDragStart={(e) => handleDragStart(e, index)}
               onDragOver={(e) => handleDragOver(e, index)}
               onDragEnd={handleDragEnd}
@@ -128,14 +137,16 @@ const SortingElement: React.FC<SortingElementProps> = ({
                 boxShadow: isDragging
                   ? "none"
                   : "0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)",
-                cursor: isDragging ? "grabbing" : "grab",
+                cursor: !isInteractiveMode ? "default" : isDragging ? "grabbing" : "grab",
                 display: "flex",
                 alignItems: "center",
                 gap: "12px",
                 transition: "transform 0.15s ease, opacity 0.15s ease",
                 opacity: isDragging ? 0.5 : 1,
               }}
-              className="group hover:border-zinc-400 hover:shadow-md"
+              className={`group ${
+                isInteractiveMode ? "hover:border-zinc-400 hover:shadow-md" : ""
+              }`}
             >
               {/* Grip Icon */}
               <GripVertical
@@ -231,43 +242,45 @@ const SortingElement: React.FC<SortingElementProps> = ({
           </div>
         )}
 
-        <div
-          style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}
-        >
-          {hasChecked && !isCorrect && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleReset}
-              style={{
-                borderColor: "#ef4444",
-                color: "#ef4444",
-                fontSize: "0.75rem",
-              }}
-              className="hover:bg-red-50"
-            >
-              <RefreshCw
-                style={{ height: "14px", width: "14px", marginRight: "4px" }}
-              />
-              Làm lại
-            </Button>
-          )}
-
-          <Button
-            variant={hasChecked && isCorrect ? "secondary" : "default"}
-            size="sm"
-            onClick={handleCheckAnswer}
-            disabled={hasChecked && isCorrect}
-            style={{
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              backgroundColor: hasChecked && isCorrect ? "#22c55e" : undefined,
-              color: hasChecked && isCorrect ? "#fff" : undefined,
-            }}
+        {isInteractiveMode && (
+          <div
+            style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}
           >
-            {hasChecked && isCorrect ? "Đã chính xác" : "Kiểm tra đáp án"}
-          </Button>
-        </div>
+            {hasChecked && !isCorrect && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleReset}
+                style={{
+                  borderColor: "#ef4444",
+                  color: "#ef4444",
+                  fontSize: "0.75rem",
+                }}
+                className="hover:bg-red-50"
+              >
+                <RefreshCw
+                  style={{ height: "14px", width: "14px", marginRight: "4px" }}
+                />
+                Làm lại
+              </Button>
+            )}
+
+            <Button
+              variant={hasChecked && isCorrect ? "secondary" : "default"}
+              size="sm"
+              onClick={handleCheckAnswer}
+              disabled={hasChecked && isCorrect}
+              style={{
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                backgroundColor: hasChecked && isCorrect ? "#22c55e" : undefined,
+                color: hasChecked && isCorrect ? "#fff" : undefined,
+              }}
+            >
+              {hasChecked && isCorrect ? "Đã chính xác" : "Kiểm tra đáp án"}
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   )
