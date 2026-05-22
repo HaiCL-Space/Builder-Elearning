@@ -3,10 +3,13 @@ import type { SlideElement } from "broker-core-sdk"
 
 export type BuilderElement = SlideElement
 
+export type ElementCategory = "basic" | "quiz" | "interactive"
+
 export type ElementTypeItem = {
   type: BuilderElement["type"]
   label: string
   icon: React.ElementType
+  category: ElementCategory
 }
 
 export type HotspotZone = {

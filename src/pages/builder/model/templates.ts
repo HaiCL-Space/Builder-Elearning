@@ -14,17 +14,17 @@ import {
 } from "lucide-react"
 
 export const ELEMENT_TYPES: ElementTypeItem[] = [
-  { type: "TEXT", label: "Văn bản", icon: Type },
-  { type: "VIDEO", label: "Video", icon: Video },
-  { type: "QUIZ", label: "Trắc nghiệm", icon: HelpCircle },
-  { type: "HOTSPOT", label: "Điểm nóng", icon: MousePointerClick },
-  { type: "SORTING", label: "Sắp xếp", icon: ArrowUpDown },
-  { type: "MATCHING", label: "Nối từ", icon: Link2 },
-  { type: "MEMORY_CARD", label: "Lật thẻ", icon: Sparkles },
-  { type: "FILL_BLANK", label: "Điền từ", icon: PenTool },
-  { type: "SWIPE", label: "Vuốt thẻ", icon: ArrowLeftRight },
-  { type: "TIMED_SPRINT", label: "Sprint nhanh", icon: Timer },
-  { type: "WORD_SCRAMBLE", label: "Ghép chữ", icon: SpellCheck },
+  { type: "TEXT", label: "Văn bản", icon: Type, category: "basic" },
+  { type: "VIDEO", label: "Video", icon: Video, category: "basic" },
+  { type: "QUIZ", label: "Trắc nghiệm", icon: HelpCircle, category: "quiz" },
+  { type: "HOTSPOT", label: "Điểm nóng", icon: MousePointerClick, category: "interactive" },
+  { type: "SORTING", label: "Sắp xếp", icon: ArrowUpDown, category: "interactive" },
+  { type: "MATCHING", label: "Nối từ", icon: Link2, category: "interactive" },
+  { type: "MEMORY_CARD", label: "Lật thẻ", icon: Sparkles, category: "interactive" },
+  { type: "FILL_BLANK", label: "Điền từ", icon: PenTool, category: "quiz" },
+  { type: "SWIPE", label: "Vuốt thẻ", icon: ArrowLeftRight, category: "interactive" },
+  { type: "TIMED_SPRINT", label: "Sprint nhanh", icon: Timer, category: "quiz" },
+  { type: "WORD_SCRAMBLE", label: "Ghép chữ", icon: SpellCheck, category: "interactive" },
 ]
 
 export const ELEMENT_TEMPLATES: Record<string, Partial<BuilderElement>> = {
