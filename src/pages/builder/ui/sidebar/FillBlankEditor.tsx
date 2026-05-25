@@ -69,7 +69,7 @@ export function FillBlankEditor({
             }
 
             return (
-              <div key={index} className="flex items-center gap-2">
+              <div key={`fb-ans-${index}`} className="flex items-center gap-2">
                 <input
                   type="text"
                   value={answer}

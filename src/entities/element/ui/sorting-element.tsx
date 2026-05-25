@@ -69,7 +69,7 @@ const SortingElement: React.FC<SortingElementProps> = ({
     const currentOrder = items.map((item) => item.id)
 
     // Check if every item's ID is in the correct position
-    const correct = currentOrder.every((id, idx) => id === correctOrder[idx])
+    const correct = currentOrder.length === correctOrder.length && currentOrder.every((id, idx) => id === correctOrder[idx])
     setIsCorrect(correct)
     setHasChecked(true)
   }

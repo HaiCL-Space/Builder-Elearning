@@ -87,7 +87,7 @@ export function MatchingEditor({
 
           return (
             <div
-              key={index}
+              key={`${pair[0]}-${pair[1]}`}
               className="space-y-1.5 border-b border-slate-150 pb-2.5 last:border-0 last:pb-0"
             >
               <div className="flex items-center justify-between text-[9px] font-bold text-slate-400">

@@ -75,7 +75,7 @@ const WordScrambleElement: React.FC<WordScrambleElementProps> = ({
         flexDirection: "column",
         justifyContent: "flex-start",
         gap: "12px",
-        transition: "all 0.3s ease",
+        transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
       }}
       onClick={handleClick}
     >
@@ -91,7 +91,7 @@ const WordScrambleElement: React.FC<WordScrambleElementProps> = ({
       <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", justifyContent: "center", padding: "4px 0" }}>
         {letters.map((letter, idx) => (
           <div
-            key={idx}
+            key={`letter-${idx}-${letter}`}
             style={{
               display: "flex",
               alignItems: "center",
@@ -135,7 +135,7 @@ const WordScrambleElement: React.FC<WordScrambleElementProps> = ({
             outline: "none",
             backgroundColor: hasChecked && isCorrect ? "#f1f5f9" : "#ffffff",
             color: "#0f172a",
-            transition: "all 0.15s ease",
+            transition: "background-color 0.15s ease, border-color 0.15s ease",
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter" && (!hasChecked || !isCorrect)) {

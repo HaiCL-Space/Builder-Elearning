@@ -91,7 +91,7 @@ export function ActionTab({
 
             return (
               <div
-                key={index}
+                key={`act-${act.type}-${act.trigger}-${index}`}
                 className="bg-slate-50 p-3 rounded-lg border border-slate-200/80 space-y-2 relative group"
               >
                 <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 border-b border-slate-100 pb-1.5">
@@ -214,12 +214,15 @@ export function ActionTab({
                       value={act.payload?.targetElementId || ""}
                       options={[
                         { value: "", label: "Tự động chấm..." },
-                        ...currentSlide.elements
-                          .filter((e: BuilderElement) => ["QUIZ", "SORTING", "MATCHING", "HOTSPOT"].includes(e.type))
-                          .map((el: BuilderElement) => ({
-                            value: el.id,
-                            label: `Game ${el.type}: ${el.id.slice(-5)}`,
-                          })),
+                        ...currentSlide.elements.reduce<Array<{ value: string; label: string }>>((acc, el) => {
+                          if (["QUIZ", "SORTING", "MATCHING", "HOTSPOT"].includes(el.type)) {
+                            acc.push({
+                              value: el.id,
+                              label: `Game ${el.type}: ${el.id.slice(-5)}`,
+                            })
+                          }
+                          return acc
+                        }, []),
                       ]}
                       onChange={(val) => updatePayload({ targetElementId: val })}
                     />
