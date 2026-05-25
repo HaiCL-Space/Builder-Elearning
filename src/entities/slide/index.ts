@@ -1,1 +1,1 @@
-export * from "./ui/slide-preview";
+// Slide domain index entry point

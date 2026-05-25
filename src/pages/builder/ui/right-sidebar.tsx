@@ -234,10 +234,10 @@ export function RightSidebar({
                   <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
                     <label className="text-xs font-semibold text-slate-600">Độ mờ (Opacity)</label>
                     {(() => {
+                      const styleObj = selectedElement.style as unknown as { opacity?: number | string }
                       const opacityVal =
-                        selectedElement.style &&
-                        (selectedElement.style as Record<string, any>).opacity !== undefined
-                          ? parseFloat(String((selectedElement.style as Record<string, any>).opacity))
+                        styleObj && styleObj.opacity !== undefined
+                          ? parseFloat(String(styleObj.opacity))
                           : 1
                       const safeOpacity = isNaN(opacityVal) ? 1 : opacityVal
                       return (

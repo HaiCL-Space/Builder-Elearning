@@ -4,39 +4,44 @@
 
 ### 1) Top-Level Map
 
+List only meaningful top-level directories and files.
+
 | Path | Purpose | Evidence |
 |------|---------|----------|
-| `src/` | Primary source code | `tsconfig.app.json` |
-| `public/` | Static assets | `list_dir` on root |
-| `docs/` | Codebase documentation | `list_dir` on root |
-| `src/app/` | Application root, providers, styles | `list_dir` on src |
-| `src/entities/` | Business entities (slide, element) | `list_dir` on src |
-| `src/pages/` | Routed pages (builder) | `list_dir` on src |
-| `src/shared/` | Shared UI, lib, and API | `list_dir` on src |
+| `src/` | Main source code directory containing all application layers | Root directory scan |
+| `src/app/` | Application root: entry bootstrap, theme providers, and global stylesheets | `src/main.tsx` imports |
+| `src/pages/` | Routed pages composing the main application views | `src/App.tsx` imports |
+| `src/pages/builder/` | Interactive slide builder with visual canvas, slide management, and drag/resize editing | `src/pages/builder/ui/builder-page.tsx` |
+| `src/pages/viewer/` | Lightweight slide slideshow player/viewer for courses | `src/pages/viewer/ui/viewer-page.tsx` |
+| `src/entities/` | Domain-specific modules and ui components (slide element rendering, quiz widgets) | `src/entities/element/index.ts` |
+| `src/shared/` | Multi-page shared components (primitive UI, auth, custom dialogs, central libraries) | `src/shared/ui/button.tsx` |
+| `public/` | Standard public assets (Vite logo, static web files) | Root directory scan |
+| `docs/` | Comprehensive codebase technical documentation | Root directory scan |
 
 ### 2) Entry Points
 
-- Main runtime entry: `src/main.tsx`
-- Secondary entry points (worker/cli/jobs): [NONE]
-- How entry is selected (script/config): Referenced via `index.html`
+- **Main runtime entry**: `src/main.tsx` - initializes the React 19 root, mounts the global `<ThemeProvider>`, and renders the core `<App />` component.
+- **Secondary entry points (worker/cli/jobs)**: None.
+- **How entry is selected (script/config)**: Referenced inside the main root `index.html` via a `<script type="module" src="/src/main.tsx">` injection, compiled by Vite.
 
 ### 3) Module Boundaries
 
 | Boundary | What belongs here | What must not be here |
 |----------|-------------------|------------------------|
-| `app` | Global providers, global styles, root component | Business logic, page specific components |
-| `pages` | Page-level composition and routing | Low-level reusable components |
-| `entities` | Domain-specific types and basic UI for domain items | Complex features crossing multiple domains |
-| `shared` | Agnostic UI components (shadcn), generic utilities | Domain specific logic |
+| `app` | Global initialization, providers (`theme-provider.tsx`), global CSS layout styles. | Core page components, state management stores, component features. |
+| `pages` | High-level page-composing views (`builder-page.tsx`, `viewer-page.tsx`) that bundle features and entities together. | Generic UI button styles, low-level domain math helpers. |
+| `entities` | Slide element UI widgets (`quiz-element.tsx`, `hotspot-element.tsx`) and raw models (element schemas, exports). | High-level canvas drag state, sidebars, or page navigation controls. |
+| `shared` | Design system primitives (`button.tsx`, `card.tsx`), mock slide data (`mock-slides.ts`), low-level helpers (`utils.ts`). | Domain element layout state, complex page-routing decisions. |
 
 ### 4) Naming and Organization Rules
 
-- File naming pattern: PascalCase for components (`App.tsx`), camelCase or kebab-case for utilities.
-- Directory organization pattern: Feature-Sliced Design (FSD) architecture.
-- Import aliasing or path conventions: `@/` aliases to `src/` directory.
+- **File naming pattern**: PascalCase for React component files (e.g. `CanvasElement.tsx`, `CustomAlertDialog.tsx`), camelCase or kebab-case for utilities, logic files, and hooks (e.g. `use-builder-store.ts`, `builder-utils.ts`).
+- **Directory organization pattern**: Follows a strict Feature-Sliced Design (FSD) architecture dividing modules into layers (`app`, `pages`, `entities`, `shared`), slices, and segments.
+- **Import aliasing or path conventions**: Absolute path aliases are enforced using `@/` mapping directly to the `src/` directory (e.g. `import { uid } from "@/shared/lib/utils"`). This is defined in `tsconfig.json` and `vite.config.ts`. Direct circular imports or deep relative jumps crossing module layers (e.g., `shared` importing from `pages`) are forbidden by architectural rules.
 
 ### 5) Evidence
 
-- `vite.config.ts` (path alias)
-- `package.json`
-- `index.html`
+- [vite.config.ts](file:///d:/Dev/Work/previewer/vite.config.ts) (Alias mapping rule)
+- [tsconfig.app.json](file:///d:/Dev/Work/previewer/tsconfig.app.json) (Include boundaries)
+- [src/App.tsx](file:///d:/Dev/Work/previewer/src/App.tsx) (Composition of page layers)
+- [src/main.tsx](file:///d:/Dev/Work/previewer/src/main.tsx) (Runtime entry mounting)
