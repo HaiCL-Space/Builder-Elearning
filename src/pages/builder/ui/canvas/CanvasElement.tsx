@@ -1,5 +1,5 @@
 import type React from "react"
-import { useEffect } from "react"
+import { useEffect, useState, useRef } from "react"
 import { motion, useAnimation, type TargetAndTransition } from "framer-motion"
 import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 import type { BuilderElement } from "@/pages/builder/model/types"
@@ -106,6 +106,35 @@ export function CanvasElement({
   const testAnimationKey = useBuilderStore((s) => s.testAnimationKey)
   const targetOpacity = element.style?.opacity !== undefined ? parseFloat(String(element.style.opacity)) : 1
 
+  const [isEditing, setIsEditing] = useState(false)
+  const [tempText, setTempText] = useState((element.data as { content?: string }).content || "")
+  const editorRef = useRef<HTMLDivElement>(null)
+
+  const updateElement = useBuilderStore((s) => s.updateElement)
+  const currentSlideIndex = useBuilderStore((s) => s.currentSlideIndex)
+
+  useEffect(() => {
+    if (isEditing && editorRef.current) {
+      editorRef.current.focus()
+      // Select all text in contentEditable
+      const range = document.createRange()
+      range.selectNodeContents(editorRef.current)
+      const selection = window.getSelection()
+      if (selection) {
+        selection.removeAllRanges()
+        selection.addRange(range)
+      }
+    }
+  }, [isEditing])
+
+  const saveText = () => {
+    updateElement(currentSlideIndex, element.id, (el) => ({
+      ...el,
+      data: { ...(el.data as object), content: tempText },
+    } as unknown as BuilderElement))
+    setIsEditing(false)
+  }
+
   useEffect(() => {
     if (!isInteractiveMode && testAnimationElementId === element.id && testAnimationKey > 0) {
       const runTest = async () => {
@@ -184,7 +213,16 @@ export function CanvasElement({
           ? "ring-2 ring-blue-500 shadow-lg"
           : "cursor-move hover:ring-1 hover:ring-blue-300"
       } transition-shadow duration-150`}
-      onMouseDown={!isInteractiveMode ? (e) => onElementMouseDown(e, element) : undefined}
+      onMouseDown={!isInteractiveMode && !isEditing ? (e) => onElementMouseDown(e, element) : undefined}
+      onDoubleClick={
+        !isInteractiveMode && element.type === "TEXT"
+          ? (e) => {
+              e.stopPropagation()
+              setIsEditing(true)
+              setTempText((element.data as { content?: string }).content || "")
+            }
+          : undefined
+      }
     >
       {/* Conditionally render preview OR interactive element */}
       {isInteractiveMode ? (
@@ -270,6 +308,34 @@ export function CanvasElement({
             />
           )}
         </div>
+      ) : isEditing && element.type === "TEXT" ? (
+        <div
+          ref={editorRef}
+          contentEditable
+          suppressContentEditableWarning
+          onInput={(e) => setTempText(e.currentTarget.textContent || "")}
+          onBlur={saveText}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setIsEditing(false)
+              setTempText((element.data as { content?: string }).content || "")
+            }
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
+          className="flex h-full w-full flex-col justify-center px-4 py-2 outline-none select-text cursor-text focus:ring-1 focus:ring-blue-400"
+          style={{
+            fontSize: element.style?.fontSize ?? 16,
+            color: element.style?.color || "#333",
+            textAlign: (element.style?.textAlign as React.CSSProperties["textAlign"]) || "center",
+            backgroundColor: element.style?.backgroundColor || "transparent",
+            fontFamily: element.style?.fontFamily || "inherit",
+            fontWeight: element.style?.fontWeight || "normal",
+            borderRadius: element.style?.borderRadius ? `${element.style?.borderRadius}px` : "0px",
+            wordBreak: "break-word",
+          }}
+        >
+          {(element.data as { content?: string }).content || ""}
+        </div>
       ) : (
         <div className="pointer-events-none flex h-full w-full items-center justify-center overflow-hidden">
           <ElementPreview element={element} hideZones={isSelected} />
@@ -288,10 +354,10 @@ export function CanvasElement({
 
 
       {/* badge on Edit mode only */}
-      {!isInteractiveMode && <ElementTypeBadge type={String(element.type)} />}
+      {!isInteractiveMode && !isEditing && <ElementTypeBadge type={String(element.type)} />}
 
       {/* Lightning indicator on Edit mode if has actions */}
-      {!isInteractiveMode && element.actions && element.actions.length > 0 && (
+      {!isInteractiveMode && !isEditing && element.actions && element.actions.length > 0 && (
         <div
           title="Có liên kết sự kiện tương tác (Action)"
           className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white shadow-xs animate-bounce"
@@ -300,7 +366,7 @@ export function CanvasElement({
         </div>
       )}
 
-      {!isInteractiveMode && isSelected && (
+      {!isInteractiveMode && isSelected && !isEditing && (
         <>
           <DeleteButton onDelete={() => onDeleteElement(element.id)} />
           <ResizeHandles
