@@ -8,12 +8,35 @@ export function App() {
   const [pathname, setPathname] = useState(
     typeof window !== "undefined" ? window.location.pathname : "/"
   )
+  const [isResolvingAuth, setIsResolvingAuth] = useState(true)
 
   useEffect(() => {
     const handlePopState = () => {
       setPathname(window.location.pathname)
     }
     window.addEventListener("popstate", handlePopState)
+
+    // Attempt to silently restore the session on initial app load if a refresh token exists
+    const restoreSession = async () => {
+      const hasToken = auth.hasRefreshToken()
+      console.log("[App Init] Checking refresh token cookie in document.cookie:", document.cookie)
+      console.log("[App Init] auth.hasRefreshToken():", hasToken)
+      
+      if (hasToken) {
+        try {
+          console.log("[App Init] Refresh token detected. Requesting silent token refresh...")
+          const success = await auth.refresh()
+          console.log("[App Init] Silent refresh success status:", success)
+        } catch (err) {
+          console.error("[App Init] Failed to restore session on app boot:", err)
+        }
+      } else {
+        console.log("[App Init] No refresh token found. Redirecting to login if needed.")
+      }
+      setIsResolvingAuth(false)
+    }
+    restoreSession()
+
     return () => window.removeEventListener("popstate", handlePopState)
   }, [])
 
@@ -26,6 +49,18 @@ export function App() {
     auth.logout()
     window.history.replaceState(null, "", "/login")
     setPathname("/login")
+  }
+
+  // Display a dark premium loading page during initial authentication check
+  if (isResolvingAuth) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-blue-500" />
+          <span className="text-xs font-medium tracking-wide">Đang xác thực phiên làm việc...</span>
+        </div>
+      </div>
+    )
   }
 
   // Auth Guards and Route Resolution during render
@@ -64,11 +99,11 @@ export function App() {
     return <BuilderPage onLogout={handleLogout} />
   }
 
-  // Dynamic Loading/Fallback state
+  // Fallback / Redirect state
   return (
-    <div className="flex h-screen items-center justify-center bg-slate-50 text-slate-500">
+    <div className="flex h-screen items-center justify-center bg-slate-950 text-slate-400">
       <div className="flex flex-col items-center gap-2">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-300 border-t-blue-600" />
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-blue-500" />
         <span className="text-xs">Đang chuyển hướng...</span>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react"
-import { Lock, User, Eye, EyeOff, LogIn, AlertCircle } from "lucide-react"
+import { Lock, Mail, Eye, EyeOff, LogIn, AlertCircle } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/shared/ui/card"
 import { auth } from "@/shared/lib/auth"
@@ -9,7 +9,7 @@ interface LoginPageProps {
 }
 
 export function LoginPage({ onLoginSuccess }: LoginPageProps) {
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -19,26 +19,27 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
     e.preventDefault()
     setError(null)
 
-    if (!username.trim() || !password.trim()) {
-      setError("Vui lòng điền đầy đủ tên đăng nhập và mật khẩu.")
+    if (!email.trim() || !password.trim()) {
+      setError("Vui lòng điền đầy đủ email và mật khẩu.")
       return
     }
 
     setIsLoading(true)
 
-    // Simulate network delay for realistic visual loading state
-    setTimeout(() => {
-      // Allow any valid non-empty username/password, but default to admin/admin123 simulation
-      const success = auth.login(username)
-
+    try {
+      const result = await auth.login(email, password)
       setIsLoading(false)
 
-      if (success) {
+      if (result.success) {
         onLoginSuccess()
       } else {
-        setError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.")
+        setError(result.message || "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.")
       }
-    }, 800)
+    } catch (err) {
+      console.error("Login submission error:", err)
+      setIsLoading(false)
+      setError("Đã xảy ra lỗi kết nối. Vui lòng thử lại sau.")
+    }
   }
 
   return (
@@ -65,24 +66,24 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
 
           <CardContent className="mt-6">
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Username Input */}
+              {/* Email Input */}
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                  Tên đăng nhập
+                  Địa chỉ Email
                 </label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
-                    <User className="h-4 w-4" />
+                    <Mail className="h-4 w-4" />
                   </span>
                   <input
-                    type="text"
+                    type="email"
                     disabled={isLoading}
-                    value={username}
+                    value={email}
                     onChange={(e) => {
-                      setUsername(e.target.value)
+                      setEmail(e.target.value)
                       if (error) setError(null)
                     }}
-                    placeholder="Tài khoản (ví dụ: admin)"
+                    placeholder="example@gmail.com"
                     className="w-full rounded-lg border border-white/10 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-500 outline-none transition duration-250 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50"
                   />
                 </div>
@@ -107,7 +108,7 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
                       setPassword(e.target.value)
                       if (error) setError(null)
                     }}
-                    placeholder="Mật khẩu (ví dụ: admin123)"
+                    placeholder="Nhập mật khẩu của bạn"
                     className="w-full rounded-lg border border-white/10 bg-slate-950/50 py-2.5 pl-10 pr-10 text-sm text-white placeholder-slate-500 outline-none transition duration-250 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50"
                   />
                   <button
@@ -151,7 +152,7 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
 
           {/* Prompting Default Credentials Footer */}
           <div className="mt-6 border-t border-white/5 bg-slate-950/40 p-4 text-center text-[11px] text-slate-500 rounded-b-xl">
-            Tài khoản mẫu: <span className="font-semibold text-slate-400">admin</span> / Mật khẩu: <span className="font-semibold text-slate-400">admin123</span>
+            Tài khoản mẫu: <span className="font-semibold text-slate-400">hien02@gmail.com</span> / Mật khẩu: <span className="font-semibold text-slate-400">12345678</span>
           </div>
         </Card>
       </div>
