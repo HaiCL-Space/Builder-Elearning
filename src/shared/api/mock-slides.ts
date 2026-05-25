@@ -708,6 +708,384 @@ export const MOCK_SLIDES: Slide[] = [
           content: "💡 KHUYẾN NGHỊ THỰC TIỄN:\n\n• CHỦ ĐẦU TƯ: Duy trì tỷ lệ vốn chủ sở hữu đạt chuẩn (15%-20%) theo luật, tuyệt đối không huy động cọc quá 5% trước khi dự án đủ pháp lý kinh doanh.\n\n• NGƯỜI MUA: Cảnh giác pháp lý, luôn kiểm tra sự hiện diện của Thư bảo lãnh nghĩa vụ tài chính từ ngân hàng thương mại trước khi ký hợp đồng và giải ngân tiền.",
         },
       },
+      {
+        id: "el-btn-next-7",
+        type: "TEXT",
+        position: { x: 72, y: 92, w: 18, h: 7 },
+        style: {
+          backgroundColor: "#d97706", // warm amber-600
+          color: "#ffffff",
+          fontSize: 13,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 15,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 600 },
+        data: {
+          content: "Xem tiếp phóng sự ➔",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
+          },
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // SLIDE 8: VIDEO PHÓNG SỰ BỐI CẢNH BAN HÀNH (THEME OCEAN)
+  // =========================================================================
+  {
+    id: "slide-bds-video",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
+    order: 8,
+    config: { aspectRatio: "16:9", theme: "ocean" },
+    elements: [
+      {
+        id: "el-text-title-8",
+        type: "TEXT",
+        position: { x: 10, y: 4, w: 80, h: 10 },
+        style: {
+          fontSize: 24,
+          textAlign: "center",
+          color: "#0c4a6e", // sky-950
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
+        data: {
+          content: "7. PHIM TÀI LIỆU: CỘT MỐC PHÁP LÝ BẤT ĐỘNG SẢN 2023",
+        },
+      },
+      {
+        id: "el-text-desc-8",
+        type: "TEXT",
+        position: { x: 15, y: 15, w: 70, h: 8 },
+        style: {
+          fontSize: 14,
+          textAlign: "center",
+          color: "#0284c7", // sky-600
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
+        data: {
+          content: "Xem phóng sự ngắn dưới đây để nắm rõ bối cảnh hoàn thiện thể chế & chuyên nghiệp hóa thị trường:",
+        },
+      },
+      {
+        id: "el-video-documentary",
+        type: "VIDEO",
+        position: { x: 15, y: 25, w: 70, h: 54 },
+        style: {
+          borderRadius: 12,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "zoom-in", duration: 800, delay: 200 },
+        data: {
+          src: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+          autoPlay: false,
+          muted: false,
+          loop: false,
+          controls: true,
+          isLive: false,
+        },
+      },
+      {
+        id: "el-btn-next-8",
+        type: "TEXT",
+        position: { x: 41, y: 84, w: 18, h: 9 },
+        style: {
+          backgroundColor: "#0284c7", // sky-600
+          color: "#ffffff",
+          fontSize: 13,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
+        data: {
+          content: "Tiếp theo ➔",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
+          },
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // SLIDE 9: TRÒ CHƠI LẬT THẺ PHÂN LOẠI HỢP ĐỒNG (THEME LIGHT)
+  // =========================================================================
+  {
+    id: "slide-bds-memory",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
+    order: 9,
+    config: { aspectRatio: "16:9", theme: "light" },
+    elements: [
+      {
+        id: "el-text-title-9",
+        type: "TEXT",
+        position: { x: 10, y: 0, w: 80, h: 10 },
+        style: {
+          fontSize: 24,
+          textAlign: "center",
+          color: "#1e3a8a", // Navy
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
+        data: {
+          content: "8. TRÒ CHƠI LẬT THẺ: HỆ THỐNG HỢP ĐỒNG ĐIỀU 44",
+        },
+      },
+      {
+        id: "el-text-subtitle-9",
+        type: "TEXT",
+        position: { x: 10, y: 7, w: 80, h: 8 },
+        style: {
+          fontSize: 14,
+          textAlign: "center",
+          color: "#4b5563",
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
+        data: {
+          content: "Lật các thẻ dưới đây để tìm cặp loại hợp đồng mẫu tương đồng theo quy định pháp luật mới:",
+        },
+      },
+      {
+        id: "el-memory-contracts",
+        type: "MEMORY_CARD",
+        position: { x: 26, y: 14, w: 47, h: 71 },
+        style: {
+          borderRadius: 16,
+          opacity: 1,
+          zIndex: 5,
+        },
+        enterAnimation: { type: "zoom-in", duration: 600, delay: 200 },
+        data: {
+          cards: [
+            { id: "c-1", value: "HĐ Mua bán nhà ở" },
+            { id: "c-2", value: "HĐ Môi giới BĐS" },
+            { id: "c-3", value: "HĐ Chuyển nhượng dự án" },
+          ],
+        },
+      },
+      {
+        id: "el-btn-next-9",
+        type: "TEXT",
+        position: { x: 41, y: 88, w: 18, h: 9 },
+        style: {
+          backgroundColor: "#2563eb", // blue-600
+          color: "#ffffff",
+          fontSize: 13,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
+        data: {
+          content: "Tiếp theo ➔",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
+          },
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // SLIDE 10: CHẠY ĐUA THỜI GIAN: ĐIỀU KIỆN MUA NHÀ Ở XÃ HỘI (THEME SUNSET)
+  // =========================================================================
+  {
+    id: "slide-bds-sprint",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
+    order: 10,
+    config: { aspectRatio: "16:9", theme: "sunset" },
+    elements: [
+      {
+        id: "el-text-title-10",
+        type: "TEXT",
+        position: { x: 10, y: 4, w: 80, h: 10 },
+        style: {
+          fontSize: 24,
+          textAlign: "center",
+          color: "#7c2d12", // orange-950
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
+        data: {
+          content: "9. SPRINT NHANH: ĐIỀU KIỆN MUA NHÀ Ở XÃ HỘI",
+        },
+      },
+      {
+        id: "el-sprint-social-housing",
+        type: "TIMED_SPRINT",
+        position: { x: 15, y: 16, w: 70, h: 66 },
+        style: {
+          borderRadius: 16,
+          opacity: 1,
+          zIndex: 5,
+        },
+        enterAnimation: { type: "bounce", duration: 600, delay: 200 },
+        data: {
+          question: "Theo Nghị định 100/2024/NĐ-CP, trần thu nhập của cả vợ và chồng đã kết hôn để đủ điều kiện mua nhà ở xã hội là bao nhiêu?",
+          options: [
+            { id: "sprint-opt-1", content: "Tổng thu nhập ≤ 15 triệu đồng / tháng" },
+            { id: "sprint-opt-2", content: "Tổng thu nhập ≤ 20 triệu đồng / tháng" },
+            { id: "sprint-opt-3", content: "Tổng thu nhập ≤ 30 triệu đồng / tháng" },
+            { id: "sprint-opt-4", content: "Tổng thu nhập ≤ 40 triệu đồng / tháng" },
+          ],
+          correctId: "sprint-opt-3",
+          duration: 20,
+        },
+      },
+      {
+        id: "el-btn-next-10",
+        type: "TEXT",
+        position: { x: 41, y: 86, w: 18, h: 9 },
+        style: {
+          backgroundColor: "#c2410c", // orange-700
+          color: "#ffffff",
+          fontSize: 13,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
+        data: {
+          content: "Tiếp theo ➔",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
+          },
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // SLIDE 11: GHÉP CHỮ PHÁP LÝ: NGUYÊN TẮC TỐI CAO (THEME NEON)
+  // =========================================================================
+  {
+    id: "slide-bds-scramble",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
+    order: 11,
+    config: { aspectRatio: "16:9", theme: "neon" },
+    elements: [
+      {
+        id: "el-text-title-11",
+        type: "TEXT",
+        position: { x: 10, y: 4, w: 80, h: 10 },
+        style: {
+          fontSize: 24,
+          textAlign: "center",
+          color: "#fbbf24", // amber-400
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
+        data: {
+          content: "10. GHÉP CHỮ PHÁP LÝ: NGUYÊN TẮC TỐI CAO",
+        },
+      },
+      {
+        id: "el-text-subtitle-11",
+        type: "TEXT",
+        position: { x: 10, y: 15, w: 80, h: 8 },
+        style: {
+          fontSize: 14,
+          textAlign: "center",
+          color: "#cbd5e1",
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
+        data: {
+          content: "Sắp xếp các chữ cái xáo trộn dưới đây để tạo thành từ khóa chỉ nguyên tắc điều phối tối cao của Luật 2023:",
+        },
+      },
+      {
+        id: "el-scramble-principle",
+        type: "WORD_SCRAMBLE",
+        position: { x: 15, y: 25, w: 70, h: 52 },
+        style: {
+          borderRadius: 16,
+          opacity: 1,
+          zIndex: 5,
+        },
+        enterAnimation: { type: "bounce", duration: 800, delay: 200 },
+        data: {
+          scrambledWord: "HABHCNIM",
+          correctWord: "MINHBACH",
+          caseSensitive: false,
+        },
+      },
+      {
+        id: "el-btn-finish-11",
+        type: "TEXT",
+        position: { x: 41, y: 82, w: 18, h: 9 },
+        style: {
+          backgroundColor: "#c084fc", // purple-400
+          color: "#090514",
+          fontSize: 13,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
+        data: {
+          content: "Quay lại từ đầu ↺",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { targetSlideId: "slide-bds-intro" },
+          },
+        ],
+      },
     ],
   },
 ]
