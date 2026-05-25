@@ -15,6 +15,8 @@ import {
 import { ELEMENT_TYPES } from "@/pages/builder/model/templates"
 import type { ElementCategory } from "@/pages/builder/model/types"
 import type { Slide } from "broker-core-sdk"
+import { useAuthStore } from "@/shared/auth"
+import { ScrollArea } from "@/shared/ui/scroll-area"
 
 const CATEGORY_CONFIG: Record<
   ElementCategory,
@@ -60,6 +62,7 @@ export function LeftSidebar({
   onAddElement,
   onLogout,
 }: LeftSidebarProps) {
+  const user = useAuthStore((state) => state.user)
   const [activeTab, setActiveTab] = useState<"slides" | "elements">("slides")
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -72,7 +75,7 @@ export function LeftSidebar({
           className={`flex flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-xs font-semibold transition ${
             activeTab === "slides"
               ? "bg-white text-blue-600 shadow-sm"
-              : "text-slate-600 hover:bg-slate-150 hover:text-slate-900"
+              : "hover:bg-slate-150 text-slate-600 hover:text-slate-900"
           }`}
         >
           <Layers className="h-3.5 w-3.5" />
@@ -83,7 +86,7 @@ export function LeftSidebar({
           className={`flex flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-xs font-semibold transition ${
             activeTab === "elements"
               ? "bg-white text-blue-600 shadow-sm"
-              : "text-slate-600 hover:bg-slate-150 hover:text-slate-900"
+              : "hover:bg-slate-150 text-slate-600 hover:text-slate-900"
           }`}
         >
           <LayoutGrid className="h-3.5 w-3.5" />
@@ -92,12 +95,12 @@ export function LeftSidebar({
       </div>
 
       {/* Tab Content */}
-      <div className="flex-1 overflow-y-auto">
+      <ScrollArea className="flex-1">
         {activeTab === "slides" ? (
           <div className="space-y-4 p-3">
             {/* Slide Action Row */}
             <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">
                 Lộ trình Slide
               </span>
               <button
@@ -192,7 +195,7 @@ export function LeftSidebar({
                         Object.entries(elementCounts).map(([type, count]) => (
                           <span
                             key={type}
-                            className="rounded bg-slate-100 px-1 py-0.2 font-medium text-slate-600"
+                            className="py-0.2 rounded bg-slate-100 px-1 font-medium text-slate-600"
                           >
                             {type}: {count}
                           </span>
@@ -209,14 +212,14 @@ export function LeftSidebar({
             {/* Header */}
             <div className="flex items-center gap-1.5 border-b border-slate-100 pb-2">
               <PanelLeft className="h-4 w-4 text-slate-400" />
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">
                 Thành phần Slide
               </span>
             </div>
 
             {/* Search Input */}
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none">
+              <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5">
                 <Search className="h-3.5 w-3.5 text-slate-400" />
               </span>
               <input
@@ -224,7 +227,7 @@ export function LeftSidebar({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Tìm kiếm thành phần..."
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-1.5 pl-8 pr-7 text-xs outline-none transition focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500/20"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-1.5 pr-7 pl-8 text-xs transition outline-none focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500/20"
               />
               {searchQuery && (
                 <button
@@ -245,13 +248,13 @@ export function LeftSidebar({
 
                 if (filteredElements.length === 0) {
                   return (
-                    <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
+                    <div className="flex flex-col items-center justify-center px-4 py-8 text-center">
                       <span className="text-xs text-slate-400">
                         Không tìm thấy thành phần nào khớp với "{searchQuery}"
                       </span>
                       <button
                         onClick={() => setSearchQuery("")}
-                        className="mt-2 text-xs font-semibold text-blue-500 hover:text-blue-600 underline"
+                        className="mt-2 text-xs font-semibold text-blue-500 underline hover:text-blue-600"
                       >
                         Xóa tìm kiếm
                       </button>
@@ -274,12 +277,12 @@ export function LeftSidebar({
                       {/* Category Title */}
                       <div className="flex items-center gap-1.5 pt-1">
                         <span
-                          className={`text-[10px] font-bold uppercase tracking-wider ${config.headerColor}`}
+                          className={`text-[10px] font-bold tracking-wider uppercase ${config.headerColor}`}
                         >
                           {config.label}
                         </span>
                         <span
-                          className={`rounded-full border px-1.5 py-0.2 text-[9px] font-semibold leading-none ${config.badgeColor}`}
+                          className={`py-0.2 rounded-full border px-1.5 text-[9px] leading-none font-semibold ${config.badgeColor}`}
                         >
                           {elementsInCat.length}
                         </span>
@@ -292,7 +295,7 @@ export function LeftSidebar({
                           <button
                             key={et.type}
                             onClick={() => onAddElement(et.type)}
-                            className="group flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs transition-all hover:scale-[1.03] active:scale-[0.98] duration-150 hover:border-blue-400 hover:bg-blue-50/50 hover:shadow-sm"
+                            className="group flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs transition-all duration-150 hover:scale-[1.03] hover:border-blue-400 hover:bg-blue-50/50 hover:shadow-sm active:scale-[0.98]"
                           >
                             <et.icon className="h-5.5 w-5.5 text-slate-600 transition-colors group-hover:text-blue-600" />
                             <span className="text-[11px] font-semibold text-slate-700 transition-colors group-hover:text-blue-700">
@@ -308,27 +311,35 @@ export function LeftSidebar({
             </div>
           </div>
         )}
-      </div>
+      </ScrollArea>
 
       {/* User Section at the bottom */}
-      <div className="border-t border-slate-200 bg-slate-50/50 p-3 flex items-center justify-between gap-2.5">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-xs font-bold text-white shadow-sm shadow-indigo-200">
-            A
-          </div>
-          <div className="flex flex-col min-w-0">
+      <div className="flex items-center justify-between gap-2.5 border-t border-slate-200 bg-slate-50/50 p-3">
+        <div className="flex min-w-0 items-center gap-2">
+          {user?.avatar ? (
+            <img
+              src={user.avatar}
+              alt={user.name || "User Avatar"}
+              className="h-8 w-8 shrink-0 rounded-full object-cover shadow-sm shadow-indigo-200"
+            />
+          ) : (
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-xs font-bold text-white shadow-sm shadow-indigo-200">
+              {(user?.name || "U").charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div className="flex min-w-0 flex-col">
             <span className="truncate text-xs font-semibold text-slate-800">
-              Administrator
+              {user?.name || "Unknow"}
             </span>
             <span className="truncate text-[10px] text-slate-500">
-              admin@previewer.com
+              {user?.email || ""}
             </span>
           </div>
         </div>
         {onLogout && (
           <button
             onClick={onLogout}
-            className="group/btn p-1.5 rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600 transition"
+            className="group/btn rounded-lg p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-600"
             title="Đăng xuất"
           >
             <LogOut className="h-4 w-4" />

@@ -6,6 +6,7 @@ export interface AuthUser {
   name: string
   phoneNumber?: string
   gender?: string
+  avatar?: string
   bod?: string
   provider?: string
   createdAt?: string
