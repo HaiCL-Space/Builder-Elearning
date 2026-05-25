@@ -48,7 +48,7 @@ export function SwipeEditor({
                 : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
             }`}
           >
-            ĐÚNG ➡️ (Quẹt Phải)
+            ĐÚNG (Quẹt Phải)
           </button>
           <button
             type="button"
@@ -59,7 +59,7 @@ export function SwipeEditor({
                 : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
             }`}
           >
-            SAI ⬅️ (Quẹt Trái)
+            SAI (Quẹt Trái)
           </button>
         </div>
       </div>

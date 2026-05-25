@@ -3,6 +3,7 @@ import { SlidersHorizontal, Trash2, Sparkles, Zap } from "lucide-react"
 import type { BuilderElement } from "@/pages/builder/model/types"
 import type { Slide } from "broker-core-sdk"
 import { NumberField } from "@/shared/ui/fields"
+import { ScrollArea } from "@/shared/ui/scroll-area"
 
 // Import sub-components from sidebar/ folder
 import { TextEditor } from "./sidebar/TextEditor"
@@ -95,7 +96,7 @@ export function RightSidebar({
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <ScrollArea className="flex-1">
         {selectedElement ? (
           <div className="space-y-5 p-4">
             {/* =========================================================================
@@ -311,7 +312,7 @@ export function RightSidebar({
             Chọn một thành phần trên canvas để bắt đầu tùy chỉnh
           </div>
         )}
-      </div>
+      </ScrollArea>
     </aside>
   )
 }

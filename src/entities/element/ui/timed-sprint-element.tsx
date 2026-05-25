@@ -238,7 +238,13 @@ const TimedSprintElement: React.FC<TimedSprintElementProps> = ({
             variant="outline"
             size="sm"
             onClick={handleReset}
-            style={{ fontSize: "0.75rem", height: "28px" }}
+            style={{
+              borderColor: "#475569",
+              color: "#475569",
+              fontSize: "0.75rem",
+              height: "28px",
+            }}
+            className="hover:bg-slate-50 hover:text-slate-900"
           >
             <RefreshCw style={{ height: "12px", width: "12px", marginRight: "4px" }} />
             Chạy lại

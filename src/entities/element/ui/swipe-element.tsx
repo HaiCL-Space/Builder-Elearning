@@ -167,7 +167,7 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
           <div style={{ marginTop: "12px", fontSize: "0.6875rem", color: "#94a3b8", fontWeight: 500 }}>
             {hasChecked ? (
               <span style={{ fontWeight: 700, color: isCorrect ? "#166534" : "#991b1b" }}>
-                Đã trả lời: {swipedDir === "left" ? "SAI ⬅️" : "ĐÚNG ➡️"}
+                Đã trả lời: {swipedDir === "left" ? "SAI" : "ĐÚNG"}
               </span>
             ) : (
               "Kéo thả sang TRÁI (Sai) hoặc PHẢI (Đúng)"
@@ -220,7 +220,7 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
               style={{ flex: 1, borderColor: "#ef4444", color: "#ef4444", fontSize: "0.75rem", height: "28px" }}
               className="hover:bg-red-50"
             >
-              Sai ⬅️
+              Sai
             </Button>
             <Button
               variant="outline"
@@ -232,7 +232,7 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
               style={{ flex: 1, borderColor: "#22c55e", color: "#22c55e", fontSize: "0.75rem", height: "28px" }}
               className="hover:bg-green-50"
             >
-              Đúng ➡️
+              Đúng
             </Button>
           </div>
         ) : (

@@ -258,7 +258,13 @@ const MemoryCardElement: React.FC<MemoryCardElementProps> = ({
             e.stopPropagation()
             initializeCards()
           }}
-          style={{ fontSize: "0.75rem", height: "28px" }}
+          style={{
+            borderColor: "#6366f1",
+            color: "#6366f1",
+            fontSize: "0.75rem",
+            height: "28px",
+          }}
+          className="hover:bg-indigo-50 hover:text-indigo-700"
         >
           <RefreshCw style={{ height: "12px", width: "12px", marginRight: "4px" }} />
           Chơi lại
