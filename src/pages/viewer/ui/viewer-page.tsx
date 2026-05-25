@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { ACTION_TYPES, learningEngine, gameEngine, type ElementAction, type MultipleChoiceData } from "broker-core-sdk"
-import { MOCK_SLIDES } from "@/shared/api/mock-slides"
+import { MOCK_SLIDES } from "@/shared/api"
 import { THEME_BACKGROUNDS } from "@/shared/lib/builder-utils"
 import CanvasElement from "@/pages/builder/ui/canvas/CanvasElement"
 import type { BuilderElement } from "@/pages/builder/model/types"

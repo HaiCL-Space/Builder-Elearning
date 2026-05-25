@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import type { BuilderElement } from "@/pages/builder/model/types"
-import { MOCK_SLIDES } from "@/shared/api/mock-slides"
+import { MOCK_SLIDES } from "@/shared/api"
 import { ELEMENT_TEMPLATES } from "@/pages/builder/model/templates"
 import { uid } from "@/shared/lib/utils"
 import type { Slide, ElementAction } from "broker-core-sdk"

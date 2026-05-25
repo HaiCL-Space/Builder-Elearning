@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react"
 import { Lock, Mail, Eye, EyeOff, LogIn, AlertCircle } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/shared/ui/card"
-import { auth } from "@/shared/lib/auth"
+import { auth } from "@/shared/auth"
 
 interface LoginPageProps {
   onLoginSuccess: () => void

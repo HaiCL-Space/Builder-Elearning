@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { BuilderPage } from "./pages/builder"
 import { ViewerPage } from "./pages/viewer"
 import { LoginPage } from "@/pages/login"
-import { auth } from "@/shared/lib/auth"
+import { auth } from "@/shared/auth"
 
 export function App() {
   const [pathname, setPathname] = useState(

@@ -1,4 +1,4 @@
-import { api } from "./api"
+import { api } from "@/shared/api"
 import { useAuthStore, type AuthUser } from "./auth-store"
 
 const AUTH_REFRESH_TOKEN_KEY = "refreshToken"

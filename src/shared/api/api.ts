@@ -1,4 +1,5 @@
-import { useAuthStore } from "./auth-store"
+import { useAuthStore } from "@/shared/auth"
+
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8001/v1"
 
