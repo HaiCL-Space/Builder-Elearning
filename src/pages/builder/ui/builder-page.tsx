@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useRef, useEffect } from "react"
 import type { BuilderElement } from "@/pages/builder/model/types"
 import { LeftSidebar } from "@/pages/builder/ui/left-sidebar"
 import { Canvas } from "@/pages/builder/ui/canvas"
@@ -7,23 +7,30 @@ import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 import { useCanvasEvents } from "@/pages/builder/lib/use-canvas-events"
 import { useActionRunner } from "@/pages/builder/lib/use-action-runner"
 import { CustomAlertDialog } from "@/shared/ui/custom-alert-dialog"
+import { useSlidesQuery, useSaveSlidesMutation } from "@/entities/slide"
 
 export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
+  // 1. Fetch slides using TanStack Query v5
+  const { data: fetchedSlides, isPending: isQueryPending, isError: isQueryError, error: queryError } = useSlidesQuery("course-demo")
+  const saveMutation = useSaveSlidesMutation("course-demo")
+
   const slides = useBuilderStore((state) => state.slides)
   const currentSlideIndex = useBuilderStore((state) => state.currentSlideIndex)
-  const currentSlide = slides[currentSlideIndex]
+  const currentSlide = slides[currentSlideIndex] || null
 
   const selectedElementId = useBuilderStore((state) => state.selectedElementId)
   const selectedElement =
-    currentSlide.elements.find((e: BuilderElement) => e.id === selectedElementId) || null
+    currentSlide?.elements.find((e: BuilderElement) => e.id === selectedElementId) || null
 
   const isInteractiveMode = useBuilderStore((state) => state.isInteractiveMode)
   const guidelines = useBuilderStore((state) => state.guidelines)
   const activeTooltip = useBuilderStore((state) => state.activeTooltip)
   const activeAlert = useBuilderStore((state) => state.activeAlert)
   const closeAlert = useBuilderStore((state) => state.closeAlert)
+  const setAlert = useBuilderStore((state) => state.setAlert)
 
   // Actions from Zustand store
+  const initializeSlides = useBuilderStore((state) => state.initializeSlides)
   const setCurrentSlideIndex = useBuilderStore((state) => state.setCurrentSlideIndex)
   const handleDeleteElement = useBuilderStore((state) => state.handleDeleteElement)
   const handleSelectSlide = useBuilderStore((state) => state.handleSelectSlide)
@@ -40,6 +47,35 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
   const updateSelectedActions = useBuilderStore((state) => state.updateSelectedActions)
   const updateSelectedAnimations = useBuilderStore((state) => state.updateSelectedAnimations)
 
+  // 2. Synchronize React Query's server state with Zustand's draft state on load
+  useEffect(() => {
+    if (fetchedSlides) {
+      initializeSlides(fetchedSlides)
+    }
+  }, [fetchedSlides, initializeSlides])
+
+  // 3. Save draft state back to Server via React Query Mutation
+  const handleSave = () => {
+    saveMutation.mutate(slides, {
+      onSuccess: (isOnlineSuccess) => {
+        setAlert({
+          type: "success",
+          title: isOnlineSuccess ? "Lưu thiết kế thành công!" : "Lưu thiết kế ngoại tuyến!",
+          message: isOnlineSuccess
+            ? "Mọi thay đổi đã được đồng bộ hóa và lưu trữ an toàn trên máy chủ."
+            : "Thiết kế đã được sao lưu an toàn tại bộ nhớ trình duyệt của bạn (chế độ ngoại tuyến).",
+        })
+      },
+      onError: (error) => {
+        setAlert({
+          type: "error",
+          title: "Không thể lưu thiết kế",
+          message: error.message || "Đã xảy ra lỗi kết nối với máy chủ khi lưu.",
+        })
+      },
+    })
+  }
+
   const canvasRef = useRef<HTMLDivElement | null>(null)
 
   // Custom Hooks for Logic
@@ -53,8 +89,34 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
     handleMouseUp,
   } = useCanvasEvents(canvasRef)
 
-
   const { handleAction } = useActionRunner()
+
+  // 4. Loading & Error Boundaries (Premium Experience)
+  if (isQueryPending) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-blue-500" />
+          <span className="text-xs font-medium tracking-wide">Đang tải thiết kế slides từ hệ thống...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (isQueryError) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400">
+        <div className="flex flex-col items-center gap-4 text-center max-w-md px-6 bg-slate-900 border border-white/10 rounded-2xl p-8 shadow-2xl">
+          <div className="h-12 w-12 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 text-xl font-bold">!</div>
+          <h2 className="text-base font-bold text-white">Không thể kết nối máy chủ</h2>
+          <p className="text-xs text-slate-400 leading-relaxed">{queryError?.message || "Đã xảy ra lỗi không xác định."}</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Safety fallback if slides are still empty
+  if (!currentSlide) return null
 
   const handleNext = () =>
     setCurrentSlideIndex((i) => Math.min(slides.length - 1, i + 1))
@@ -100,6 +162,8 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
           onToggleMode={handleToggleMode}
           onAction={handleAction}
           theme={currentSlide.config?.theme}
+          onSave={handleSave}
+          isSaving={saveMutation.isPending}
         />
 
         {/* GUIDELINES & REAL-TIME TOOLTIP OVERLAYS */}

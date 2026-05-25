@@ -25,6 +25,8 @@ export function Canvas({
   onToggleMode,
   onAction,
   theme,
+  onSave,
+  isSaving,
 }: {
   canvasRef: React.RefObject<HTMLDivElement | null>
   currentSlideOrder: number
@@ -59,6 +61,8 @@ export function Canvas({
   onToggleMode: (interactive: boolean) => void
   onAction?: (action: ElementAction) => void
   theme?: string
+  onSave?: () => void
+  isSaving?: boolean
 }) {
   const themeBg = THEME_BACKGROUNDS[theme || "light"] || THEME_BACKGROUNDS.light
 
@@ -73,6 +77,8 @@ export function Canvas({
         onNext={onNext}
         isInteractiveMode={isInteractiveMode}
         onToggleMode={onToggleMode}
+        onSave={onSave}
+        isSaving={isSaving}
       />
 
       <div

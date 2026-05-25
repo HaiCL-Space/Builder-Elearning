@@ -1,12 +1,13 @@
 import { useState } from "react"
-import { ACTION_TYPES, learningEngine, gameEngine, type ElementAction, type MultipleChoiceData } from "broker-core-sdk"
+import { ACTION_TYPES, learningEngine, gameEngine, type ElementAction, type MultipleChoiceData, type Slide } from "broker-core-sdk"
 import { MOCK_SLIDES } from "@/shared/api"
 import { THEME_BACKGROUNDS } from "@/shared/lib/builder-utils"
 import CanvasElement from "@/pages/builder/ui/canvas/CanvasElement"
 import type { BuilderElement } from "@/pages/builder/model/types"
 import { CustomAlertDialog } from "@/shared/ui/custom-alert-dialog"
+import { useSlidesQuery } from "@/entities/slide"
 
-function getInitiallyHiddenElements(slide: (typeof MOCK_SLIDES)[number]) {
+function getInitiallyHiddenElements(slide: Slide) {
   const initiallyHidden = new Set<string>()
 
   slide.elements.forEach((element) => {
@@ -17,11 +18,23 @@ function getInitiallyHiddenElements(slide: (typeof MOCK_SLIDES)[number]) {
 }
 
 export function ViewerPage() {
+  // 1. Fetch slides dynamically using React Query v5
+  const { data: slides = MOCK_SLIDES, isPending, isError, error } = useSlidesQuery("course-demo")
+
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
-  const currentSlide = MOCK_SLIDES[currentSlideIndex]
-  const [hiddenElements, setHiddenElements] = useState<Set<string>>(() =>
-    getInitiallyHiddenElements(currentSlide)
-  )
+  
+  // Guard slide access safely
+  const currentSlide = slides[currentSlideIndex] || slides[0] || MOCK_SLIDES[0]
+  
+  const [prevSlideId, setPrevSlideId] = useState<string | null>(null)
+  const [hiddenElements, setHiddenElements] = useState<Set<string>>(new Set())
+
+  // Adjust state synchronously during render when the slide ID changes
+  if (currentSlide && currentSlide.id !== prevSlideId) {
+    setPrevSlideId(currentSlide.id)
+    setHiddenElements(getInitiallyHiddenElements(currentSlide))
+  }
+
   const [activeAlert, setActiveAlert] = useState<{
     isOpen: boolean
     type: "success" | "error" | "warning" | "info"
@@ -36,20 +49,36 @@ export function ViewerPage() {
     }
   } | null>(null)
 
+  // Loading & Error Boundaries (Premium Experience)
+  if (isPending) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-cyan-500" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">Đang tải slide viewer...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400">
+        <div className="flex flex-col items-center gap-4 text-center max-w-md px-6 bg-slate-900 border border-white/10 rounded-2xl p-8 shadow-2xl">
+          <div className="h-12 w-12 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 text-xl font-bold">!</div>
+          <h2 className="text-base font-bold text-white">Lỗi tải slides</h2>
+          <p className="text-xs text-slate-400 leading-relaxed">{error?.message || "Đã xảy ra lỗi không xác định."}</p>
+        </div>
+      </div>
+    )
+  }
+
   const handleNext = () => {
-    setCurrentSlideIndex((index) => {
-      const nextIndex = Math.min(MOCK_SLIDES.length - 1, index + 1)
-      setHiddenElements(getInitiallyHiddenElements(MOCK_SLIDES[nextIndex]))
-      return nextIndex
-    })
+    setCurrentSlideIndex((index) => Math.min(slides.length - 1, index + 1))
   }
 
   const handlePrev = () => {
-    setCurrentSlideIndex((index) => {
-      const nextIndex = Math.max(0, index - 1)
-      setHiddenElements(getInitiallyHiddenElements(MOCK_SLIDES[nextIndex]))
-      return nextIndex
-    })
+    setCurrentSlideIndex((index) => Math.max(0, index - 1))
   }
 
   const executeAction = (action: ElementAction) => {
@@ -222,7 +251,7 @@ export function ViewerPage() {
               Viewer
             </div>
             <div className="text-sm text-slate-300">
-              Slide {currentSlide.order} / {MOCK_SLIDES.length}
+              Slide {currentSlide.order} / {slides.length}
             </div>
           </div>
 
@@ -230,14 +259,14 @@ export function ViewerPage() {
             <button
               onClick={handlePrev}
               disabled={currentSlideIndex === 0}
-              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
             >
               Quay lại
             </button>
             <button
               onClick={handleNext}
-              disabled={currentSlideIndex === MOCK_SLIDES.length - 1}
-              className="rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-40"
+              disabled={currentSlideIndex === slides.length - 1}
+              className="rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
             >
               Tiếp theo
             </button>

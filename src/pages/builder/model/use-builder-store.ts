@@ -68,6 +68,7 @@ interface BuilderState {
   closeAlert: () => void
 
   // Basic Setters
+  initializeSlides: (slides: Slide[]) => void
   setSlides: (slides: Slide[] | ((prev: Slide[]) => Slide[])) => void
   setCurrentSlideIndex: (index: number | ((prev: number) => number)) => void
   setSelectedElementId: (id: string | null) => void
@@ -158,6 +159,12 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   })),
 
   // Basic Setters
+  initializeSlides: (slides) =>
+    set({
+      slides,
+      currentSlideIndex: 0,
+      selectedElementId: null,
+    }),
   setSlides: (slides) =>
     set((state) => ({
       slides: typeof slides === "function" ? slides(state.slides) : slides,
