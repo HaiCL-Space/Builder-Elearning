@@ -8,7 +8,7 @@ import { useCanvasEvents } from "@/pages/builder/lib/use-canvas-events"
 import { useActionRunner } from "@/pages/builder/lib/use-action-runner"
 import { CustomAlertDialog } from "@/shared/ui/custom-alert-dialog"
 
-export function SlideBuilder() {
+export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
   const slides = useBuilderStore((state) => state.slides)
   const currentSlideIndex = useBuilderStore((state) => state.currentSlideIndex)
   const currentSlide = slides[currentSlideIndex]
@@ -75,6 +75,7 @@ export function SlideBuilder() {
         onDuplicateSlide={handleDuplicateSlide}
         onMoveSlide={handleMoveSlide}
         onAddElement={handleAddElement}
+        onLogout={onLogout}
       />
 
       <div className="relative flex flex-1 flex-col overflow-hidden">

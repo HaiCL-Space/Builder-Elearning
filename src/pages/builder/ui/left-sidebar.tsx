@@ -10,6 +10,7 @@ import {
   PanelLeft,
   Search,
   X,
+  LogOut,
 } from "lucide-react"
 import { ELEMENT_TYPES } from "@/pages/builder/model/templates"
 import type { ElementCategory } from "@/pages/builder/model/types"
@@ -45,6 +46,7 @@ interface LeftSidebarProps {
   onDuplicateSlide: (index: number) => void
   onMoveSlide: (index: number, direction: "up" | "down") => void
   onAddElement: (type: string) => void
+  onLogout?: () => void
 }
 
 export function LeftSidebar({
@@ -56,6 +58,7 @@ export function LeftSidebar({
   onDuplicateSlide,
   onMoveSlide,
   onAddElement,
+  onLogout,
 }: LeftSidebarProps) {
   const [activeTab, setActiveTab] = useState<"slides" | "elements">("slides")
   const [searchQuery, setSearchQuery] = useState("")
@@ -304,6 +307,32 @@ export function LeftSidebar({
               })()}
             </div>
           </div>
+        )}
+      </div>
+
+      {/* User Section at the bottom */}
+      <div className="border-t border-slate-200 bg-slate-50/50 p-3 flex items-center justify-between gap-2.5">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-xs font-bold text-white shadow-sm shadow-indigo-200">
+            A
+          </div>
+          <div className="flex flex-col min-w-0">
+            <span className="truncate text-xs font-semibold text-slate-800">
+              Administrator
+            </span>
+            <span className="truncate text-[10px] text-slate-500">
+              admin@previewer.com
+            </span>
+          </div>
+        </div>
+        {onLogout && (
+          <button
+            onClick={onLogout}
+            className="group/btn p-1.5 rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600 transition"
+            title="Đăng xuất"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
         )}
       </div>
     </aside>
