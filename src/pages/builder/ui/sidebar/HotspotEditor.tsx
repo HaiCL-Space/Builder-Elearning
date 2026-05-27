@@ -68,9 +68,11 @@ export function HotspotEditor({
         </div>
 
         {zones.length === 0 ? (
-          <div className="text-xs text-slate-400 text-center py-2">Chưa có zone</div>
+          <div className="py-2 text-center text-xs text-slate-400">
+            Chưa có zone
+          </div>
         ) : (
-          <div className="space-y-3 max-h-60 overflow-y-auto">
+          <div className="max-h-60 space-y-3 overflow-y-auto">
             {zones.map((z: HotspotZone) => {
               const updateZone = (patch: Partial<HotspotZone>) => {
                 const nextZones = zones.map((it: HotspotZone) =>
@@ -101,9 +103,7 @@ export function HotspotEditor({
                             ? "bg-emerald-100 text-emerald-800"
                             : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                         }`}
-                        onClick={() =>
-                          onUpdateData({ correctZoneId: z.id })
-                        }
+                        onClick={() => onUpdateData({ correctZoneId: z.id })}
                       >
                         Đúng
                       </button>
@@ -115,9 +115,7 @@ export function HotspotEditor({
                             (it: HotspotZone) => it.id !== z.id
                           )
                           const nextCorrect =
-                            correctZoneId === z.id
-                              ? ""
-                              : correctZoneId
+                            correctZoneId === z.id ? "" : correctZoneId
                           onUpdateData({
                             zones: nextZones,
                             correctZoneId: nextCorrect,
@@ -129,7 +127,7 @@ export function HotspotEditor({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-1.5 border-t border-slate-100 pt-2 mt-1">
+                  <div className="mt-1 grid grid-cols-2 gap-1.5 border-t border-slate-100 pt-2">
                     <TextField
                       label="Mã ID"
                       value={z.id}

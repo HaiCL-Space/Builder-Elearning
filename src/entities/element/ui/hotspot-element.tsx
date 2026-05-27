@@ -49,7 +49,9 @@ const HotspotElement: React.FC<HotspotElementProps> = ({
             top: `${zone.yMin}%`,
             width: `${zone.xMax - zone.xMin}%`,
             height: `${zone.yMax - zone.yMin}%`,
-            backgroundColor: isInteractive ? "transparent" : "rgba(255, 0, 0, 0.3)",
+            backgroundColor: isInteractive
+              ? "transparent"
+              : "rgba(255, 0, 0, 0.3)",
             cursor: "pointer",
             border: isInteractive ? "none" : "1px solid red",
           }}

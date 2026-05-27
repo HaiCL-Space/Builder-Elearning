@@ -1,7 +1,19 @@
 import { type SlideElement } from "broker-core-sdk"
 import React, { useState } from "react"
-import { motion, useMotionValue, useTransform, type PanInfo } from "framer-motion"
-import { HelpCircle, ThumbsUp, ThumbsDown, RefreshCw, CheckCircle2, XCircle } from "lucide-react"
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  type PanInfo,
+} from "framer-motion"
+import {
+  HelpCircle,
+  ThumbsUp,
+  ThumbsDown,
+  RefreshCw,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react"
 import { Button } from "@/shared/ui/button"
 
 interface SwipeElementProps {
@@ -30,10 +42,10 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
 
   // Framer Motion drag values
   const x = useMotionValue(0)
-  
+
   // Transform x position to rotate the card slightly as dragged
   const rotate = useTransform(x, [-150, 150], [-10, 10])
-  
+
   // Transform x position to background opacity and overlay colors
   const leftColorOpacity = useTransform(x, [-100, 0], [1, 0])
   const rightColorOpacity = useTransform(x, [0, 100], [0, 1])
@@ -81,8 +93,18 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
     >
       {/* Title */}
       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        <HelpCircle style={{ height: "16px", width: "16px", color: "#f59e0b" }} />
-        <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#d97706", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+        <HelpCircle
+          style={{ height: "16px", width: "16px", color: "#f59e0b" }}
+        />
+        <span
+          style={{
+            fontSize: "0.75rem",
+            fontWeight: 700,
+            color: "#d97706",
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+          }}
+        >
           Trò chơi quẹt thẻ (Swipe)
         </span>
       </div>
@@ -148,8 +170,18 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
             rotate,
             width: "80%",
             maxWidth: "240px",
-            backgroundColor: swipedDir === "left" ? "#fef2f2" : swipedDir === "right" ? "#f0fdf4" : "#ffffff",
-            border: swipedDir === "left" ? "2px solid #ef4444" : swipedDir === "right" ? "2px solid #22c55e" : "1px solid #cbd5e1",
+            backgroundColor:
+              swipedDir === "left"
+                ? "#fef2f2"
+                : swipedDir === "right"
+                  ? "#f0fdf4"
+                  : "#ffffff",
+            border:
+              swipedDir === "left"
+                ? "2px solid #ef4444"
+                : swipedDir === "right"
+                  ? "2px solid #22c55e"
+                  : "1px solid #cbd5e1",
             borderRadius: "10px",
             padding: "16px",
             textAlign: "center",
@@ -161,12 +193,31 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
           }}
           whileDrag={{ scale: 1.05 }}
         >
-          <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#1e293b", display: "block" }}>
+          <span
+            style={{
+              fontSize: "0.875rem",
+              fontWeight: 600,
+              color: "#1e293b",
+              display: "block",
+            }}
+          >
             {element.data.statement}
           </span>
-          <div style={{ marginTop: "12px", fontSize: "0.6875rem", color: "#94a3b8", fontWeight: 500 }}>
+          <div
+            style={{
+              marginTop: "12px",
+              fontSize: "0.6875rem",
+              color: "#94a3b8",
+              fontWeight: 500,
+            }}
+          >
             {hasChecked ? (
-              <span style={{ fontWeight: 700, color: isCorrect ? "#166534" : "#991b1b" }}>
+              <span
+                style={{
+                  fontWeight: 700,
+                  color: isCorrect ? "#166534" : "#991b1b",
+                }}
+              >
                 Đã trả lời: {swipedDir === "left" ? "SAI" : "ĐÚNG"}
               </span>
             ) : (
@@ -194,12 +245,16 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
         >
           {isCorrect ? (
             <>
-              <CheckCircle2 style={{ height: "14px", width: "14px", flexShrink: 0 }} />
+              <CheckCircle2
+                style={{ height: "14px", width: "14px", flexShrink: 0 }}
+              />
               <span>Chính xác rồi! Tuyệt vời!</span>
             </>
           ) : (
             <>
-              <XCircle style={{ height: "14px", width: "14px", flexShrink: 0 }} />
+              <XCircle
+                style={{ height: "14px", width: "14px", flexShrink: 0 }}
+              />
               <span>Rất tiếc, chưa đúng. Thử lại nhé!</span>
             </>
           )}
@@ -207,7 +262,15 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
       )}
 
       {/* Buttons */}
-      <div style={{ display: "flex", gap: "8px", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "8px",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: "auto",
+        }}
+      >
         {!hasChecked ? (
           <div style={{ display: "flex", gap: "6px", flex: 1 }}>
             <Button
@@ -217,7 +280,13 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
                 e.stopPropagation()
                 handleSwipeAction("left")
               }}
-              style={{ flex: 1, borderColor: "#ef4444", color: "#ef4444", fontSize: "0.75rem", height: "28px" }}
+              style={{
+                flex: 1,
+                borderColor: "#ef4444",
+                color: "#ef4444",
+                fontSize: "0.75rem",
+                height: "28px",
+              }}
               className="hover:bg-red-50"
             >
               Sai
@@ -229,7 +298,13 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
                 e.stopPropagation()
                 handleSwipeAction("right")
               }}
-              style={{ flex: 1, borderColor: "#22c55e", color: "#22c55e", fontSize: "0.75rem", height: "28px" }}
+              style={{
+                flex: 1,
+                borderColor: "#22c55e",
+                color: "#22c55e",
+                fontSize: "0.75rem",
+                height: "28px",
+              }}
               className="hover:bg-green-50"
             >
               Đúng
@@ -243,9 +318,16 @@ const SwipeElement: React.FC<SwipeElementProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={handleReset}
-                style={{ borderColor: "#ef4444", color: "#ef4444", fontSize: "0.75rem", height: "28px" }}
+                style={{
+                  borderColor: "#ef4444",
+                  color: "#ef4444",
+                  fontSize: "0.75rem",
+                  height: "28px",
+                }}
               >
-                <RefreshCw style={{ height: "12px", width: "12px", marginRight: "4px" }} />
+                <RefreshCw
+                  style={{ height: "12px", width: "12px", marginRight: "4px" }}
+                />
                 Chơi lại
               </Button>
             )}

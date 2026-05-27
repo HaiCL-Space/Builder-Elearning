@@ -1,12 +1,15 @@
-export * from "./ui/element-preview";
-export { default as HotspotElement } from "./ui/hotspot-element";
-export { default as MatchingElement } from "./ui/matching-element";
-export { default as QuizElement } from "./ui/quiz-element";
-export { default as SortingElement } from "./ui/sorting-element";
-export { default as TextElement } from "./ui/text-element";
-export { default as VideoElement } from "./ui/video-element";
-export { default as MemoryCardElement } from "./ui/memory-card-element";
-export { default as FillBlankElement } from "./ui/fill-blank-element";
-export { default as SwipeElement } from "./ui/swipe-element";
-export { default as TimedSprintElement } from "./ui/timed-sprint-element";
-export { default as WordScrambleElement } from "./ui/word-scramble-element";
+export * from "./ui/element-preview"
+export { default as HotspotElement } from "./ui/hotspot-element"
+export { default as MatchingElement } from "./ui/matching-element"
+export { default as QuizElement } from "./ui/quiz-element"
+export { default as SortingElement } from "./ui/sorting-element"
+export { default as TextElement } from "./ui/text-element"
+export { default as VideoElement } from "./ui/video-element"
+export { default as MemoryCardElement } from "./ui/memory-card-element"
+export { default as FillBlankElement } from "./ui/fill-blank-element"
+export { default as SwipeElement } from "./ui/swipe-element"
+export { default as TimedSprintElement } from "./ui/timed-sprint-element"
+export { default as WordScrambleElement } from "./ui/word-scramble-element"
+export { default as CrosswordElement } from "./ui/crossword-element"
+export { default as BranchingElement } from "./ui/branching-element"
+export { default as LabelImageElement } from "./ui/label-image-element"

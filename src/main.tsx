@@ -15,4 +15,3 @@ createRoot(document.getElementById("root")!).render(
     </QueryProvider>
   </StrictMode>
 )
-

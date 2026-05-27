@@ -11,7 +11,12 @@ import { useSlidesQuery, useSaveSlidesMutation } from "@/entities/slide"
 
 export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
   // 1. Fetch slides using TanStack Query v5
-  const { data: fetchedSlides, isPending: isQueryPending, isError: isQueryError, error: queryError } = useSlidesQuery("course-demo")
+  const {
+    data: fetchedSlides,
+    isPending: isQueryPending,
+    isError: isQueryError,
+    error: queryError,
+  } = useSlidesQuery("course-demo")
   const saveMutation = useSaveSlidesMutation("course-demo")
 
   const slides = useBuilderStore((state) => state.slides)
@@ -20,7 +25,9 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
 
   const selectedElementId = useBuilderStore((state) => state.selectedElementId)
   const selectedElement =
-    currentSlide?.elements.find((e: BuilderElement) => e.id === selectedElementId) || null
+    currentSlide?.elements.find(
+      (e: BuilderElement) => e.id === selectedElementId
+    ) || null
 
   const isInteractiveMode = useBuilderStore((state) => state.isInteractiveMode)
   const guidelines = useBuilderStore((state) => state.guidelines)
@@ -31,21 +38,37 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
 
   // Actions from Zustand store
   const initializeSlides = useBuilderStore((state) => state.initializeSlides)
-  const setCurrentSlideIndex = useBuilderStore((state) => state.setCurrentSlideIndex)
-  const handleDeleteElement = useBuilderStore((state) => state.handleDeleteElement)
+  const setCurrentSlideIndex = useBuilderStore(
+    (state) => state.setCurrentSlideIndex
+  )
+  const handleDeleteElement = useBuilderStore(
+    (state) => state.handleDeleteElement
+  )
   const handleSelectSlide = useBuilderStore((state) => state.handleSelectSlide)
   const handleAddElement = useBuilderStore((state) => state.handleAddElement)
   const handleAddSlide = useBuilderStore((state) => state.handleAddSlide)
   const handleDeleteSlide = useBuilderStore((state) => state.handleDeleteSlide)
-  const handleDuplicateSlide = useBuilderStore((state) => state.handleDuplicateSlide)
+  const handleDuplicateSlide = useBuilderStore(
+    (state) => state.handleDuplicateSlide
+  )
   const handleMoveSlide = useBuilderStore((state) => state.handleMoveSlide)
   const handleToggleMode = useBuilderStore((state) => state.handleToggleMode)
 
-  const updateSelectedPosition = useBuilderStore((state) => state.updateSelectedPosition)
-  const updateSelectedStyle = useBuilderStore((state) => state.updateSelectedStyle)
-  const updateSelectedData = useBuilderStore((state) => state.updateSelectedData)
-  const updateSelectedActions = useBuilderStore((state) => state.updateSelectedActions)
-  const updateSelectedAnimations = useBuilderStore((state) => state.updateSelectedAnimations)
+  const updateSelectedPosition = useBuilderStore(
+    (state) => state.updateSelectedPosition
+  )
+  const updateSelectedStyle = useBuilderStore(
+    (state) => state.updateSelectedStyle
+  )
+  const updateSelectedData = useBuilderStore(
+    (state) => state.updateSelectedData
+  )
+  const updateSelectedActions = useBuilderStore(
+    (state) => state.updateSelectedActions
+  )
+  const updateSelectedAnimations = useBuilderStore(
+    (state) => state.updateSelectedAnimations
+  )
 
   // 2. Synchronize React Query's server state with Zustand's draft state on load
   useEffect(() => {
@@ -60,7 +83,9 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
       onSuccess: (isOnlineSuccess) => {
         setAlert({
           type: "success",
-          title: isOnlineSuccess ? "Lưu thiết kế thành công!" : "Lưu thiết kế ngoại tuyến!",
+          title: isOnlineSuccess
+            ? "Lưu thiết kế thành công!"
+            : "Lưu thiết kế ngoại tuyến!",
           message: isOnlineSuccess
             ? "Mọi thay đổi đã được đồng bộ hóa và lưu trữ an toàn trên máy chủ."
             : "Thiết kế đã được sao lưu an toàn tại bộ nhớ trình duyệt của bạn (chế độ ngoại tuyến).",
@@ -70,7 +95,8 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
         setAlert({
           type: "error",
           title: "Không thể lưu thiết kế",
-          message: error.message || "Đã xảy ra lỗi kết nối với máy chủ khi lưu.",
+          message:
+            error.message || "Đã xảy ra lỗi kết nối với máy chủ khi lưu.",
         })
       },
     })
@@ -97,7 +123,9 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
       <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-blue-500" />
-          <span className="text-xs font-medium tracking-wide">Đang tải thiết kế slides từ hệ thống...</span>
+          <span className="text-xs font-medium tracking-wide">
+            Đang tải thiết kế slides từ hệ thống...
+          </span>
         </div>
       </div>
     )
@@ -106,10 +134,16 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
   if (isQueryError) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400">
-        <div className="flex flex-col items-center gap-4 text-center max-w-md px-6 bg-slate-900 border border-white/10 rounded-2xl p-8 shadow-2xl">
-          <div className="h-12 w-12 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 text-xl font-bold">!</div>
-          <h2 className="text-base font-bold text-white">Không thể kết nối máy chủ</h2>
-          <p className="text-xs text-slate-400 leading-relaxed">{queryError?.message || "Đã xảy ra lỗi không xác định."}</p>
+        <div className="flex max-w-md flex-col items-center gap-4 rounded-2xl border border-white/10 bg-slate-900 p-8 px-6 text-center shadow-2xl">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-red-500/30 bg-red-500/10 text-xl font-bold text-red-500">
+            !
+          </div>
+          <h2 className="text-base font-bold text-white">
+            Không thể kết nối máy chủ
+          </h2>
+          <p className="text-xs leading-relaxed text-slate-400">
+            {queryError?.message || "Đã xảy ra lỗi không xác định."}
+          </p>
         </div>
       </div>
     )
@@ -156,7 +190,6 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
           onHotspotZoneMouseDown={handleHotspotZoneMouseDown}
           onHotspotZoneResizeMouseDown={handleHotspotZoneResizeMouseDown}
           onDeleteElement={handleDeleteElement}
-
           onResizeMouseDown={handleResizeMouseDown}
           isInteractiveMode={isInteractiveMode}
           onToggleMode={handleToggleMode}
@@ -168,7 +201,7 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
 
         {/* GUIDELINES & REAL-TIME TOOLTIP OVERLAYS */}
         {!isInteractiveMode && guidelines && (
-          <div className="absolute inset-0 pointer-events-none z-50">
+          <div className="pointer-events-none absolute inset-0 z-50">
             {guidelines.x !== undefined && (
               <div
                 className="absolute top-0 bottom-0 border-l border-dashed border-blue-500"
@@ -177,7 +210,7 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
             )}
             {guidelines.y !== undefined && (
               <div
-                className="absolute left-0 right-0 border-t border-dashed border-blue-500"
+                className="absolute right-0 left-0 border-t border-dashed border-blue-500"
                 style={{ top: `${guidelines.y}%` }}
               />
             )}
@@ -186,7 +219,7 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
 
         {!isInteractiveMode && activeTooltip && (
           <div
-            className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-full bg-slate-900/90 px-4 py-1.5 text-[11px] font-bold text-white shadow-lg backdrop-blur-md flex gap-3 animate-fade-in"
+            className="animate-fade-in absolute bottom-6 left-1/2 z-50 flex -translate-x-1/2 gap-3 rounded-full bg-slate-900/90 px-4 py-1.5 text-[11px] font-bold text-white shadow-lg backdrop-blur-md"
             style={{ pointerEvents: "none" }}
           >
             <span>X: {activeTooltip.x}%</span>

@@ -23,7 +23,7 @@ export function HotspotZonesLayer({
   ) => void
 }) {
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="pointer-events-none absolute inset-0">
       {zones.map((z) => {
         const w = Math.max(0, z.xMax - z.xMin)
         const h = Math.max(0, z.yMax - z.yMin)
@@ -42,7 +42,7 @@ export function HotspotZonesLayer({
             title={`Drag zone: ${z.id}`}
           >
             {/* ID label at top-left */}
-            <div className="absolute top-1 left-1 pointer-events-none select-none bg-blue-600 text-white text-[8px] font-bold px-1 rounded shadow-xs max-w-[90%] truncate">
+            <div className="pointer-events-none absolute top-1 left-1 max-w-[90%] truncate rounded bg-blue-600 px-1 text-[8px] font-bold text-white shadow-xs select-none">
               {z.id}
             </div>
 
@@ -80,4 +80,3 @@ export function HotspotZonesLayer({
     </div>
   )
 }
-

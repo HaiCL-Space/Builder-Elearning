@@ -29,7 +29,8 @@ const SortingElement: React.FC<SortingElementProps> = ({
   // Reset state when element changes or sidebar items change in design mode
   if (
     element.id !== prevElementId ||
-    (!isInteractive && JSON.stringify(element.data.items) !== JSON.stringify(prevItems))
+    (!isInteractive &&
+      JSON.stringify(element.data.items) !== JSON.stringify(prevItems))
   ) {
     setPrevElementId(element.id)
     setPrevItems(element.data.items)
@@ -69,7 +70,9 @@ const SortingElement: React.FC<SortingElementProps> = ({
     const currentOrder = items.map((item) => item.id)
 
     // Check if every item's ID is in the correct position
-    const correct = currentOrder.length === correctOrder.length && currentOrder.every((id, idx) => id === correctOrder[idx])
+    const correct =
+      currentOrder.length === correctOrder.length &&
+      currentOrder.every((id, idx) => id === correctOrder[idx])
     setIsCorrect(correct)
     setHasChecked(true)
   }
@@ -136,7 +139,11 @@ const SortingElement: React.FC<SortingElementProps> = ({
                 boxShadow: isDragging
                   ? "none"
                   : "0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)",
-                cursor: !isInteractive ? "default" : isDragging ? "grabbing" : "grab",
+                cursor: !isInteractive
+                  ? "default"
+                  : isDragging
+                    ? "grabbing"
+                    : "grab",
                 display: "flex",
                 alignItems: "center",
                 gap: "12px",
@@ -272,7 +279,8 @@ const SortingElement: React.FC<SortingElementProps> = ({
               style={{
                 fontSize: "0.75rem",
                 fontWeight: 600,
-                backgroundColor: hasChecked && isCorrect ? "#22c55e" : undefined,
+                backgroundColor:
+                  hasChecked && isCorrect ? "#22c55e" : undefined,
                 color: hasChecked && isCorrect ? "#fff" : undefined,
               }}
             >

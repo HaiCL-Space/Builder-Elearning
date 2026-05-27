@@ -27,8 +27,6 @@ export function NumberField({
   )
 }
 
-
-
 export function ColorField({
   label,
   value,
@@ -44,10 +42,8 @@ export function ColorField({
   const hex = rgbToHex(r, g, b)
 
   return (
-    <div className="flex flex-col gap-1 min-w-0">
-      <label className="text-[11px] font-medium text-slate-500">
-        {label}
-      </label>
+    <div className="flex min-w-0 flex-col gap-1">
+      <label className="text-[11px] font-medium text-slate-500">{label}</label>
       <div className="flex items-center gap-2">
         <input
           type="color"
@@ -56,9 +52,9 @@ export function ColorField({
             const newRgb = parseColor(e.target.value)
             onChange(toRgbaString(newRgb.r, newRgb.g, newRgb.b, a))
           }}
-          className="h-7 w-7 cursor-pointer rounded border border-slate-300 p-0.5 shrink-0"
+          className="h-7 w-7 shrink-0 cursor-pointer rounded border border-slate-300 p-0.5"
         />
-        <div className="flex-1 flex flex-col gap-0.5 min-w-0">
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           {showAlpha ? (
             <>
               <input
@@ -72,13 +68,17 @@ export function ColorField({
                 }}
                 className="h-1 w-full cursor-pointer appearance-none rounded-full bg-slate-200 accent-blue-600"
               />
-              <div className="flex justify-between text-[9px] text-slate-400 font-mono">
-                <span className="truncate">{value.length > 7 ? "RGBA" : value}</span>
+              <div className="flex justify-between font-mono text-[9px] text-slate-400">
+                <span className="truncate">
+                  {value.length > 7 ? "RGBA" : value}
+                </span>
                 <span>{Math.round(a * 100)}%</span>
               </div>
             </>
           ) : (
-            <span className="truncate text-xs text-slate-500 font-mono">{value}</span>
+            <span className="truncate font-mono text-xs text-slate-500">
+              {value}
+            </span>
           )}
         </div>
       </div>

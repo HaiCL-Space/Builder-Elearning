@@ -78,14 +78,32 @@ const FillBlankElement: React.FC<FillBlankElementProps> = ({
     >
       {/* Title */}
       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        <HelpCircle style={{ height: "16px", width: "16px", color: "#0ea5e9" }} />
-        <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#0284c7", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+        <HelpCircle
+          style={{ height: "16px", width: "16px", color: "#0ea5e9" }}
+        />
+        <span
+          style={{
+            fontSize: "0.75rem",
+            fontWeight: 700,
+            color: "#0284c7",
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+          }}
+        >
           Điền vào chỗ trống
         </span>
       </div>
 
       {/* Question */}
-      <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 600, color: "#1e293b", lineHeight: "1.4" }}>
+      <h3
+        style={{
+          margin: 0,
+          fontSize: "1rem",
+          fontWeight: 600,
+          color: "#1e293b",
+          lineHeight: "1.4",
+        }}
+      >
         {element.data.question}
       </h3>
 
@@ -116,7 +134,9 @@ const FillBlankElement: React.FC<FillBlankElementProps> = ({
             if (e.key === "Enter" && (!hasChecked || !isCorrect)) {
               // Trigger check on Enter press
               e.preventDefault()
-              const syntheticEvent = { stopPropagation: () => {} } as React.MouseEvent
+              const syntheticEvent = {
+                stopPropagation: () => {},
+              } as React.MouseEvent
               handleCheck(syntheticEvent)
             }
           }}
@@ -141,12 +161,16 @@ const FillBlankElement: React.FC<FillBlankElementProps> = ({
         >
           {isCorrect ? (
             <>
-              <CheckCircle2 style={{ height: "16px", width: "16px", flexShrink: 0 }} />
+              <CheckCircle2
+                style={{ height: "16px", width: "16px", flexShrink: 0 }}
+              />
               <span>Chính xác! Câu trả lời của bạn hoàn toàn đúng.</span>
             </>
           ) : (
             <>
-              <XCircle style={{ height: "16px", width: "16px", flexShrink: 0 }} />
+              <XCircle
+                style={{ height: "16px", width: "16px", flexShrink: 0 }}
+              />
               <span>Chưa chính xác rồi. Hãy thử lại nhé!</span>
             </>
           )}
@@ -154,7 +178,14 @@ const FillBlankElement: React.FC<FillBlankElementProps> = ({
       )}
 
       {/* Buttons */}
-      <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end", marginTop: "auto" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          justifyContent: "flex-end",
+          marginTop: "auto",
+        }}
+      >
         {hasChecked && !isCorrect && (
           <Button
             variant="outline"
@@ -166,7 +197,9 @@ const FillBlankElement: React.FC<FillBlankElementProps> = ({
               fontSize: "0.75rem",
             }}
           >
-            <RefreshCw style={{ height: "12px", width: "12px", marginRight: "4px" }} />
+            <RefreshCw
+              style={{ height: "12px", width: "12px", marginRight: "4px" }}
+            />
             Thử lại
           </Button>
         )}

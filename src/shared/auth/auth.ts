@@ -56,7 +56,10 @@ export type { AuthUser }
 export const auth = {
   isAuthenticated(): boolean {
     if (typeof window === "undefined") return false
-    return !!useAuthStore.getState().accessToken || !!getCookie(AUTH_REFRESH_TOKEN_KEY)
+    return (
+      !!useAuthStore.getState().accessToken ||
+      !!getCookie(AUTH_REFRESH_TOKEN_KEY)
+    )
   },
 
   getUser(): AuthUser | null {
@@ -113,12 +116,13 @@ export const auth = {
       scheduleTokenRefresh(maxAge)
 
       return { success: true, message: resData.message }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Login API error:", error)
+      const err = error as { message?: string }
       return {
         success: false,
         message:
-          error.message ||
+          err.message ||
           "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.",
       }
     }

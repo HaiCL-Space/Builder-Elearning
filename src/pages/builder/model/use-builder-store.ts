@@ -35,7 +35,6 @@ interface BuilderState {
     handle: string
   } | null
 
-
   testAnimationElementId: string | null
   testAnimationKey: number
   triggerTestAnimation: (id: string) => void
@@ -53,18 +52,20 @@ interface BuilderState {
       isMastered: boolean
     }
   } | null
-  setAlert: (alert: {
-    type: "success" | "error" | "warning" | "info"
-    title: string
-    message: string
-    spacedRepetition?: {
-      conceptId: string
-      userAnswerDesc: string
-      days: number
-      nextReviewDateStr: string
-      isMastered: boolean
-    }
-  } | null) => void
+  setAlert: (
+    alert: {
+      type: "success" | "error" | "warning" | "info"
+      title: string
+      message: string
+      spacedRepetition?: {
+        conceptId: string
+        userAnswerDesc: string
+        days: number
+        nextReviewDateStr: string
+        isMastered: boolean
+      }
+    } | null
+  ) => void
   closeAlert: () => void
 
   // Basic Setters
@@ -100,7 +101,6 @@ interface BuilderState {
       handle: string
     } | null
   ) => void
-
 
   // Core Operations
   updateElement: (
@@ -151,12 +151,16 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     })),
 
   activeAlert: null,
-  setAlert: (alert) => set({
-    activeAlert: alert ? { ...alert, isOpen: true } : null
-  }),
-  closeAlert: () => set((state) => ({
-    activeAlert: state.activeAlert ? { ...state.activeAlert, isOpen: false } : null
-  })),
+  setAlert: (alert) =>
+    set({
+      activeAlert: alert ? { ...alert, isOpen: true } : null,
+    }),
+  closeAlert: () =>
+    set((state) => ({
+      activeAlert: state.activeAlert
+        ? { ...state.activeAlert, isOpen: false }
+        : null,
+    })),
 
   // Basic Setters
   initializeSlides: (slides) =>
@@ -175,7 +179,8 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
         typeof index === "function" ? index(state.currentSlideIndex) : index,
     })),
   setSelectedElementId: (id) => set({ selectedElementId: id }),
-  setIsInteractiveMode: (interactive) => set({ isInteractiveMode: interactive }),
+  setIsInteractiveMode: (interactive) =>
+    set({ isInteractiveMode: interactive }),
   setGuidelines: (guidelines) => set({ guidelines }),
   setActiveTooltip: (tooltip) => set({ activeTooltip: tooltip }),
   setDraggingId: (id) => set({ draggingId: id }),
@@ -183,7 +188,6 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   setResizing: (resizing) => set({ resizing }),
   setDraggingZone: (zone) => set({ draggingZone: zone }),
   setResizingZone: (resizingZone) => set({ resizingZone }),
-
 
   // Core Operations
   updateElement: (slideIndex, elementId, updater) =>
@@ -221,10 +225,15 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   updateSelectedData: (patch) => {
     const { selectedElementId, currentSlideIndex, updateElement } = get()
     if (!selectedElementId) return
-    updateElement(currentSlideIndex, selectedElementId, (el) => ({
-      ...el,
-      data: { ...el.data, ...patch },
-    } as unknown as BuilderElement))
+    updateElement(
+      currentSlideIndex,
+      selectedElementId,
+      (el) =>
+        ({
+          ...el,
+          data: { ...el.data, ...patch },
+        }) as unknown as BuilderElement
+    )
   },
 
   updateSelectedActions: (actions) => {
@@ -272,7 +281,12 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   },
 
   handleDeleteElement: (id) => {
-    const { currentSlideIndex, setSlides, selectedElementId, setSelectedElementId } = get()
+    const {
+      currentSlideIndex,
+      setSlides,
+      selectedElementId,
+      setSelectedElementId,
+    } = get()
     setSlides((prev) =>
       prev.map((slide, idx) =>
         idx === currentSlideIndex
@@ -317,7 +331,9 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     if (slides.length <= 1) return
     const nextSlides = slides.filter((_, idx) => idx !== index)
     const nextIndex =
-      currentSlideIndex >= index ? Math.max(0, currentSlideIndex - 1) : currentSlideIndex
+      currentSlideIndex >= index
+        ? Math.max(0, currentSlideIndex - 1)
+        : currentSlideIndex
     set({
       slides: nextSlides,
       currentSlideIndex: nextIndex,

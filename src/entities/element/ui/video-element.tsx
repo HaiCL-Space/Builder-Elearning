@@ -13,26 +13,28 @@ const VideoElement: React.FC<VideoElementProps> = ({
   baseStyle,
   handleClick,
 }) => {
-  const { 
-    src, 
-    poster, 
-    autoPlay, 
-    loop, 
-    muted, 
+  const {
+    src,
+    poster,
+    autoPlay,
+    loop,
+    muted,
     controls = true,
-    isLive = false 
+    isLive = false,
   } = element.data as VideoData
 
   const getYoutubeId = (url: string) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
     const match = url.match(regExp)
-    return (match && match[2].length === 11) ? match[2] : null
+    return match && match[2].length === 11 ? match[2] : null
   }
 
   const youtubeId = src ? getYoutubeId(src) : null
-  
+
   // Detect if it's likely a live stream from URL
-  const detectedLive = isLive || (src && (src.includes("live") || src.includes(".m3u8")))
+  const detectedLive =
+    isLive || (src && (src.includes("live") || src.includes(".m3u8")))
 
   return (
     <div
@@ -63,17 +65,19 @@ const VideoElement: React.FC<VideoElementProps> = ({
           playsInline
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center text-white/50 text-xs flex-col gap-2">
+        <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-xs text-white/50">
           <span className="text-2xl">🎥</span>
           <span>Chưa cấu hình Video / Livestream</span>
         </div>
       )}
 
       {detectedLive && (
-        <div className={cn(
-          "absolute top-2 left-2 flex items-center gap-1.5 rounded-sm bg-red-600 px-1.5 py-0.5",
-          "text-[10px] font-bold text-white shadow-lg animate-pulse z-10"
-        )}>
+        <div
+          className={cn(
+            "absolute top-2 left-2 flex items-center gap-1.5 rounded-sm bg-red-600 px-1.5 py-0.5",
+            "z-10 animate-pulse text-[10px] font-bold text-white shadow-lg"
+          )}
+        >
           <div className="h-1.5 w-1.5 rounded-full bg-white" />
           TRỰC TIẾP
         </div>

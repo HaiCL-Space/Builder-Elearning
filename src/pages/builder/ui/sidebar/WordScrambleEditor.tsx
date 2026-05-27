@@ -29,8 +29,8 @@ export function WordScrambleEditor({
     const chars = trimmedWord.split("")
     // Fisher-Yates shuffle
     for (let i = chars.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [chars[i], chars[j]] = [chars[j], chars[i]]
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[chars[i], chars[j]] = [chars[j], chars[i]]
     }
 
     let scrambled = chars.join("")
@@ -68,7 +68,7 @@ export function WordScrambleEditor({
             type="button"
             onClick={handleAutoScramble}
             disabled={!correctWord.trim()}
-            className="flex items-center gap-1 rounded bg-purple-50 px-2 py-0.5 text-[10px] font-bold text-purple-600 hover:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            className="flex items-center gap-1 rounded bg-purple-50 px-2 py-0.5 text-[10px] font-bold text-purple-600 transition hover:bg-purple-100 disabled:cursor-not-allowed disabled:opacity-50"
             title="Đảo ngẫu nhiên các chữ cái từ Lời giải"
           >
             <Sparkles className="h-3 w-3" /> Tự động đảo chữ
@@ -84,17 +84,17 @@ export function WordScrambleEditor({
       </div>
 
       {/* Case Sensitive Toggle */}
-      <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+      <div className="flex items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 p-2.5">
         <input
           type="checkbox"
           id="ws-case-sensitive"
           checked={caseSensitive}
           onChange={(e) => onUpdateData({ caseSensitive: e.target.checked })}
-          className="h-3.5 w-3.5 accent-blue-500 rounded border-slate-300 focus:ring-blue-500 cursor-pointer"
+          className="h-3.5 w-3.5 cursor-pointer rounded border-slate-300 accent-blue-500 focus:ring-blue-500"
         />
         <label
           htmlFor="ws-case-sensitive"
-          className="text-xs font-semibold text-slate-600 select-none cursor-pointer"
+          className="cursor-pointer text-xs font-semibold text-slate-600 select-none"
         >
           Phân biệt chữ hoa / thường
         </label>

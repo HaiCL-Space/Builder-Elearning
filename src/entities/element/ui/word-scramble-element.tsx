@@ -75,20 +75,39 @@ const WordScrambleElement: React.FC<WordScrambleElementProps> = ({
         flexDirection: "column",
         justifyContent: "flex-start",
         gap: "12px",
-        transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
+        transition:
+          "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
       }}
       onClick={handleClick}
     >
       {/* Title */}
       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        <HelpCircle style={{ height: "16px", width: "16px", color: "#a855f7" }} />
-        <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#9333ea", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+        <HelpCircle
+          style={{ height: "16px", width: "16px", color: "#a855f7" }}
+        />
+        <span
+          style={{
+            fontSize: "0.75rem",
+            fontWeight: 700,
+            color: "#9333ea",
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+          }}
+        >
           Giải đố sắp xếp chữ
         </span>
       </div>
 
       {/* Scrambled Word Badges */}
-      <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", justifyContent: "center", padding: "4px 0" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "6px",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          padding: "4px 0",
+        }}
+      >
         {letters.map((letter, idx) => (
           <div
             key={`letter-${idx}-${letter}`}
@@ -108,7 +127,7 @@ const WordScrambleElement: React.FC<WordScrambleElementProps> = ({
               transition: "transform 0.15s ease",
               cursor: "default",
             }}
-            className="hover:scale-110 hover:-translate-y-0.5"
+            className="hover:-translate-y-0.5 hover:scale-110"
           >
             {letter}
           </div>
@@ -140,7 +159,9 @@ const WordScrambleElement: React.FC<WordScrambleElementProps> = ({
           onKeyDown={(e) => {
             if (e.key === "Enter" && (!hasChecked || !isCorrect)) {
               e.preventDefault()
-              const syntheticEvent = { stopPropagation: () => {} } as React.MouseEvent
+              const syntheticEvent = {
+                stopPropagation: () => {},
+              } as React.MouseEvent
               handleCheck(syntheticEvent)
             }
           }}
@@ -165,12 +186,16 @@ const WordScrambleElement: React.FC<WordScrambleElementProps> = ({
         >
           {isCorrect ? (
             <>
-              <CheckCircle2 style={{ height: "14px", width: "14px", flexShrink: 0 }} />
+              <CheckCircle2
+                style={{ height: "14px", width: "14px", flexShrink: 0 }}
+              />
               <span>Chính xác rồi! Từ hoàn toàn khớp.</span>
             </>
           ) : (
             <>
-              <XCircle style={{ height: "14px", width: "14px", flexShrink: 0 }} />
+              <XCircle
+                style={{ height: "14px", width: "14px", flexShrink: 0 }}
+              />
               <span>Chưa chính xác rồi. Hãy thử lại chữ cái nhé!</span>
             </>
           )}
@@ -178,7 +203,14 @@ const WordScrambleElement: React.FC<WordScrambleElementProps> = ({
       )}
 
       {/* Buttons */}
-      <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "auto" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "8px",
+          justifyContent: "flex-end",
+          marginTop: "auto",
+        }}
+      >
         {hasChecked && !isCorrect && (
           <Button
             variant="outline"
@@ -191,7 +223,9 @@ const WordScrambleElement: React.FC<WordScrambleElementProps> = ({
               height: "28px",
             }}
           >
-            <RefreshCw style={{ height: "12px", width: "12px", marginRight: "4px" }} />
+            <RefreshCw
+              style={{ height: "12px", width: "12px", marginRight: "4px" }}
+            />
             Thử lại
           </Button>
         )}

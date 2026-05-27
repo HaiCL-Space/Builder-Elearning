@@ -1,5 +1,15 @@
 import { useState } from "react"
-import { ACTION_TYPES, learningEngine, gameEngine, type ElementAction, type MultipleChoiceData, type Slide } from "broker-core-sdk"
+import {
+  ACTION_TYPES,
+  learningEngine,
+  gameEngine,
+  type ElementAction,
+  type MultipleChoiceData,
+  type Slide,
+  type CrosswordData,
+  type BranchingData,
+  type LabelImageData,
+} from "broker-core-sdk"
 import { MOCK_SLIDES } from "@/shared/api"
 import { THEME_BACKGROUNDS } from "@/shared/lib/builder-utils"
 import CanvasElement from "@/pages/builder/ui/canvas/CanvasElement"
@@ -19,13 +29,18 @@ function getInitiallyHiddenElements(slide: Slide) {
 
 export function ViewerPage() {
   // 1. Fetch slides dynamically using React Query v5
-  const { data: slides = MOCK_SLIDES, isPending, isError, error } = useSlidesQuery("course-demo")
+  const {
+    data: slides = MOCK_SLIDES,
+    isPending,
+    isError,
+    error,
+  } = useSlidesQuery("course-demo")
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
-  
+
   // Guard slide access safely
   const currentSlide = slides[currentSlideIndex] || slides[0] || MOCK_SLIDES[0]
-  
+
   const [prevSlideId, setPrevSlideId] = useState<string | null>(null)
   const [hiddenElements, setHiddenElements] = useState<Set<string>>(new Set())
 
@@ -55,7 +70,9 @@ export function ViewerPage() {
       <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-cyan-500" />
-          <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">Đang tải slide viewer...</span>
+          <span className="text-xs font-semibold tracking-wider text-cyan-300 uppercase">
+            Đang tải slide viewer...
+          </span>
         </div>
       </div>
     )
@@ -64,10 +81,14 @@ export function ViewerPage() {
   if (isError) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400">
-        <div className="flex flex-col items-center gap-4 text-center max-w-md px-6 bg-slate-900 border border-white/10 rounded-2xl p-8 shadow-2xl">
-          <div className="h-12 w-12 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 text-xl font-bold">!</div>
+        <div className="flex max-w-md flex-col items-center gap-4 rounded-2xl border border-white/10 bg-slate-900 p-8 px-6 text-center shadow-2xl">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-red-500/30 bg-red-500/10 text-xl font-bold text-red-500">
+            !
+          </div>
           <h2 className="text-base font-bold text-white">Lỗi tải slides</h2>
-          <p className="text-xs text-slate-400 leading-relaxed">{error?.message || "Đã xảy ra lỗi không xác định."}</p>
+          <p className="text-xs leading-relaxed text-slate-400">
+            {error?.message || "Đã xảy ra lỗi không xác định."}
+          </p>
         </div>
       </div>
     )
@@ -126,7 +147,8 @@ export function ViewerPage() {
               isOpen: true,
               type: "warning",
               title: "Chưa chọn câu trả lời",
-              message: "Vui lòng chọn một phương án trả lời trước khi kiểm tra!"
+              message:
+                "Vui lòng chọn một phương án trả lời trước khi kiểm tra!",
             })
             return
           }
@@ -146,19 +168,26 @@ export function ViewerPage() {
             correctZoneId?: string
             zones?: { id: string }[]
           }
-          const userAnswer = (action.payload as { userAnswer?: string })?.userAnswer
+          const userAnswer = (action.payload as { userAnswer?: string })
+            ?.userAnswer
 
           isCorrect = userAnswer === hotspotData.correctZoneId
-          const zone = (hotspotData.zones || []).find((z) => z.id === userAnswer)
+          const zone = (hotspotData.zones || []).find(
+            (z) => z.id === userAnswer
+          )
           userAnswerDesc = zone?.id || userAnswer || "Vùng không xác định"
         } else if (targetEl.type === "SORTING") {
           isCorrect = true
           userAnswerDesc = "Sắp xếp mốc thời gian lịch sử"
         } else if (targetEl.type === "MATCHING") {
-          const matchingEl = document.querySelector(`[data-matching-id="${targetId}"]`)
+          const matchingEl = document.querySelector(
+            `[data-matching-id="${targetId}"]`
+          )
           const userMatchesRaw = matchingEl?.getAttribute("data-user-matches")
-          const userMatches: [string, string][] = userMatchesRaw ? JSON.parse(userMatchesRaw) : []
-          
+          const userMatches: [string, string][] = userMatchesRaw
+            ? JSON.parse(userMatchesRaw)
+            : []
+
           const matchingData = targetEl.data as unknown as {
             leftColumn: { id: string; content: string }[]
             rightColumn: { id: string; content: string }[]
@@ -170,17 +199,84 @@ export function ViewerPage() {
               isOpen: true,
               type: "warning",
               title: "Chưa hoàn thành ghép nối",
-              message: "Vui lòng nối tất cả các cặp từ trước khi kiểm tra!"
+              message: "Vui lòng nối tất cả các cặp từ trước khi kiểm tra!",
             })
             return
           }
 
           // Check if all user matches are in correctPairs
-          isCorrect = userMatches.every(([uL, uR]) => 
+          isCorrect = userMatches.every(([uL, uR]) =>
             matchingData.correctPairs.some(([cL, cR]) => cL === uL && cR === uR)
           )
-          
+
           userAnswerDesc = `Đã nối ${userMatches.length} cặp từ`
+        } else if (targetEl.type === "CROSSWORD") {
+          const userAnswer = (
+            action.payload as { userAnswer?: Record<string, string> }
+          )?.userAnswer
+          if (!userAnswer || Object.keys(userAnswer).length === 0) {
+            setActiveAlert({
+              isOpen: true,
+              type: "warning",
+              title: "Chưa hoàn thành ô chữ",
+              message:
+                "Vui lòng nhập các chữ cái vào ô trống trước khi kiểm tra!",
+            })
+            return
+          }
+          isCorrect = gameEngine.validateGameResult(
+            "CROSSWORD",
+            userAnswer,
+            targetEl.data as CrosswordData
+          )
+          userAnswerDesc = `Đã giải câu đố ô chữ`
+        } else if (targetEl.type === "BRANCHING") {
+          const userAnswer = (action.payload as { userAnswer?: string })
+            ?.userAnswer
+          if (!userAnswer) {
+            setActiveAlert({
+              isOpen: true,
+              type: "warning",
+              title: "Chưa đưa ra quyết định",
+              message:
+                "Vui lòng hoàn thành kịch bản rẽ nhánh trước khi kiểm tra!",
+            })
+            return
+          }
+          const branchingData = targetEl.data as BranchingData
+          isCorrect = gameEngine.validateGameResult(
+            "BRANCHING",
+            userAnswer,
+            branchingData
+          )
+          const node = branchingData.nodes?.find(
+            (n) => n.id === userAnswer
+          )
+          userAnswerDesc = `Đưa ra quyết định tại: ${node?.title || userAnswer}`
+        } else if (targetEl.type === "LABEL_IMAGE") {
+          const userAnswer = (
+            action.payload as { userAnswer?: Record<string, string> }
+          )?.userAnswer
+          const labelImageData = targetEl.data as LabelImageData
+          if (
+            !userAnswer ||
+            Object.keys(userAnswer).length < labelImageData.zones.length
+          ) {
+            setActiveAlert({
+              isOpen: true,
+              type: "warning",
+              title: "Chưa dán nhãn đầy đủ",
+              message:
+                "Vui lòng dán nhãn đầy đủ cho tất cả các vùng trước khi kiểm tra!",
+            })
+            return
+          }
+          isCorrect = gameEngine.validateGameResult(
+            "LABEL_IMAGE",
+            userAnswer,
+            labelImageData
+          )
+          userAnswerDesc = `Dán nhãn ${Object.keys(userAnswer).length} vùng hình ảnh`
         } else {
           isCorrect = true
           userAnswerDesc = "Trả lời tự do"
@@ -188,7 +284,10 @@ export function ViewerPage() {
 
         // Spaced Repetition calculation
         const days = learningEngine.calculateNextReview(isCorrect, "High")
-        const isMastered = learningEngine.checkMastery(isCorrect ? 3 : 0, "High")
+        const isMastered = learningEngine.checkMastery(
+          isCorrect ? 3 : 0,
+          "High"
+        )
 
         const nextReviewDate = new Date()
         nextReviewDate.setDate(nextReviewDate.getDate() + days)
@@ -196,15 +295,17 @@ export function ViewerPage() {
         setActiveAlert({
           isOpen: true,
           type: isCorrect ? "success" : "error",
-          title: isCorrect ? "🎉 CHÍNH XÁC! Bạn trả lời xuất sắc!" : "❌ SAI RỒI. Hãy thử lại nhé!",
+          title: isCorrect
+            ? "🎉 CHÍNH XÁC! Bạn trả lời xuất sắc!"
+            : "❌ SAI RỒI. Hãy thử lại nhé!",
           message: "",
           spacedRepetition: {
             conceptId,
             userAnswerDesc,
             days,
             nextReviewDateStr: nextReviewDate.toLocaleDateString("vi-VN"),
-            isMastered
-          }
+            isMastered,
+          },
         })
         break
       }
@@ -215,7 +316,9 @@ export function ViewerPage() {
     }
   }
 
-  const themeBg = THEME_BACKGROUNDS[currentSlide.config?.theme || "light"] || THEME_BACKGROUNDS.light
+  const themeBg =
+    THEME_BACKGROUNDS[currentSlide.config?.theme || "light"] ||
+    THEME_BACKGROUNDS.light
 
   const renderedElements = currentSlide.elements.map((element) => {
     if (!hiddenElements.has(element.id)) {
@@ -247,7 +350,7 @@ export function ViewerPage() {
       <div className="border-b border-white/10 bg-slate-950/80 px-4 py-3 backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <div>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-cyan-300">
+            <div className="text-[11px] font-semibold tracking-[0.22em] text-cyan-300 uppercase">
               Viewer
             </div>
             <div className="text-sm text-slate-300">
@@ -259,14 +362,14 @@ export function ViewerPage() {
             <button
               onClick={handlePrev}
               disabled={currentSlideIndex === 0}
-              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+              className="cursor-pointer rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Quay lại
             </button>
             <button
               onClick={handleNext}
               disabled={currentSlideIndex === slides.length - 1}
-              className="rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+              className="cursor-pointer rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Tiếp theo
             </button>
@@ -274,7 +377,7 @@ export function ViewerPage() {
         </div>
       </div>
 
-      <div className="relative flex flex-1 min-h-0 items-center justify-center overflow-hidden px-4 py-4">
+      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-4 py-4">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.14),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(59,130,246,0.18),transparent_30%)]" />
 
         <div
@@ -305,7 +408,9 @@ export function ViewerPage() {
           title={activeAlert.title}
           message={activeAlert.message}
           spacedRepetition={activeAlert.spacedRepetition}
-          onClose={() => setActiveAlert(prev => prev ? { ...prev, isOpen: false } : null)}
+          onClose={() =>
+            setActiveAlert((prev) => (prev ? { ...prev, isOpen: false } : null))
+          }
         />
       )}
     </div>

@@ -38,8 +38,14 @@ export function MatchingEditor({
             const rightId = `vi-${pairId}`
 
             const nextLeft = [...leftCol, { id: leftId, content: "Từ khóa A" }]
-            const nextRight = [...rightCol, { id: rightId, content: "Ý nghĩa B" }]
-            const nextPairs = [...correctPairs, [leftId, rightId] as [string, string]]
+            const nextRight = [
+              ...rightCol,
+              { id: rightId, content: "Ý nghĩa B" },
+            ]
+            const nextPairs = [
+              ...correctPairs,
+              [leftId, rightId] as [string, string],
+            ]
 
             onUpdateData({
               leftColumn: nextLeft,
@@ -53,7 +59,7 @@ export function MatchingEditor({
         </button>
       </div>
 
-      <div className="space-y-3 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100 max-h-64 overflow-y-auto">
+      <div className="max-h-64 space-y-3 overflow-y-auto rounded-lg border border-slate-100 bg-slate-50/50 p-2.5">
         {correctPairs.map((pair, index) => {
           const leftItem = leftCol.find((x) => x.id === pair[0])
           const rightItem = rightCol.find((x) => x.id === pair[1])
@@ -77,7 +83,9 @@ export function MatchingEditor({
           const deletePair = () => {
             const nextLeft = leftCol.filter((it) => it.id !== pair[0])
             const nextRight = rightCol.filter((it) => it.id !== pair[1])
-            const nextPairs = correctPairs.filter((p) => p[0] !== pair[0] && p[1] !== pair[1])
+            const nextPairs = correctPairs.filter(
+              (p) => p[0] !== pair[0] && p[1] !== pair[1]
+            )
             onUpdateData({
               leftColumn: nextLeft,
               rightColumn: nextRight,
@@ -88,7 +96,7 @@ export function MatchingEditor({
           return (
             <div
               key={`${pair[0]}-${pair[1]}`}
-              className="space-y-1.5 border-b border-slate-150 pb-2.5 last:border-0 last:pb-0"
+              className="border-slate-150 space-y-1.5 border-b pb-2.5 last:border-0 last:pb-0"
             >
               <div className="flex items-center justify-between text-[9px] font-bold text-slate-400">
                 <span>CẶP #{index + 1}</span>
@@ -102,7 +110,9 @@ export function MatchingEditor({
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <span className="text-[8px] font-semibold text-blue-500 block mb-0.5">Bên trái</span>
+                  <span className="mb-0.5 block text-[8px] font-semibold text-blue-500">
+                    Bên trái
+                  </span>
                   <input
                     type="text"
                     value={leftItem.content}
@@ -111,7 +121,9 @@ export function MatchingEditor({
                   />
                 </div>
                 <div>
-                  <span className="text-[8px] font-semibold text-pink-500 block mb-0.5">Bên phải</span>
+                  <span className="mb-0.5 block text-[8px] font-semibold text-pink-500">
+                    Bên phải
+                  </span>
                   <input
                     type="text"
                     value={rightItem.content}

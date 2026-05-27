@@ -30,7 +30,7 @@ export function TextEditor({
         }
         onChange={(v) => onUpdateData({ content: v })}
       />
-      <div className="grid grid-cols-2 gap-3.5 bg-slate-50/50 p-3 rounded-lg border border-slate-100 items-start">
+      <div className="grid grid-cols-2 items-start gap-3.5 rounded-lg border border-slate-100 bg-slate-50/50 p-3">
         <NumberField
           label="Cỡ chữ (px)"
           value={Number(

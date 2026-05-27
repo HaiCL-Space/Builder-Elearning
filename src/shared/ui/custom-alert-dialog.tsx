@@ -1,13 +1,13 @@
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { 
-  CheckCircle2, 
-  XCircle, 
-  AlertCircle, 
-  Calendar, 
+import {
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  Calendar,
   Award,
-  BookOpen, 
-  ArrowRight 
+  BookOpen,
+  ArrowRight,
 } from "lucide-react"
 
 interface SpacedRepetitionData {
@@ -33,7 +33,7 @@ export function CustomAlertDialog({
   title,
   message,
   spacedRepetition,
-  onClose
+  onClose,
 }: CustomAlertDialogProps) {
   // Close on Escape key
   React.useEffect(() => {
@@ -53,7 +53,8 @@ export function CustomAlertDialog({
       accent: "text-emerald-400",
       icon: <CheckCircle2 className="size-12 text-emerald-400" />,
       badge: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-      button: "bg-emerald-500 hover:bg-emerald-400 text-emerald-950 shadow-emerald-500/20",
+      button:
+        "bg-emerald-500 hover:bg-emerald-400 text-emerald-950 shadow-emerald-500/20",
       glow: "shadow-[0_0_50px_-12px_rgba(16,185,129,0.3)]",
       gradient: "from-emerald-500/20 via-transparent to-transparent",
     },
@@ -71,7 +72,8 @@ export function CustomAlertDialog({
       accent: "text-amber-400",
       icon: <AlertCircle className="size-12 text-amber-400" />,
       badge: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-      button: "bg-amber-500 hover:bg-amber-400 text-amber-950 shadow-amber-500/20",
+      button:
+        "bg-amber-500 hover:bg-amber-400 text-amber-950 shadow-amber-500/20",
       glow: "shadow-[0_0_50px_-12px_rgba(245,158,11,0.3)]",
       gradient: "from-amber-500/20 via-transparent to-transparent",
     },
@@ -83,7 +85,7 @@ export function CustomAlertDialog({
       button: "bg-cyan-500 hover:bg-cyan-400 text-cyan-950 shadow-cyan-500/20",
       glow: "shadow-[0_0_50px_-12px_rgba(6,182,212,0.3)]",
       gradient: "from-cyan-500/20 via-transparent to-transparent",
-    }
+    },
   }[type]
 
   return (
@@ -108,7 +110,9 @@ export function CustomAlertDialog({
             className={`relative w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-slate-900/90 p-6 text-slate-100 shadow-2xl backdrop-blur-xl ${theme.glow}`}
           >
             {/* Ambient Background Glow Effect */}
-            <div className={`absolute -top-40 -left-40 size-80 rounded-full bg-gradient-to-br ${theme.gradient} blur-3xl pointer-events-none`} />
+            <div
+              className={`absolute -top-40 -left-40 size-80 rounded-full bg-gradient-to-br ${theme.gradient} pointer-events-none blur-3xl`}
+            />
 
             {/* Header / Icon section */}
             <div className="relative flex flex-col items-center text-center">
@@ -116,17 +120,17 @@ export function CustomAlertDialog({
                 initial={{ scale: 0.5, rotate: -15 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: "spring", delay: 0.1, stiffness: 200 }}
-                className="mb-4 flex size-20 items-center justify-center rounded-full bg-white/5 border border-white/10 shadow-inner"
+                className="mb-4 flex size-20 items-center justify-center rounded-full border border-white/10 bg-white/5 shadow-inner"
               >
                 {theme.icon}
               </motion.div>
 
-              <h3 className="text-xl font-bold tracking-tight bg-gradient-to-b from-white to-slate-300 bg-clip-text text-transparent">
+              <h3 className="bg-gradient-to-b from-white to-slate-300 bg-clip-text text-xl font-bold tracking-tight text-transparent">
                 {title}
               </h3>
-              
+
               {!spacedRepetition && (
-                <p className="mt-2 text-sm text-slate-400 max-w-sm">
+                <p className="mt-2 max-w-sm text-sm text-slate-400">
                   {message}
                 </p>
               )}
@@ -138,13 +142,15 @@ export function CustomAlertDialog({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="mt-6 space-y-4 relative"
+                className="relative mt-6 space-y-4"
               >
                 {/* Concept / Lesson Badge */}
-                <div className="flex items-center justify-between rounded-lg bg-white/5 border border-white/10 p-3">
+                <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/5 p-3">
                   <div className="flex items-center gap-2">
                     <BookOpen className="size-4 text-slate-400" />
-                    <span className="text-xs font-medium text-slate-400">Học phần</span>
+                    <span className="text-xs font-medium text-slate-400">
+                      Học phần
+                    </span>
                   </div>
                   <span className="rounded bg-white/10 px-2 py-0.5 text-xs font-semibold text-slate-200">
                     {spacedRepetition.conceptId}
@@ -152,11 +158,11 @@ export function CustomAlertDialog({
                 </div>
 
                 {/* Selected Answer block */}
-                <div className="rounded-lg bg-white/5 border border-white/10 p-3">
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">
+                <div className="rounded-lg border border-white/10 bg-white/5 p-3">
+                  <div className="mb-1 text-[10px] font-semibold tracking-wider text-slate-500 uppercase">
                     Phương án của bạn
                   </div>
-                  <div className="text-sm font-medium text-slate-300 italic border-l-2 border-white/20 pl-2">
+                  <div className="border-l-2 border-white/20 pl-2 text-sm font-medium text-slate-300 italic">
                     "{spacedRepetition.userAnswerDesc}"
                   </div>
                 </div>
@@ -164,8 +170,8 @@ export function CustomAlertDialog({
                 {/* Spaced Repetition Stats Grid */}
                 <div className="grid grid-cols-2 gap-3">
                   {/* Review Interval */}
-                  <div className="rounded-lg bg-white/5 border border-white/10 p-3 flex flex-col justify-between">
-                    <span className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
+                  <div className="flex flex-col justify-between rounded-lg border border-white/10 bg-white/5 p-3">
+                    <span className="text-[10px] font-semibold tracking-wider text-slate-500 uppercase">
                       Kế hoạch ôn tập
                     </span>
                     <div className="mt-2 flex items-baseline gap-1">
@@ -177,11 +183,11 @@ export function CustomAlertDialog({
                   </div>
 
                   {/* Backup Review Date */}
-                  <div className="rounded-lg bg-white/5 border border-white/10 p-3 flex flex-col justify-between">
-                    <span className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
+                  <div className="flex flex-col justify-between rounded-lg border border-white/10 bg-white/5 p-3">
+                    <span className="text-[10px] font-semibold tracking-wider text-slate-500 uppercase">
                       Ngày ôn tiếp theo
                     </span>
-                    <div className="mt-2 flex items-center gap-1.5 text-slate-200 font-semibold text-sm">
+                    <div className="mt-2 flex items-center gap-1.5 text-sm font-semibold text-slate-200">
                       <Calendar className="size-4 text-slate-400" />
                       {spacedRepetition.nextReviewDateStr}
                     </div>
@@ -189,36 +195,41 @@ export function CustomAlertDialog({
                 </div>
 
                 {/* Mastery Level Status */}
-                <div className="rounded-lg bg-white/5 border border-white/10 p-3 space-y-2">
+                <div className="space-y-2 rounded-lg border border-white/10 bg-white/5 p-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold flex items-center gap-1">
-                      <Award className="size-3.5" /> Trạng thái Mastery (Thành thạo)
+                    <span className="flex items-center gap-1 text-[10px] font-semibold tracking-wider text-slate-500 uppercase">
+                      <Award className="size-3.5" /> Trạng thái Mastery (Thành
+                      thạo)
                     </span>
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${
-                      spacedRepetition.isMastered 
-                        ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
-                        : "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                    }`}>
+                    <span
+                      className={`rounded-full border px-2 py-0.5 text-xs font-semibold ${
+                        spacedRepetition.isMastered
+                          ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+                          : "border-amber-500/20 bg-amber-500/10 text-amber-400"
+                      }`}
+                    >
                       {spacedRepetition.isMastered ? "Đạt ✅" : "Chưa đạt ⚠️"}
                     </span>
                   </div>
 
                   {/* Modern micro progress bar */}
-                  <div className="relative h-2 w-full overflow-hidden rounded-full bg-white/5 border border-white/10">
-                    <motion.div 
+                  <div className="relative h-2 w-full overflow-hidden rounded-full border border-white/10 bg-white/5">
+                    <motion.div
                       initial={{ width: 0 }}
-                      animate={{ width: spacedRepetition.isMastered ? "100%" : "33%" }}
+                      animate={{
+                        width: spacedRepetition.isMastered ? "100%" : "33%",
+                      }}
                       transition={{ type: "spring", delay: 0.3 }}
                       className={`h-full rounded-full bg-gradient-to-r ${
-                        spacedRepetition.isMastered 
-                          ? "from-emerald-500 to-teal-400" 
+                        spacedRepetition.isMastered
+                          ? "from-emerald-500 to-teal-400"
                           : "from-amber-500 to-orange-400"
                       }`}
                     />
                   </div>
-                  <p className="text-[10px] text-slate-400 leading-normal">
-                    {spacedRepetition.isMastered 
-                      ? "Tuyệt vời! Bạn đã thành thạo kiến thức học phần này." 
+                  <p className="text-[10px] leading-normal text-slate-400">
+                    {spacedRepetition.isMastered
+                      ? "Tuyệt vời! Bạn đã thành thạo kiến thức học phần này."
                       : "Cần trả lời đúng liên tục 3 lần để đạt trạng thái thành thạo."}
                   </p>
                 </div>
@@ -231,7 +242,7 @@ export function CustomAlertDialog({
                 whileHover={{ scale: 1.02, y: -1 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onClose}
-                className={`relative flex items-center justify-center gap-1.5 w-full rounded-xl px-5 py-2.5 text-sm font-semibold transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 cursor-pointer ${theme.button}`}
+                className={`relative flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-md transition-all focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:outline-none ${theme.button}`}
               >
                 Tiếp tục
                 <ArrowRight className="size-4" />

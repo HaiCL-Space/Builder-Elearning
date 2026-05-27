@@ -54,7 +54,7 @@ export function FillBlankEditor({
           </button>
         </div>
 
-        <div className="space-y-2 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
+        <div className="space-y-2 rounded-lg border border-slate-100 bg-slate-50/50 p-2.5">
           {correctAnswers.map((answer, index) => {
             const updateAnswerText = (txt: string) => {
               const nextAnswers = correctAnswers.map((ans, idx) =>
@@ -64,7 +64,9 @@ export function FillBlankEditor({
             }
 
             const deleteAnswer = () => {
-              const nextAnswers = correctAnswers.filter((_, idx) => idx !== index)
+              const nextAnswers = correctAnswers.filter(
+                (_, idx) => idx !== index
+              )
               onUpdateData({ correctAnswers: nextAnswers })
             }
 
@@ -74,13 +76,13 @@ export function FillBlankEditor({
                   type="text"
                   value={answer}
                   onChange={(e) => updateAnswerText(e.target.value)}
-                  className="flex-1 min-w-0 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs outline-none focus:border-blue-500"
+                  className="min-w-0 flex-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs outline-none focus:border-blue-500"
                 />
 
                 <button
                   type="button"
                   onClick={deleteAnswer}
-                  className="rounded p-1 text-slate-400 hover:bg-red-50 hover:text-red-600 shrink-0"
+                  className="shrink-0 rounded p-1 text-slate-400 hover:bg-red-50 hover:text-red-600"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
@@ -88,7 +90,7 @@ export function FillBlankEditor({
             )
           })}
           {correctAnswers.length === 0 && (
-            <div className="text-center text-[11px] text-slate-400 py-2">
+            <div className="py-2 text-center text-[11px] text-slate-400">
               Chưa có đáp án nào. Nhấn "Thêm đáp án".
             </div>
           )}
@@ -96,17 +98,17 @@ export function FillBlankEditor({
       </div>
 
       {/* Case Sensitive Option */}
-      <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+      <div className="flex items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 p-2.5">
         <input
           type="checkbox"
           id="fb-case-sensitive"
           checked={caseSensitive}
           onChange={(e) => onUpdateData({ caseSensitive: e.target.checked })}
-          className="h-3.5 w-3.5 accent-blue-500 rounded border-slate-300 focus:ring-blue-500 cursor-pointer"
+          className="h-3.5 w-3.5 cursor-pointer rounded border-slate-300 accent-blue-500 focus:ring-blue-500"
         />
         <label
           htmlFor="fb-case-sensitive"
-          className="text-xs font-semibold text-slate-600 select-none cursor-pointer"
+          className="cursor-pointer text-xs font-semibold text-slate-600 select-none"
         >
           Phân biệt chữ hoa / thường
         </label>

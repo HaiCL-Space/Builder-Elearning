@@ -1,4 +1,9 @@
-import { useQuery, useMutation, useQueryClient, queryOptions } from "@tanstack/react-query"
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  queryOptions,
+} from "@tanstack/react-query"
 import { api } from "@/shared/api"
 import { MOCK_SLIDES } from "@/shared/api"
 import type { Slide } from "broker-core-sdk"
@@ -18,10 +23,17 @@ export const slideQueryOptions = (courseId: string = "course-demo") =>
     queryFn: async (): Promise<Slide[]> => {
       try {
         // Attempt to fetch slides from the actual backend
-        const response = await api.get<Slide[] | { data: Slide[] }>(`/courses/${courseId}/slides`)
+        const response = await api.get<Slide[] | { data: Slide[] }>(
+          `/courses/${courseId}/slides`
+        )
         if (Array.isArray(response)) {
           return response
-        } else if (response && typeof response === "object" && "data" in response && Array.isArray(response.data)) {
+        } else if (
+          response &&
+          typeof response === "object" &&
+          "data" in response &&
+          Array.isArray(response.data)
+        ) {
           return response.data
         }
         throw new Error("Invalid response format from server")
@@ -65,10 +77,13 @@ export function useSaveSlidesMutation(courseId: string = "course-demo") {
         )
         // Simulate network latency (500ms) for professional UX spinner feedback
         await new Promise<void>((resolve) => setTimeout(resolve, 600))
-        
+
         // Save to localStorage as a robust local backup
         if (typeof window !== "undefined") {
-          localStorage.setItem(`previewer_slides_backup_${courseId}`, JSON.stringify(slides))
+          localStorage.setItem(
+            `previewer_slides_backup_${courseId}`,
+            JSON.stringify(slides)
+          )
         }
         return false // Return false to indicate offline local-saved status
       }
@@ -79,7 +94,7 @@ export function useSaveSlidesMutation(courseId: string = "course-demo") {
         queryKey: slideKeys.list(courseId),
       })
       console.log(
-        isOnlineSuccess 
+        isOnlineSuccess
           ? "[React Query] Slides saved successfully to backend database."
           : "[React Query] Slides backup saved successfully to local storage (Offline Mode)."
       )

@@ -30,52 +30,60 @@ export function VideoEditor({
         value={data.poster || ""}
         onChange={(v) => onUpdateData({ poster: v })}
       />
-      
+
       <div className="grid grid-cols-2 gap-x-4 gap-y-2 pt-1">
-        <label className="flex items-center gap-2 cursor-pointer group">
-          <input 
-            type="checkbox" 
-            checked={!!data.isLive} 
+        <label className="group flex cursor-pointer items-center gap-2">
+          <input
+            type="checkbox"
+            checked={!!data.isLive}
             onChange={(e) => onUpdateData({ isLive: e.target.checked })}
-            className="rounded border-slate-300 text-red-600 focus:ring-red-500 h-3.5 w-3.5 transition"
+            className="h-3.5 w-3.5 rounded border-slate-300 text-red-600 transition focus:ring-red-500"
           />
-          <span className="text-[11px] font-bold text-red-600 group-hover:text-red-700 transition">Chế độ Trực tiếp</span>
+          <span className="text-[11px] font-bold text-red-600 transition group-hover:text-red-700">
+            Chế độ Trực tiếp
+          </span>
         </label>
 
-        <label className="flex items-center gap-2 cursor-pointer group">
-          <input 
-            type="checkbox" 
-            checked={!!data.autoPlay} 
+        <label className="group flex cursor-pointer items-center gap-2">
+          <input
+            type="checkbox"
+            checked={!!data.autoPlay}
             onChange={(e) => onUpdateData({ autoPlay: e.target.checked })}
-            className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5 transition"
+            className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 transition focus:ring-blue-500"
           />
-          <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition">Tự động phát</span>
-        </label>
-        
-        <label className="flex items-center gap-2 cursor-pointer group">
-          <input 
-            type="checkbox" 
-            checked={!!data.muted} 
-            onChange={(e) => onUpdateData({ muted: e.target.checked })}
-            className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5 transition"
-          />
-          <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition">Tắt tiếng</span>
+          <span className="text-[11px] font-medium text-slate-600 transition group-hover:text-slate-900">
+            Tự động phát
+          </span>
         </label>
 
-        <label className="flex items-center gap-2 cursor-pointer group">
-          <input 
-            type="checkbox" 
-            checked={!!data.loop} 
-            onChange={(e) => onUpdateData({ loop: e.target.checked })}
-            className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5 transition"
+        <label className="group flex cursor-pointer items-center gap-2">
+          <input
+            type="checkbox"
+            checked={!!data.muted}
+            onChange={(e) => onUpdateData({ muted: e.target.checked })}
+            className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 transition focus:ring-blue-500"
           />
-          <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition">Lặp lại</span>
+          <span className="text-[11px] font-medium text-slate-600 transition group-hover:text-slate-900">
+            Tắt tiếng
+          </span>
+        </label>
+
+        <label className="group flex cursor-pointer items-center gap-2">
+          <input
+            type="checkbox"
+            checked={!!data.loop}
+            onChange={(e) => onUpdateData({ loop: e.target.checked })}
+            className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 transition focus:ring-blue-500"
+          />
+          <span className="text-[11px] font-medium text-slate-600 transition group-hover:text-slate-900">
+            Lặp lại
+          </span>
         </label>
       </div>
 
-      <div className="mt-2 rounded-md bg-amber-50 p-2.5 text-[10px] text-amber-700 border border-amber-100 leading-relaxed">
-        <p className="font-bold mb-1">💡 Mẹo phát trực tiếp:</p>
-        <ul className="list-disc ml-3 space-y-1">
+      <div className="mt-2 rounded-md border border-amber-100 bg-amber-50 p-2.5 text-[10px] leading-relaxed text-amber-700">
+        <p className="mb-1 font-bold">💡 Mẹo phát trực tiếp:</p>
+        <ul className="ml-3 list-disc space-y-1">
           <li>Dán link YouTube Live để phát trực tiếp từ YouTube.</li>
           <li>Sử dụng link .m3u8 (HLS) cho các luồng livestream trực tiếp.</li>
           <li>Bật "Chế độ Trực tiếp" để hiển thị nhãn LIVE trên video.</li>

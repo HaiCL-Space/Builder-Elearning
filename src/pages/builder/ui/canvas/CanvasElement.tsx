@@ -21,46 +21,94 @@ import {
   SwipeElement,
   TimedSprintElement,
   WordScrambleElement,
+  CrosswordElement,
+  BranchingElement,
+  LabelImageElement,
 } from "@/entities/element"
 import type { ElementAction } from "broker-core-sdk"
 
-type AnimationConfig = NonNullable<BuilderElement["enterAnimation"]> | NonNullable<BuilderElement["exitAnimation"]>
+type AnimationConfig =
+  | NonNullable<BuilderElement["enterAnimation"]>
+  | NonNullable<BuilderElement["exitAnimation"]>
 
 const getAnimationVariants = (
   anim: AnimationConfig | undefined,
   isEnter: boolean,
   targetOpacity = 1
-): { initial?: TargetAndTransition; animate?: TargetAndTransition; exit?: TargetAndTransition } | undefined => {
+):
+  | {
+      initial?: TargetAndTransition
+      animate?: TargetAndTransition
+      exit?: TargetAndTransition
+    }
+  | undefined => {
   if (!anim) return undefined
   const duration = (anim.duration || 500) / 1000
   const delay = (anim.delay || 0) / 1000
 
   if (isEnter) {
     switch (anim.type) {
-      case "fade-in": return { initial: { opacity: 0 }, animate: { opacity: targetOpacity, transition: { duration, delay } } }
-      case "slide-up": return { initial: { opacity: 0, y: 50 }, animate: { opacity: targetOpacity, y: 0, transition: { duration, delay } } }
-      case "zoom-in": return { initial: { opacity: 0, scale: 0.5 }, animate: { opacity: targetOpacity, scale: 1, transition: { duration, delay } } }
-      case "bounce": return {
-        initial: { y: -50, opacity: 0 },
-        animate: {
-          y: [-50, 0, -15, 0],
-          opacity: [0, targetOpacity, targetOpacity, targetOpacity],
-          transition: { duration, delay, times: [0, 0.5, 0.75, 1], ease: "easeInOut" }
+      case "fade-in":
+        return {
+          initial: { opacity: 0 },
+          animate: { opacity: targetOpacity, transition: { duration, delay } },
         }
-      }
+      case "slide-up":
+        return {
+          initial: { opacity: 0, y: 50 },
+          animate: {
+            opacity: targetOpacity,
+            y: 0,
+            transition: { duration, delay },
+          },
+        }
+      case "zoom-in":
+        return {
+          initial: { opacity: 0, scale: 0.5 },
+          animate: {
+            opacity: targetOpacity,
+            scale: 1,
+            transition: { duration, delay },
+          },
+        }
+      case "bounce":
+        return {
+          initial: { y: -50, opacity: 0 },
+          animate: {
+            y: [-50, 0, -15, 0],
+            opacity: [0, targetOpacity, targetOpacity, targetOpacity],
+            transition: {
+              duration,
+              delay,
+              times: [0, 0.5, 0.75, 1],
+              ease: "easeInOut",
+            },
+          },
+        }
     }
   } else {
     switch (anim.type) {
-      case "fade-in": return { exit: { opacity: 0, transition: { duration, delay } } }
-      case "slide-up": return { exit: { opacity: 0, y: 50, transition: { duration, delay } } }
-      case "zoom-in": return { exit: { opacity: 0, scale: 0.5, transition: { duration, delay } } }
-      case "bounce": return {
-        exit: {
-          y: [0, -15, 0, 50],
-          opacity: [targetOpacity, targetOpacity, targetOpacity, 0],
-          transition: { duration, delay, times: [0, 0.25, 0.5, 1], ease: "easeInOut" }
+      case "fade-in":
+        return { exit: { opacity: 0, transition: { duration, delay } } }
+      case "slide-up":
+        return { exit: { opacity: 0, y: 50, transition: { duration, delay } } }
+      case "zoom-in":
+        return {
+          exit: { opacity: 0, scale: 0.5, transition: { duration, delay } },
         }
-      }
+      case "bounce":
+        return {
+          exit: {
+            y: [0, -15, 0, 50],
+            opacity: [targetOpacity, targetOpacity, targetOpacity, 0],
+            transition: {
+              duration,
+              delay,
+              times: [0, 0.25, 0.5, 1],
+              ease: "easeInOut",
+            },
+          },
+        }
     }
   }
   return undefined
@@ -102,12 +150,19 @@ export function CanvasElement({
   onAction?: (action: ElementAction) => void
 }) {
   const controls = useAnimation()
-  const testAnimationElementId = useBuilderStore((s) => s.testAnimationElementId)
+  const testAnimationElementId = useBuilderStore(
+    (s) => s.testAnimationElementId
+  )
   const testAnimationKey = useBuilderStore((s) => s.testAnimationKey)
-  const targetOpacity = element.style?.opacity !== undefined ? parseFloat(String(element.style.opacity)) : 1
+  const targetOpacity =
+    element.style?.opacity !== undefined
+      ? parseFloat(String(element.style.opacity))
+      : 1
 
   const [isEditing, setIsEditing] = useState(false)
-  const [tempText, setTempText] = useState((element.data as { content?: string }).content || "")
+  const [tempText, setTempText] = useState(
+    (element.data as { content?: string }).content || ""
+  )
   const editorRef = useRef<HTMLDivElement>(null)
 
   const updateElement = useBuilderStore((s) => s.updateElement)
@@ -128,18 +183,35 @@ export function CanvasElement({
   }, [isEditing])
 
   const saveText = () => {
-    updateElement(currentSlideIndex, element.id, (el) => ({
-      ...el,
-      data: { ...(el.data as object), content: tempText },
-    } as unknown as BuilderElement))
+    updateElement(
+      currentSlideIndex,
+      element.id,
+      (el) =>
+        ({
+          ...el,
+          data: { ...(el.data as object), content: tempText },
+        }) as unknown as BuilderElement
+    )
     setIsEditing(false)
   }
 
   useEffect(() => {
-    if (!isInteractiveMode && testAnimationElementId === element.id && testAnimationKey > 0) {
+    if (
+      !isInteractiveMode &&
+      testAnimationElementId === element.id &&
+      testAnimationKey > 0
+    ) {
       const runTest = async () => {
-        const enterVar = getAnimationVariants(element.enterAnimation, true, targetOpacity)
-        const exitVar = getAnimationVariants(element.exitAnimation, false, targetOpacity)
+        const enterVar = getAnimationVariants(
+          element.enterAnimation,
+          true,
+          targetOpacity
+        )
+        const exitVar = getAnimationVariants(
+          element.exitAnimation,
+          false,
+          targetOpacity
+        )
 
         if (enterVar?.initial) {
           await controls.start(enterVar.initial, { duration: 0 })
@@ -150,12 +222,24 @@ export function CanvasElement({
         if (exitVar?.exit) {
           await controls.start(exitVar.exit)
           // Reset
-          await controls.start({ opacity: targetOpacity, scale: 1, y: 0, x: 0 }, { duration: 0.2 })
+          await controls.start(
+            { opacity: targetOpacity, scale: 1, y: 0, x: 0 },
+            { duration: 0.2 }
+          )
         }
       }
       runTest()
     }
-  }, [testAnimationElementId, testAnimationKey, element.id, element.enterAnimation, element.exitAnimation, controls, isInteractiveMode, targetOpacity])
+  }, [
+    testAnimationElementId,
+    testAnimationKey,
+    element.id,
+    element.enterAnimation,
+    element.exitAnimation,
+    controls,
+    isInteractiveMode,
+    targetOpacity,
+  ])
   const pos = element.position
   const baseStyle: React.CSSProperties = {
     position: "absolute",
@@ -172,10 +256,12 @@ export function CanvasElement({
       | HotspotZone[]
       | undefined) || []
 
-  const handleElementClick = (e: React.MouseEvent, userAnswer?: string) => {
+  const handleElementClick = (e: React.MouseEvent, userAnswer?: unknown) => {
     e.stopPropagation()
     if (element.actions) {
-      const clickActions = element.actions.filter((a) => a.trigger === "ON_CLICK")
+      const clickActions = element.actions.filter(
+        (a) => a.trigger === "ON_CLICK"
+      )
       clickActions.forEach((action) => {
         // Nếu là Hotspot, truyền thêm userAnswer vào payload để SlideBuilder xử lý
         const actionWithAnswer = userAnswer
@@ -196,8 +282,16 @@ export function CanvasElement({
     justifyContent: "center",
   }
 
-  const enterVar = getAnimationVariants(element.enterAnimation, true, targetOpacity)
-  const exitVar = getAnimationVariants(element.exitAnimation, false, targetOpacity)
+  const enterVar = getAnimationVariants(
+    element.enterAnimation,
+    true,
+    targetOpacity
+  )
+  const exitVar = getAnimationVariants(
+    element.exitAnimation,
+    false,
+    targetOpacity
+  )
 
   return (
     <motion.div
@@ -210,10 +304,14 @@ export function CanvasElement({
         isInteractiveMode
           ? ""
           : isSelected
-          ? "ring-2 ring-blue-500 shadow-lg"
-          : "cursor-move hover:ring-1 hover:ring-blue-300"
+            ? "shadow-lg ring-2 ring-blue-500"
+            : "cursor-move hover:ring-1 hover:ring-blue-300"
       } transition-shadow duration-150`}
-      onMouseDown={!isInteractiveMode && !isEditing ? (e) => onElementMouseDown(e, element) : undefined}
+      onMouseDown={
+        !isInteractiveMode && !isEditing
+          ? (e) => onElementMouseDown(e, element)
+          : undefined
+      }
       onDoubleClick={
         !isInteractiveMode && element.type === "TEXT"
           ? (e) => {
@@ -274,14 +372,18 @@ export function CanvasElement({
           )}
           {element.type === "MEMORY_CARD" && (
             <MemoryCardElement
-              element={element as Extract<BuilderElement, { type: "MEMORY_CARD" }>}
+              element={
+                element as Extract<BuilderElement, { type: "MEMORY_CARD" }>
+              }
               baseStyle={innerWrapperStyle}
               handleClick={handleElementClick}
             />
           )}
           {element.type === "FILL_BLANK" && (
             <FillBlankElement
-              element={element as Extract<BuilderElement, { type: "FILL_BLANK" }>}
+              element={
+                element as Extract<BuilderElement, { type: "FILL_BLANK" }>
+              }
               baseStyle={innerWrapperStyle}
               handleClick={handleElementClick}
             />
@@ -295,16 +397,48 @@ export function CanvasElement({
           )}
           {element.type === "TIMED_SPRINT" && (
             <TimedSprintElement
-              element={element as Extract<BuilderElement, { type: "TIMED_SPRINT" }>}
+              element={
+                element as Extract<BuilderElement, { type: "TIMED_SPRINT" }>
+              }
               baseStyle={innerWrapperStyle}
               handleClick={handleElementClick}
             />
           )}
           {element.type === "WORD_SCRAMBLE" && (
             <WordScrambleElement
-              element={element as Extract<BuilderElement, { type: "WORD_SCRAMBLE" }>}
+              element={
+                element as Extract<BuilderElement, { type: "WORD_SCRAMBLE" }>
+              }
               baseStyle={innerWrapperStyle}
               handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "CROSSWORD" && (
+            <CrosswordElement
+              element={
+                element as Extract<BuilderElement, { type: "CROSSWORD" }>
+              }
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "BRANCHING" && (
+            <BranchingElement
+              element={
+                element as Extract<BuilderElement, { type: "BRANCHING" }>
+              }
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+            />
+          )}
+          {element.type === "LABEL_IMAGE" && (
+            <LabelImageElement
+              element={
+                element as Extract<BuilderElement, { type: "LABEL_IMAGE" }>
+              }
+              baseStyle={innerWrapperStyle}
+              handleClick={handleElementClick}
+              isInteractive={isInteractiveMode}
             />
           )}
         </div>
@@ -322,15 +456,19 @@ export function CanvasElement({
             }
           }}
           onMouseDown={(e) => e.stopPropagation()}
-          className="flex h-full w-full flex-col justify-center px-4 py-2 outline-none select-text cursor-text focus:ring-1 focus:ring-blue-400"
+          className="flex h-full w-full cursor-text flex-col justify-center px-4 py-2 outline-none select-text focus:ring-1 focus:ring-blue-400"
           style={{
             fontSize: element.style?.fontSize ?? 16,
             color: element.style?.color || "#333",
-            textAlign: (element.style?.textAlign as React.CSSProperties["textAlign"]) || "center",
+            textAlign:
+              (element.style?.textAlign as React.CSSProperties["textAlign"]) ||
+              "center",
             backgroundColor: element.style?.backgroundColor || "transparent",
             fontFamily: element.style?.fontFamily || "inherit",
             fontWeight: element.style?.fontWeight || "normal",
-            borderRadius: element.style?.borderRadius ? `${element.style?.borderRadius}px` : "0px",
+            borderRadius: element.style?.borderRadius
+              ? `${element.style?.borderRadius}px`
+              : "0px",
             wordBreak: "break-word",
           }}
         >
@@ -342,29 +480,35 @@ export function CanvasElement({
         </div>
       )}
 
-      {/* interactive zones for HOTSPOT (drag/drop) in Edit mode only */}
-      {!isInteractiveMode && isSelected && element.type === "HOTSPOT" && (
-        <HotspotZonesLayer
-          element={element}
-          zones={zones}
-          onZoneMouseDown={onHotspotZoneMouseDown}
-          onZoneResizeMouseDown={onHotspotZoneResizeMouseDown}
-        />
-      )}
-
+      {/* interactive zones for HOTSPOT / LABEL_IMAGE (drag/drop) in Edit mode only */}
+      {!isInteractiveMode &&
+        isSelected &&
+        (element.type === "HOTSPOT" || element.type === "LABEL_IMAGE") && (
+          <HotspotZonesLayer
+            element={element}
+            zones={zones}
+            onZoneMouseDown={onHotspotZoneMouseDown}
+            onZoneResizeMouseDown={onHotspotZoneResizeMouseDown}
+          />
+        )}
 
       {/* badge on Edit mode only */}
-      {!isInteractiveMode && !isEditing && <ElementTypeBadge type={String(element.type)} />}
+      {!isInteractiveMode && !isEditing && (
+        <ElementTypeBadge type={String(element.type)} />
+      )}
 
       {/* Lightning indicator on Edit mode if has actions */}
-      {!isInteractiveMode && !isEditing && element.actions && element.actions.length > 0 && (
-        <div
-          title="Có liên kết sự kiện tương tác (Action)"
-          className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white shadow-xs animate-bounce"
-        >
-          ⚡
-        </div>
-      )}
+      {!isInteractiveMode &&
+        !isEditing &&
+        element.actions &&
+        element.actions.length > 0 && (
+          <div
+            title="Có liên kết sự kiện tương tác (Action)"
+            className="absolute top-1.5 right-1.5 flex h-4 w-4 animate-bounce items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white shadow-xs"
+          >
+            ⚡
+          </div>
+        )}
 
       {!isInteractiveMode && isSelected && !isEditing && (
         <>

@@ -17,15 +17,17 @@ interface CardItem {
   isMatched: boolean
 }
 
-const getInitialCards = (rawCards: Array<{ id: string; value: string }>): CardItem[] => {
-  const values = rawCards.map(c => c.value)
+const getInitialCards = (
+  rawCards: Array<{ id: string; value: string }>
+): CardItem[] => {
+  const values = rawCards.map((c) => c.value)
   const uniqueValues = Array.from(new Set(values))
-  
+
   let listToUse = [...rawCards]
   if (uniqueValues.length === rawCards.length) {
     listToUse = [
-      ...rawCards.map(c => ({ ...c, id: `${c.id}-a` })),
-      ...rawCards.map(c => ({ ...c, id: `${c.id}-b` }))
+      ...rawCards.map((c) => ({ ...c, id: `${c.id}-a` })),
+      ...rawCards.map((c) => ({ ...c, id: `${c.id}-b` })),
     ]
   }
 
@@ -45,7 +47,9 @@ const MemoryCardElement: React.FC<MemoryCardElementProps> = ({
   baseStyle,
   handleClick,
 }) => {
-  const [cards, setCards] = useState<CardItem[]>(() => getInitialCards(element.data.cards || []))
+  const [cards, setCards] = useState<CardItem[]>(() =>
+    getInitialCards(element.data.cards || [])
+  )
   const [selectedIds, setSelectedIds] = useState<string[]>([]) // Track uniqueIds of currently flipped cards
   const [attempts, setAttempts] = useState(0)
   const [prevElementId, setPrevElementId] = useState(element.id)
@@ -133,14 +137,32 @@ const MemoryCardElement: React.FC<MemoryCardElementProps> = ({
       onClick={handleClick}
     >
       {/* Header Info */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <Sparkles style={{ height: "16px", width: "16px", color: "#6366f1" }} />
-          <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4f46e5", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          <Sparkles
+            style={{ height: "16px", width: "16px", color: "#6366f1" }}
+          />
+          <span
+            style={{
+              fontSize: "0.75rem",
+              fontWeight: 700,
+              color: "#4f46e5",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+            }}
+          >
             Lật thẻ nhớ
           </span>
         </div>
-        <span style={{ fontSize: "0.75rem", color: "#64748b", fontWeight: 500 }}>
+        <span
+          style={{ fontSize: "0.75rem", color: "#64748b", fontWeight: 500 }}
+        >
           Lượt thử: <strong style={{ color: "#334155" }}>{attempts}</strong>
         </span>
       </div>
@@ -149,7 +171,8 @@ const MemoryCardElement: React.FC<MemoryCardElementProps> = ({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: cards.length > 8 ? "repeat(4, 1fr)" : "repeat(3, 1fr)",
+          gridTemplateColumns:
+            cards.length > 8 ? "repeat(4, 1fr)" : "repeat(3, 1fr)",
           gap: "8px",
           flex: 1,
           alignContent: "center",
@@ -196,7 +219,7 @@ const MemoryCardElement: React.FC<MemoryCardElementProps> = ({
                     color: "#6366f1",
                     boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
                   }}
-                  className="hover:scale-[1.03] transition-all duration-150 hover:border-indigo-400"
+                  className="transition-all duration-150 hover:scale-[1.03] hover:border-indigo-400"
                 >
                   ?
                 </div>
@@ -209,7 +232,9 @@ const MemoryCardElement: React.FC<MemoryCardElementProps> = ({
                     height: "100%",
                     backfaceVisibility: "hidden",
                     backgroundColor: card.isMatched ? "#ecfdf5" : "#ffffff",
-                    border: card.isMatched ? "2px solid #10b981" : "2px solid #6366f1",
+                    border: card.isMatched
+                      ? "2px solid #10b981"
+                      : "2px solid #6366f1",
                     borderRadius: "8px",
                     display: "flex",
                     alignItems: "center",
@@ -232,7 +257,14 @@ const MemoryCardElement: React.FC<MemoryCardElementProps> = ({
       </div>
 
       {/* Completion & Actions */}
-      <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "4px" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "8px",
+          justifyContent: "flex-end",
+          marginTop: "4px",
+        }}
+      >
         {isAllMatched && (
           <div
             style={{
@@ -266,7 +298,9 @@ const MemoryCardElement: React.FC<MemoryCardElementProps> = ({
           }}
           className="hover:bg-indigo-50 hover:text-indigo-700"
         >
-          <RefreshCw style={{ height: "12px", width: "12px", marginRight: "4px" }} />
+          <RefreshCw
+            style={{ height: "12px", width: "12px", marginRight: "4px" }}
+          />
           Chơi lại
         </Button>
       </div>

@@ -1,4 +1,13 @@
-import { LayoutTemplate, ChevronLeft, ChevronRight, PenTool, Play, Download, Save, Loader2 } from "lucide-react"
+import {
+  LayoutTemplate,
+  ChevronLeft,
+  ChevronRight,
+  PenTool,
+  Play,
+  Download,
+  Save,
+  Loader2,
+} from "lucide-react"
 import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 
 export function CanvasHeader({
@@ -27,7 +36,9 @@ export function CanvasHeader({
   const slides = useBuilderStore((state) => state.slides)
 
   const handleExportJson = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(slides, null, 2))
+    const dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(slides, null, 2))
     const downloadAnchorNode = document.createElement("a")
     downloadAnchorNode.setAttribute("href", dataStr)
     downloadAnchorNode.setAttribute("download", "slides_export.json")
@@ -37,11 +48,11 @@ export function CanvasHeader({
   }
 
   return (
-    <div className="mb-4 flex w-full max-w-5xl items-center justify-between gap-4 bg-white px-4 py-2 rounded-xl border border-slate-200/80 shadow-xs">
+    <div className="mb-4 flex w-full max-w-5xl items-center justify-between gap-4 rounded-xl border border-slate-200/80 bg-white px-4 py-2 shadow-xs">
       {/* Left side: Slide info */}
       <div className="flex items-center gap-2">
         <LayoutTemplate className="h-4 w-4 text-slate-500" />
-        <h2 className="text-xs font-semibold text-slate-600 tracking-wide">
+        <h2 className="text-xs font-semibold tracking-wide text-slate-600">
           SLIDE {currentSlideOrder} / {totalSlides}
         </h2>
       </div>
@@ -60,7 +71,9 @@ export function CanvasHeader({
         <button
           onClick={() => onToggleMode(false)}
           className={`relative z-10 flex w-[110px] items-center justify-center gap-1.5 py-1.5 text-xs font-bold transition ${
-            !isInteractiveMode ? "text-blue-600" : "text-slate-500 hover:text-slate-800"
+            !isInteractiveMode
+              ? "text-blue-600"
+              : "text-slate-500 hover:text-slate-800"
           }`}
         >
           <PenTool className="h-3.5 w-3.5" />
@@ -70,7 +83,9 @@ export function CanvasHeader({
         <button
           onClick={() => onToggleMode(true)}
           className={`relative z-10 flex w-[110px] items-center justify-center gap-1.5 py-1.5 text-xs font-bold transition ${
-            isInteractiveMode ? "text-blue-600" : "text-slate-500 hover:text-slate-800"
+            isInteractiveMode
+              ? "text-blue-600"
+              : "text-slate-500 hover:text-slate-800"
           }`}
         >
           <Play className="h-3.5 w-3.5" />
@@ -84,10 +99,10 @@ export function CanvasHeader({
           <button
             onClick={onSave}
             disabled={isSaving}
-            className={`inline-flex h-8 px-3 items-center justify-center gap-1.5 rounded-lg border text-white font-medium text-xs transition mr-1.5 cursor-pointer ${
+            className={`mr-1.5 inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-lg border px-3 text-xs font-medium text-white transition ${
               isSaving
-                ? "bg-slate-300 border-slate-300 text-slate-500 cursor-not-allowed"
-                : "bg-blue-600 border-blue-600 hover:bg-blue-500 hover:border-blue-500 shadow-sm"
+                ? "cursor-not-allowed border-slate-300 bg-slate-300 text-slate-500"
+                : "border-blue-600 bg-blue-600 shadow-sm hover:border-blue-500 hover:bg-blue-500"
             }`}
             title="Lưu thiết kế"
           >
@@ -101,7 +116,7 @@ export function CanvasHeader({
         )}
         <button
           onClick={handleExportJson}
-          className="inline-flex h-8 px-3 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 font-medium text-xs transition hover:bg-slate-50 hover:text-blue-600 mr-2 cursor-pointer"
+          className="mr-2 inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-slate-600 transition hover:bg-slate-50 hover:text-blue-600"
           title="Export JSON"
         >
           <Download className="h-4 w-4" />
@@ -110,14 +125,14 @@ export function CanvasHeader({
         <button
           onClick={onPrev}
           disabled={!canPrev}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 hover:text-slate-800 disabled:opacity-30 disabled:hover:bg-white cursor-pointer"
+          className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 hover:text-slate-800 disabled:opacity-30 disabled:hover:bg-white"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
         <button
           onClick={onNext}
           disabled={!canNext}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 hover:text-slate-800 disabled:opacity-30 disabled:hover:bg-white cursor-pointer"
+          className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 hover:text-slate-800 disabled:opacity-30 disabled:hover:bg-white"
         >
           <ChevronRight className="h-4 w-4" />
         </button>

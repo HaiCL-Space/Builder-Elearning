@@ -1,14 +1,16 @@
 import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 import { learningEngine, gameEngine } from "broker-core-sdk"
-import type { ElementAction, MultipleChoiceData, Slide } from "broker-core-sdk"
+import type { ElementAction, MultipleChoiceData, Slide, CrosswordData, BranchingData, LabelImageData } from "broker-core-sdk"
 import type { BuilderElement } from "@/pages/builder/model/types"
 
 export function useActionRunner() {
   const slides = useBuilderStore((state) => state.slides)
   const currentSlideIndex = useBuilderStore((state) => state.currentSlideIndex)
   const isInteractiveMode = useBuilderStore((state) => state.isInteractiveMode)
-  
-  const setCurrentSlideIndex = useBuilderStore((state) => state.setCurrentSlideIndex)
+
+  const setCurrentSlideIndex = useBuilderStore(
+    (state) => state.setCurrentSlideIndex
+  )
   const updateElement = useBuilderStore((state) => state.updateElement)
   const setAlert = useBuilderStore((state) => state.setAlert)
 
@@ -21,7 +23,9 @@ export function useActionRunner() {
       } else if (action.payload?.direction === "PREV") {
         setCurrentSlideIndex((i) => Math.max(0, i - 1))
       } else if (action.payload?.targetSlideId) {
-        const idx = slides.findIndex((s: Slide) => s.id === action.payload?.targetSlideId)
+        const idx = slides.findIndex(
+          (s: Slide) => s.id === action.payload?.targetSlideId
+        )
         if (idx !== -1) setCurrentSlideIndex(idx)
       }
     }
@@ -50,7 +54,9 @@ export function useActionRunner() {
       if (action.payload?.mediaUrl) {
         const audio = new Audio(action.payload.mediaUrl)
         audio.loop = !!action.payload.loop
-        audio.play().catch((err) => console.log("Audio play blocked/failed:", err))
+        audio
+          .play()
+          .catch((err) => console.log("Audio play blocked/failed:", err))
       }
     }
 
@@ -59,7 +65,9 @@ export function useActionRunner() {
       const targetId = action.payload?.targetElementId
       if (!targetId) return
       const conceptId = action.payload?.conceptId || "concept-default"
-      const targetEl = currentSlide.elements.find((el: BuilderElement) => el.id === targetId)
+      const targetEl = currentSlide.elements.find(
+        (el: BuilderElement) => el.id === targetId
+      )
 
       if (!targetEl) return
 
@@ -76,7 +84,7 @@ export function useActionRunner() {
           setAlert({
             type: "warning",
             title: "Chưa chọn câu trả lời",
-            message: "Vui lòng chọn một phương án trả lời trước khi kiểm tra!"
+            message: "Vui lòng chọn một phương án trả lời trước khi kiểm tra!",
           })
           return
         }
@@ -96,7 +104,8 @@ export function useActionRunner() {
           correctZoneId?: string
           zones?: { id: string }[]
         }
-        const userAnswer = (action.payload as { userAnswer?: string })?.userAnswer
+        const userAnswer = (action.payload as { userAnswer?: string })
+          ?.userAnswer
 
         isCorrect = userAnswer === hotspotData.correctZoneId
         const zone = (hotspotData.zones || []).find((z) => z.id === userAnswer)
@@ -105,10 +114,14 @@ export function useActionRunner() {
         isCorrect = true
         userAnswerDesc = "Sắp xếp mốc thời gian lịch sử"
       } else if (targetEl.type === "MATCHING") {
-        const matchingEl = document.querySelector(`[data-matching-id="${targetId}"]`)
+        const matchingEl = document.querySelector(
+          `[data-matching-id="${targetId}"]`
+        )
         const userMatchesRaw = matchingEl?.getAttribute("data-user-matches")
-        const userMatches: [string, string][] = userMatchesRaw ? JSON.parse(userMatchesRaw) : []
-        
+        const userMatches: [string, string][] = userMatchesRaw
+          ? JSON.parse(userMatchesRaw)
+          : []
+
         const matchingData = targetEl.data as unknown as {
           leftColumn: { id: string; content: string }[]
           rightColumn: { id: string; content: string }[]
@@ -119,17 +132,81 @@ export function useActionRunner() {
           setAlert({
             type: "warning",
             title: "Chưa hoàn thành ghép nối",
-            message: "Vui lòng nối tất cả các cặp từ trước khi kiểm tra!"
+            message: "Vui lòng nối tất cả các cặp từ trước khi kiểm tra!",
           })
           return
         }
 
         // Check if all user matches are in correctPairs
-        isCorrect = userMatches.every(([uL, uR]) => 
+        isCorrect = userMatches.every(([uL, uR]) =>
           matchingData.correctPairs.some(([cL, cR]) => cL === uL && cR === uR)
         )
-        
+
         userAnswerDesc = `Đã nối ${userMatches.length} cặp từ`
+      } else if (targetEl.type === "CROSSWORD") {
+        const userAnswer = (
+          action.payload as { userAnswer?: Record<string, string> }
+        )?.userAnswer
+        if (!userAnswer || Object.keys(userAnswer).length === 0) {
+          setAlert({
+            type: "warning",
+            title: "Chưa hoàn thành ô chữ",
+            message:
+              "Vui lòng nhập các chữ cái vào ô trống trước khi kiểm tra!",
+          })
+          return
+        }
+        isCorrect = gameEngine.validateGameResult(
+          "CROSSWORD",
+          userAnswer,
+          targetEl.data as CrosswordData
+        )
+        userAnswerDesc = `Đã giải câu đố ô chữ`
+      } else if (targetEl.type === "BRANCHING") {
+        const userAnswer = (action.payload as { userAnswer?: string })
+          ?.userAnswer
+        if (!userAnswer) {
+          setAlert({
+            type: "warning",
+            title: "Chưa đưa ra quyết định",
+            message:
+              "Vui lòng hoàn thành kịch bản rẽ nhánh trước khi kiểm tra!",
+          })
+          return
+        }
+        const branchingData = targetEl.data as BranchingData
+        isCorrect = gameEngine.validateGameResult(
+          "BRANCHING",
+          userAnswer,
+          branchingData
+        )
+        const node = branchingData.nodes?.find(
+          (n) => n.id === userAnswer
+        )
+        userAnswerDesc = `Đưa ra quyết định tại: ${node?.title || userAnswer}`
+      } else if (targetEl.type === "LABEL_IMAGE") {
+        const userAnswer = (
+          action.payload as { userAnswer?: Record<string, string> }
+        )?.userAnswer
+        const labelImageData = targetEl.data as LabelImageData
+        if (
+          !userAnswer ||
+          Object.keys(userAnswer).length < labelImageData.zones.length
+        ) {
+          setAlert({
+            type: "warning",
+            title: "Chưa dán nhãn đầy đủ",
+            message:
+              "Vui lòng dán nhãn đầy đủ cho tất cả các vùng trước khi kiểm tra!",
+          })
+          return
+        }
+        isCorrect = gameEngine.validateGameResult(
+          "LABEL_IMAGE",
+          userAnswer,
+          labelImageData
+        )
+        userAnswerDesc = `Dán nhãn ${Object.keys(userAnswer).length} vùng hình ảnh`
       } else {
         isCorrect = true
         userAnswerDesc = "Trả lời tự do"
@@ -144,15 +221,17 @@ export function useActionRunner() {
 
       setAlert({
         type: isCorrect ? "success" : "error",
-        title: isCorrect ? "CHÍNH XÁC! Bạn trả lời xuất sắc!" : "CHƯA CHÍNH XÁC. Hãy thử lại nhé!",
+        title: isCorrect
+          ? "CHÍNH XÁC! Bạn trả lời xuất sắc!"
+          : "CHƯA CHÍNH XÁC. Hãy thử lại nhé!",
         message: "",
         spacedRepetition: {
           conceptId,
           userAnswerDesc,
           days,
           nextReviewDateStr: nextReviewDate.toLocaleDateString("vi-VN"),
-          isMastered
-        }
+          isMastered,
+        },
       })
     }
   }

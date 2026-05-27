@@ -42,10 +42,10 @@ export function SwipeEditor({
           <button
             type="button"
             onClick={() => onUpdateData({ correctDirection: "right" })}
-            className={`flex-1 py-2 text-xs font-bold rounded-md border transition ${
+            className={`flex-1 rounded-md border py-2 text-xs font-bold transition ${
               correctDirection === "right"
-                ? "bg-green-50 border-green-500 text-green-700"
-                : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                ? "border-green-500 bg-green-50 text-green-700"
+                : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
             }`}
           >
             ĐÚNG (Quẹt Phải)
@@ -53,10 +53,10 @@ export function SwipeEditor({
           <button
             type="button"
             onClick={() => onUpdateData({ correctDirection: "left" })}
-            className={`flex-1 py-2 text-xs font-bold rounded-md border transition ${
+            className={`flex-1 rounded-md border py-2 text-xs font-bold transition ${
               correctDirection === "left"
-                ? "bg-red-50 border-red-500 text-red-700"
-                : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                ? "border-red-500 bg-red-50 text-red-700"
+                : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
             }`}
           >
             SAI (Quẹt Trái)

@@ -46,7 +46,8 @@ export const MOCK_SLIDES: Slide[] = [
         enterAnimation: { type: "slide-up", duration: 800, delay: 200 },
         exitAnimation: { type: "fade-in", duration: 300, delay: 0 },
         data: {
-          content: "Đề cương bài học chuyên sâu về cột mốc hoàn thiện thể chế & chuyên nghiệp hóa thị trường",
+          content:
+            "Đề cương bài học chuyên sâu về cột mốc hoàn thiện thể chế & chuyên nghiệp hóa thị trường",
         },
       },
       {
@@ -65,7 +66,8 @@ export const MOCK_SLIDES: Slide[] = [
         enterAnimation: { type: "slide-up", duration: 800, delay: 400 },
         exitAnimation: { type: "fade-in", duration: 300, delay: 0 },
         data: {
-          content: "Hiệu lực thi hành: Từ ngày 01/08/2024 (Sửa đổi bổ sung bởi Luật số 43/2024/QH15)",
+          content:
+            "Hiệu lực thi hành: Từ ngày 01/08/2024 (Sửa đổi bổ sung bởi Luật số 43/2024/QH15)",
         },
       },
       {
@@ -138,7 +140,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 600, delay: 150 },
         data: {
-          content: "• Kinh doanh BĐS: Hoạt động bỏ vốn để tạo lập nhà ở, công trình xây dựng, quyền sử dụng đất đã có hạ tầng kỹ thuật trong dự án nhằm mục đích tìm kiếm lợi nhuận.\n• 3 Nguyên tắc (Điều 4): (1) Công khai, minh bạch; (2) Tự do thỏa thuận không vi phạm điều cấm của luật; (3) BĐS đưa vào kinh doanh phải đủ điều kiện luật định.",
+          content:
+            "• Kinh doanh BĐS: Hoạt động bỏ vốn để tạo lập nhà ở, công trình xây dựng, quyền sử dụng đất đã có hạ tầng kỹ thuật trong dự án nhằm mục đích tìm kiếm lợi nhuận.\n• 3 Nguyên tắc (Điều 4): (1) Công khai, minh bạch; (2) Tự do thỏa thuận không vi phạm điều cấm của luật; (3) BĐS đưa vào kinh doanh phải đủ điều kiện luật định.",
         },
       },
       {
@@ -152,11 +155,24 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "slide-up", duration: 600, delay: 300 },
         data: {
-          question: "Điểm thay đổi đột phá thể hiện sự tôn trọng tự do ý chí trong nguyên tắc hoạt động kinh doanh BĐS của Luật 2023 là gì?",
+          question:
+            "Điểm thay đổi đột phá thể hiện sự tôn trọng tự do ý chí trong nguyên tắc hoạt động kinh doanh BĐS của Luật 2023 là gì?",
           options: [
-            { id: "opt-a", content: "Chuyển từ 'không trái quy định pháp luật' sang 'không vi phạm điều cấm của luật'" },
-            { id: "opt-b", content: "Bắt buộc mọi giao dịch nhà đất phải thực hiện qua sàn giao dịch tập trung" },
-            { id: "opt-c", content: "Cho phép doanh nghiệp tự do kinh doanh ngoài phạm vi quốc phòng, an ninh mà không cần bất kỳ điều kiện gì" },
+            {
+              id: "opt-a",
+              content:
+                "Chuyển từ 'không trái quy định pháp luật' sang 'không vi phạm điều cấm của luật'",
+            },
+            {
+              id: "opt-b",
+              content:
+                "Bắt buộc mọi giao dịch nhà đất phải thực hiện qua sàn giao dịch tập trung",
+            },
+            {
+              id: "opt-c",
+              content:
+                "Cho phép doanh nghiệp tự do kinh doanh ngoài phạm vi quốc phòng, an ninh mà không cần bất kỳ điều kiện gì",
+            },
           ],
           correctId: "opt-a",
         },
@@ -260,7 +276,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          content: "Ghép nối quy mô sử dụng đất và giới hạn với tỷ lệ vốn chủ sở hữu / đặt cọc tương ứng theo Luật 2023:",
+          content:
+            "Ghép nối quy mô sử dụng đất và giới hạn với tỷ lệ vốn chủ sở hữu / đặt cọc tương ứng theo Luật 2023:",
         },
       },
       {
@@ -276,8 +293,14 @@ export const MOCK_SLIDES: Slide[] = [
         data: {
           leftColumn: [
             { id: "fn-l1", content: "Dự án sử dụng đất quy mô dưới 20 ha" },
-            { id: "fn-l2", content: "Dự án sử dụng đất quy mô từ 20 ha trở lên" },
-            { id: "fn-l3", content: "Hạn mức nhận tiền đặt cọc trước khi ký hợp đồng" },
+            {
+              id: "fn-l2",
+              content: "Dự án sử dụng đất quy mô từ 20 ha trở lên",
+            },
+            {
+              id: "fn-l3",
+              content: "Hạn mức nhận tiền đặt cọc trước khi ký hợp đồng",
+            },
           ],
           rightColumn: [
             { id: "fn-r1", content: "Vốn chủ sở hữu tối thiểu 15% tổng vốn" },
@@ -389,13 +412,14 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          content: "Kéo thả các sự kiện dưới đây theo đúng trình tự tiến độ thanh toán tối đa của khách hàng từ trước đến sau:",
+          content:
+            "Kéo thả các sự kiện dưới đây theo đúng trình tự tiến độ thanh toán tối đa của khách hàng từ trước đến sau:",
         },
       },
       {
         id: "el-sorting-payment",
         type: "SORTING",
-        position: { x: 15, y: 24, w: 70, h: 55   },
+        position: { x: 15, y: 24, w: 70, h: 55 },
         style: {
           borderRadius: 16,
           opacity: 1,
@@ -404,9 +428,21 @@ export const MOCK_SLIDES: Slide[] = [
         enterAnimation: { type: "slide-up", duration: 600, delay: 200 },
         data: {
           items: [
-            { id: "evt-1", content: "Đặt cọc giữ chỗ khi nhà ở đủ điều kiện kinh doanh (Tối đa 5% giá trị)" },
-            { id: "evt-2", content: "Thanh toán đợt đầu bao gồm cả tiền đặt cọc đã đóng trước đó (Tối đa 30% giá trị)" },
-            { id: "evt-3", content: "Thanh toán lũy kế trước khi chủ đầu tư bàn giao nhà ở thương mại (Tối đa 70% giá trị)" },
+            {
+              id: "evt-1",
+              content:
+                "Đặt cọc giữ chỗ khi nhà ở đủ điều kiện kinh doanh (Tối đa 5% giá trị)",
+            },
+            {
+              id: "evt-2",
+              content:
+                "Thanh toán đợt đầu bao gồm cả tiền đặt cọc đã đóng trước đó (Tối đa 30% giá trị)",
+            },
+            {
+              id: "evt-3",
+              content:
+                "Thanh toán lũy kế trước khi chủ đầu tư bàn giao nhà ở thương mại (Tối đa 70% giá trị)",
+            },
           ],
           correctOrder: ["evt-1", "evt-2", "evt-3"],
         },
@@ -481,7 +517,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          content: "Luật 2023 cấm phân lô, bán nền tại các phường, quận, thành phố thuộc đô thị loại đặc biệt, loại I, loại II và loại III (tổng cộng 105 thành phố, thị xã). Tại các vùng còn lại, đất nền chỉ được bán khi đã hoàn thành xây dựng hạ tầng kỹ thuật đồng bộ và do chủ đầu tư trực tiếp chuyển nhượng.",
+          content:
+            "Luật 2023 cấm phân lô, bán nền tại các phường, quận, thành phố thuộc đô thị loại đặc biệt, loại I, loại II và loại III (tổng cộng 105 thành phố, thị xã). Tại các vùng còn lại, đất nền chỉ được bán khi đã hoàn thành xây dựng hạ tầng kỹ thuật đồng bộ và do chủ đầu tư trực tiếp chuyển nhượng.",
         },
       },
       {
@@ -495,7 +532,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "bounce", duration: 800, delay: 200 },
         data: {
-          statement: "Hành vi cá nhân tự ý phân lô, tách thửa đất nền để tự do bán không cần lập dự án đầu tư theo quy hoạch ở khu vực nông thôn (đô thị loại IV, V) là được phép theo Luật 2023.",
+          statement:
+            "Hành vi cá nhân tự ý phân lô, tách thửa đất nền để tự do bán không cần lập dự án đầu tư theo quy hoạch ở khu vực nông thôn (đô thị loại IV, V) là được phép theo Luật 2023.",
           correctDirection: "left", // False statement, only official developers of approved projects can sell subdivided plots
         },
       },
@@ -569,7 +607,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          content: "Cá nhân hành nghề môi giới bắt buộc phải có chứng chỉ hành nghề và phải làm việc chính quy tại một doanh nghiệp môi giới hoặc sàn giao dịch bất động sản hợp pháp. Cá nhân cấm hành nghề môi giới độc lập tự do như trước.",
+          content:
+            "Cá nhân hành nghề môi giới bắt buộc phải có chứng chỉ hành nghề và phải làm việc chính quy tại một doanh nghiệp môi giới hoặc sàn giao dịch bất động sản hợp pháp. Cá nhân cấm hành nghề môi giới độc lập tự do như trước.",
         },
       },
       {
@@ -583,8 +622,14 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "zoom-in", duration: 600, delay: 200 },
         data: {
-          question: "Theo quy định tài chính mới, lệ phí chính thức cấp Chứng chỉ hành nghề môi giới bất động sản là bao nhiêu đồng? (Ví dụ: 300000)",
-          correctAnswers: ["300000", "300.000", "ba trăm nghìn", "ba trăm ngàn"],
+          question:
+            "Theo quy định tài chính mới, lệ phí chính thức cấp Chứng chỉ hành nghề môi giới bất động sản là bao nhiêu đồng? (Ví dụ: 300000)",
+          correctAnswers: [
+            "300000",
+            "300.000",
+            "ba trăm nghìn",
+            "ba trăm ngàn",
+          ],
           caseSensitive: false,
         },
       },
@@ -659,7 +704,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          content: "Nhấn vào vùng hình ảnh khu bất động sản để hiển thị khuyến nghị chi tiết:",
+          content:
+            "Nhấn vào vùng hình ảnh khu bất động sản để hiển thị khuyến nghị chi tiết:",
         },
       },
       {
@@ -673,7 +719,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "zoom-in", duration: 600, delay: 200 },
         data: {
-          imageUri: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80",
+          imageUri:
+            "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80",
           zones: [
             { id: "zone-developer", xMin: 5, yMin: 5, xMax: 95, yMax: 95 },
           ],
@@ -705,7 +752,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 400, delay: 0 },
         data: {
-          content: "💡 KHUYẾN NGHỊ THỰC TIỄN:\n\n• CHỦ ĐẦU TƯ: Duy trì tỷ lệ vốn chủ sở hữu đạt chuẩn (15%-20%) theo luật, tuyệt đối không huy động cọc quá 5% trước khi dự án đủ pháp lý kinh doanh.\n\n• NGƯỜI MUA: Cảnh giác pháp lý, luôn kiểm tra sự hiện diện của Thư bảo lãnh nghĩa vụ tài chính từ ngân hàng thương mại trước khi ký hợp đồng và giải ngân tiền.",
+          content:
+            "💡 KHUYẾN NGHỊ THỰC TIỄN:\n\n• CHỦ ĐẦU TƯ: Duy trì tỷ lệ vốn chủ sở hữu đạt chuẩn (15%-20%) theo luật, tuyệt đối không huy động cọc quá 5% trước khi dự án đủ pháp lý kinh doanh.\n\n• NGƯỜI MUA: Cảnh giác pháp lý, luôn kiểm tra sự hiện diện của Thư bảo lãnh nghĩa vụ tài chính từ ngân hàng thương mại trước khi ký hợp đồng và giải ngân tiền.",
         },
       },
       {
@@ -779,7 +827,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          content: "Xem phóng sự ngắn dưới đây để nắm rõ bối cảnh hoàn thiện thể chế & chuyên nghiệp hóa thị trường:",
+          content:
+            "Xem phóng sự ngắn dưới đây để nắm rõ bối cảnh hoàn thiện thể chế & chuyên nghiệp hóa thị trường:",
         },
       },
       {
@@ -872,7 +921,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          content: "Lật các thẻ dưới đây để tìm cặp loại hợp đồng mẫu tương đồng theo quy định pháp luật mới:",
+          content:
+            "Lật các thẻ dưới đây để tìm cặp loại hợp đồng mẫu tương đồng theo quy định pháp luật mới:",
         },
       },
       {
@@ -960,12 +1010,25 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "bounce", duration: 600, delay: 200 },
         data: {
-          question: "Theo Nghị định 100/2024/NĐ-CP, trần thu nhập của cả vợ và chồng đã kết hôn để đủ điều kiện mua nhà ở xã hội là bao nhiêu?",
+          question:
+            "Theo Nghị định 100/2024/NĐ-CP, trần thu nhập của cả vợ và chồng đã kết hôn để đủ điều kiện mua nhà ở xã hội là bao nhiêu?",
           options: [
-            { id: "sprint-opt-1", content: "Tổng thu nhập ≤ 15 triệu đồng / tháng" },
-            { id: "sprint-opt-2", content: "Tổng thu nhập ≤ 20 triệu đồng / tháng" },
-            { id: "sprint-opt-3", content: "Tổng thu nhập ≤ 30 triệu đồng / tháng" },
-            { id: "sprint-opt-4", content: "Tổng thu nhập ≤ 40 triệu đồng / tháng" },
+            {
+              id: "sprint-opt-1",
+              content: "Tổng thu nhập ≤ 15 triệu đồng / tháng",
+            },
+            {
+              id: "sprint-opt-2",
+              content: "Tổng thu nhập ≤ 20 triệu đồng / tháng",
+            },
+            {
+              id: "sprint-opt-3",
+              content: "Tổng thu nhập ≤ 30 triệu đồng / tháng",
+            },
+            {
+              id: "sprint-opt-4",
+              content: "Tổng thu nhập ≤ 40 triệu đồng / tháng",
+            },
           ],
           correctId: "sprint-opt-3",
           duration: 20,
@@ -1042,7 +1105,8 @@ export const MOCK_SLIDES: Slide[] = [
         },
         enterAnimation: { type: "fade-in", duration: 500, delay: 100 },
         data: {
-          content: "Sắp xếp các chữ cái xáo trộn dưới đây để tạo thành từ khóa chỉ nguyên tắc điều phối tối cao của Luật 2023:",
+          content:
+            "Sắp xếp các chữ cái xáo trộn dưới đây để tạo thành từ khóa chỉ nguyên tắc điều phối tối cao của Luật 2023:",
         },
       },
       {
@@ -1062,13 +1126,367 @@ export const MOCK_SLIDES: Slide[] = [
         },
       },
       {
-        id: "el-btn-finish-11",
+        id: "el-btn-next-11",
         type: "TEXT",
         position: { x: 41, y: 82, w: 18, h: 9 },
         style: {
           backgroundColor: "#c084fc", // purple-400
           color: "#090514",
           fontSize: 13,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
+        data: {
+          content: "Tiếp theo ➔",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
+          },
+        ],
+      },
+    ],
+  },
+  // =========================================================================
+  // SLIDE 12: TRÒ CHƠI Ô CHỮ PHÁP LÝ (THEME NEON)
+  // =========================================================================
+  {
+    id: "slide-bds-crossword",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
+    order: 12,
+    config: { aspectRatio: "16:9", theme: "neon" },
+    elements: [
+      {
+        id: "el-text-title-12",
+        type: "TEXT",
+        position: { x: 10, y: 3, w: 80, h: 10 },
+        style: {
+          fontSize: 24,
+          textAlign: "center",
+          color: "#fbbf24", // Gold
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
+        data: {
+          content: "11. THỬ THÁCH: Ô CHỮ PHÁP LÝ BẤT ĐỘNG SẢN",
+        },
+      },
+      {
+        id: "el-crossword-game",
+        type: "CROSSWORD",
+        position: { x: 15, y: 15, w: 70, h: 72 },
+        style: {
+          borderRadius: 16,
+          opacity: 1,
+          zIndex: 5,
+        },
+        enterAnimation: { type: "zoom-in", duration: 600, delay: 200 },
+        data: {
+          gridRows: 5,
+          gridCols: 5,
+          clues: [
+            {
+              id: "clue-1",
+              number: 1,
+              question: "Hành tinh chúng ta đang sống?",
+              answer: "EARTH",
+              row: 0,
+              col: 0,
+              direction: "across",
+            },
+            {
+              id: "clue-2",
+              number: 2,
+              question: "Trái nghĩa với đen?",
+              answer: "WHITE",
+              row: 2,
+              col: 0,
+              direction: "across",
+            },
+            {
+              id: "clue-3",
+              number: 3,
+              question: "Ngôn ngữ lập trình web phổ biến?",
+              answer: "HTML",
+              row: 0,
+              col: 3,
+              direction: "down",
+            },
+          ],
+          caseSensitive: false,
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.EVALUATE_ANSWER,
+            payload: {
+              targetElementId: "el-crossword-game",
+              conceptId: "concept-bds-crossword",
+            },
+          },
+        ],
+      },
+      {
+        id: "el-btn-next-12",
+        type: "TEXT",
+        position: { x: 41, y: 89, w: 18, h: 8 },
+        style: {
+          backgroundColor: "#c084fc", // purple-400
+          color: "#090514",
+          fontSize: 12,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
+        data: {
+          content: "Tiếp theo ➔",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
+          },
+        ],
+      },
+    ],
+  },
+  // =========================================================================
+  // SLIDE 13: KỊCH BẢN RẼ NHÁNH SỰ CỐ (THEME DARK)
+  // =========================================================================
+  {
+    id: "slide-bds-branching",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
+    order: 13,
+    config: { aspectRatio: "16:9", theme: "dark" },
+    elements: [
+      {
+        id: "el-text-title-13",
+        type: "TEXT",
+        position: { x: 10, y: 3, w: 80, h: 10 },
+        style: {
+          fontSize: 24,
+          textAlign: "center",
+          color: "#f59e0b", // Amber
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
+        data: {
+          content: "12. KỊCH BẢN RẼ NHÁNH: XỬ LÝ SỰ CỐ MÁY CHỦ",
+        },
+      },
+      {
+        id: "el-branching-game",
+        type: "BRANCHING",
+        position: { x: 15, y: 15, w: 70, h: 72 },
+        style: {
+          borderRadius: 16,
+          opacity: 1,
+          zIndex: 5,
+        },
+        enterAnimation: { type: "zoom-in", duration: 600, delay: 200 },
+        data: {
+          startNodeId: "node-start",
+          nodes: [
+            {
+              id: "node-start",
+              title: "Khởi đầu kịch bản",
+              content:
+                "Bạn đang gặp sự cố trên máy chủ sản phẩm, bạn sẽ làm gì đầu tiên?",
+              choices: [
+                {
+                  id: "choice-1",
+                  text: "Kiểm tra log của hệ thống",
+                  nextNodeId: "node-logs",
+                },
+                {
+                  id: "choice-2",
+                  text: "Khởi động lại máy chủ ngay lập tức",
+                  nextNodeId: "node-reboot",
+                },
+              ],
+            },
+            {
+              id: "node-logs",
+              title: "Xem Logs",
+              content:
+                "Logs chỉ ra có sự cố rò rỉ bộ nhớ từ một commit gần đây. Bạn sẽ làm gì?",
+              choices: [
+                {
+                  id: "choice-3",
+                  text: "Rollback commit gần nhất",
+                  nextNodeId: "node-rollback",
+                },
+                {
+                  id: "choice-4",
+                  text: "Bỏ qua và tiếp tục theo dõi",
+                  nextNodeId: "node-reboot",
+                },
+              ],
+            },
+            {
+              id: "node-rollback",
+              title: "Rollback thành công!",
+              content:
+                "Hệ thống hoạt động bình thường trở lại. Bạn đã giải quyết sự cố tuyệt vời!",
+              choices: [],
+              isSuccessEnd: true,
+            },
+            {
+              id: "node-reboot",
+              title: "Khởi động thất bại",
+              content:
+                "Hệ thống bị sập hoàn toàn và dữ liệu chưa được sao lưu bị mất.",
+              choices: [],
+              isFailureEnd: true,
+            },
+          ],
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.EVALUATE_ANSWER,
+            payload: {
+              targetElementId: "el-branching-game",
+              conceptId: "concept-bds-branching",
+            },
+          },
+        ],
+      },
+      {
+        id: "el-btn-next-13",
+        type: "TEXT",
+        position: { x: 41, y: 89, w: 18, h: 8 },
+        style: {
+          backgroundColor: "#f59e0b",
+          color: "#ffffff",
+          fontSize: 12,
+          textAlign: "center",
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "fade-in", duration: 500, delay: 400 },
+        data: {
+          content: "Tiếp theo ➔",
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.NAVIGATE_SLIDE,
+            payload: { direction: "NEXT" },
+          },
+        ],
+      },
+    ],
+  },
+  // =========================================================================
+  // SLIDE 14: TRÒ CHƠI DÁN NHÃN ĐỊA GIỚI (THEME SUNSET)
+  // =========================================================================
+  {
+    id: "slide-bds-labelimage",
+    tenant_id: "tenant-demo",
+    course_id: "course-bds",
+    order: 14,
+    config: { aspectRatio: "16:9", theme: "sunset" },
+    elements: [
+      {
+        id: "el-text-title-14",
+        type: "TEXT",
+        position: { x: 10, y: 3, w: 80, h: 10 },
+        style: {
+          fontSize: 24,
+          textAlign: "center",
+          color: "#7c2d12", // orange-950
+          backgroundColor: "transparent",
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        enterAnimation: { type: "slide-up", duration: 500, delay: 0 },
+        data: {
+          content: "13. THỬ THÁCH: DÁN NHÃN ĐỊA GIỚI TỰ NHIÊN",
+        },
+      },
+      {
+        id: "el-labelimage-game",
+        type: "LABEL_IMAGE",
+        position: { x: 15, y: 15, w: 70, h: 72 },
+        style: {
+          borderRadius: 16,
+          opacity: 1,
+          zIndex: 5,
+        },
+        enterAnimation: { type: "zoom-in", duration: 600, delay: 200 },
+        data: {
+          imageUri:
+            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=60",
+          labels: [
+            { id: "lbl-sky", content: "Bầu trời" },
+            { id: "lbl-lake", content: "Hồ nước" },
+            { id: "lbl-mountain", content: "Ngọn núi" },
+          ],
+          zones: [
+            {
+              id: "zone-sky",
+              xMin: 5,
+              yMin: 5,
+              xMax: 95,
+              yMax: 30,
+              correctLabelId: "lbl-sky",
+            },
+            {
+              id: "zone-mountain",
+              xMin: 20,
+              yMin: 35,
+              xMax: 80,
+              yMax: 65,
+              correctLabelId: "lbl-mountain",
+            },
+            {
+              id: "zone-lake",
+              xMin: 5,
+              yMin: 70,
+              xMax: 95,
+              yMax: 95,
+              correctLabelId: "lbl-lake",
+            },
+          ],
+        },
+        actions: [
+          {
+            trigger: ACTION_TRIGGERS.ON_CLICK,
+            type: ACTION_TYPES.EVALUATE_ANSWER,
+            payload: {
+              targetElementId: "el-labelimage-game",
+              conceptId: "concept-bds-labelimage",
+            },
+          },
+        ],
+      },
+      {
+        id: "el-btn-finish-14",
+        type: "TEXT",
+        position: { x: 41, y: 89, w: 18, h: 8 },
+        style: {
+          backgroundColor: "#c2410c", // orange-700
+          color: "#ffffff",
+          fontSize: 12,
           textAlign: "center",
           borderRadius: 8,
           opacity: 1,

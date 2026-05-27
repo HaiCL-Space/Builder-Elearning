@@ -44,7 +44,7 @@ export function SortingEditor({
         </button>
       </div>
 
-      <div className="space-y-2 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
+      <div className="space-y-2 rounded-lg border border-slate-100 bg-slate-50/50 p-2.5">
         {items.map((item, index) => {
           const updateItemText = (txt: string) => {
             const nextItems = items.map((it) =>
@@ -81,7 +81,7 @@ export function SortingEditor({
                 type="text"
                 value={item.content}
                 onChange={(e) => updateItemText(e.target.value)}
-                className="flex-1 min-w-0 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs outline-none focus:border-blue-500"
+                className="min-w-0 flex-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs outline-none focus:border-blue-500"
               />
               <div className="flex shrink-0">
                 <button

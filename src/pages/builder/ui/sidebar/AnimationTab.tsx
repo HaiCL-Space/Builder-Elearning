@@ -5,7 +5,10 @@ import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 
 interface AnimationTabProps {
   selectedElement: BuilderElement
-  onUpdateAnimations?: (patch: { enterAnimation?: BuilderElement["enterAnimation"]; exitAnimation?: BuilderElement["exitAnimation"] }) => void
+  onUpdateAnimations?: (patch: {
+    enterAnimation?: BuilderElement["enterAnimation"]
+    exitAnimation?: BuilderElement["exitAnimation"]
+  }) => void
 }
 
 export function AnimationTab({
@@ -15,8 +18,8 @@ export function AnimationTab({
   return (
     <div className="space-y-4">
       {/* ENTER ANIMATION */}
-      <div className="bg-slate-50 p-3 rounded-lg border border-slate-200/80">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-blue-600 mb-2">
+      <div className="rounded-lg border border-slate-200/80 bg-slate-50 p-3">
+        <div className="mb-2 flex items-center gap-1.5 text-xs font-bold text-blue-600">
           <Sparkles className="h-4 w-4" />
           <span>HIỆU ỨNG VÀO (ENTER)</span>
         </div>
@@ -38,7 +41,9 @@ export function AnimationTab({
               } else {
                 onUpdateAnimations?.({
                   enterAnimation: {
-                    type: val as NonNullable<BuilderElement["enterAnimation"]>["type"],
+                    type: val as NonNullable<
+                      BuilderElement["enterAnimation"]
+                    >["type"],
                     duration: selectedElement.enterAnimation?.duration || 500,
                     delay: selectedElement.enterAnimation?.delay || 0,
                   },
@@ -79,8 +84,8 @@ export function AnimationTab({
       </div>
 
       {/* EXIT ANIMATION */}
-      <div className="bg-slate-50 p-3 rounded-lg border border-slate-200/80">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-pink-600 mb-2">
+      <div className="rounded-lg border border-slate-200/80 bg-slate-50 p-3">
+        <div className="mb-2 flex items-center gap-1.5 text-xs font-bold text-pink-600">
           <Sparkles className="h-4 w-4" />
           <span>HIỆU ỨNG RA (EXIT)</span>
         </div>
@@ -102,7 +107,9 @@ export function AnimationTab({
               } else {
                 onUpdateAnimations?.({
                   exitAnimation: {
-                    type: val as NonNullable<BuilderElement["exitAnimation"]>["type"],
+                    type: val as NonNullable<
+                      BuilderElement["exitAnimation"]
+                    >["type"],
                     duration: selectedElement.exitAnimation?.duration || 500,
                     delay: selectedElement.exitAnimation?.delay || 0,
                   },
@@ -148,7 +155,7 @@ export function AnimationTab({
         onClick={() => {
           useBuilderStore.getState().triggerTestAnimation(selectedElement.id)
         }}
-        className="w-full flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-bold rounded-lg bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-100"
+        className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-600 hover:bg-blue-100"
       >
         <Play className="h-3.5 w-3.5 fill-blue-600" />
         Chạy thử hiệu ứng

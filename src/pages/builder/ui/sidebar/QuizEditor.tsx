@@ -62,7 +62,7 @@ export function QuizEditor({
           </button>
         </div>
 
-        <div className="space-y-2 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
+        <div className="space-y-2 rounded-lg border border-slate-100 bg-slate-50/50 p-2.5">
           {options.map((opt) => {
             const isCorrect = correctId === opt.id
 
@@ -88,7 +88,7 @@ export function QuizEditor({
                   checked={isCorrect}
                   onChange={() => onUpdateData({ correctId: opt.id })}
                   title="Đánh dấu đáp án đúng"
-                  className="h-3.5 w-3.5 cursor-pointer shrink-0 accent-emerald-500"
+                  className="h-3.5 w-3.5 shrink-0 cursor-pointer accent-emerald-500"
                 />
 
                 {/* Input text for option */}
@@ -96,14 +96,14 @@ export function QuizEditor({
                   type="text"
                   value={opt.content}
                   onChange={(e) => updateOptText(e.target.value)}
-                  className="flex-1 min-w-0 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs outline-none focus:border-blue-500"
+                  className="min-w-0 flex-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs outline-none focus:border-blue-500"
                 />
 
                 {/* Delete option */}
                 <button
                   type="button"
                   onClick={deleteOpt}
-                  className="rounded p-1 text-slate-400 hover:bg-red-50 hover:text-red-600 shrink-0"
+                  className="shrink-0 rounded p-1 text-slate-400 hover:bg-red-50 hover:text-red-600"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>

@@ -19,19 +19,29 @@ export function App() {
     // Attempt to silently restore the session on initial app load if a refresh token exists
     const restoreSession = async () => {
       const hasToken = auth.hasRefreshToken()
-      console.log("[App Init] Checking refresh token cookie in document.cookie:", document.cookie)
+      console.log(
+        "[App Init] Checking refresh token cookie in document.cookie:",
+        document.cookie
+      )
       console.log("[App Init] auth.hasRefreshToken():", hasToken)
-      
+
       if (hasToken) {
         try {
-          console.log("[App Init] Refresh token detected. Requesting silent token refresh...")
+          console.log(
+            "[App Init] Refresh token detected. Requesting silent token refresh..."
+          )
           const success = await auth.refresh()
           console.log("[App Init] Silent refresh success status:", success)
         } catch (err) {
-          console.error("[App Init] Failed to restore session on app boot:", err)
+          console.error(
+            "[App Init] Failed to restore session on app boot:",
+            err
+          )
         }
       } else {
-        console.log("[App Init] No refresh token found. Redirecting to login if needed.")
+        console.log(
+          "[App Init] No refresh token found. Redirecting to login if needed."
+        )
       }
       setIsResolvingAuth(false)
     }
@@ -57,7 +67,9 @@ export function App() {
       <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-blue-500" />
-          <span className="text-xs font-medium tracking-wide">Đang xác thực phiên làm việc...</span>
+          <span className="text-xs font-medium tracking-wide">
+            Đang xác thực phiên làm việc...
+          </span>
         </div>
       </div>
     )

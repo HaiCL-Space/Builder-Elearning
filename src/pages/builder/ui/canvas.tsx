@@ -102,7 +102,6 @@ export function Canvas({
             onResizeMouseDown={onResizeMouseDown}
             isInteractiveMode={isInteractiveMode}
             onAction={onAction}
-
           />
         ))}
       </div>

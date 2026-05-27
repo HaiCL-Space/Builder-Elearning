@@ -2,7 +2,9 @@ import React from "react"
 import { useBuilderStore } from "@/pages/builder/model/use-builder-store"
 import type { BuilderElement, HotspotZone } from "@/pages/builder/model/types"
 
-export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null>) {
+export function useCanvasEvents(
+  canvasRef: React.RefObject<HTMLDivElement | null>
+) {
   const slides = useBuilderStore((state) => state.slides)
   const currentSlideIndex = useBuilderStore((state) => state.currentSlideIndex)
   const currentSlide = slides[currentSlideIndex]
@@ -20,9 +22,10 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
   const setResizingZone = useBuilderStore((state) => state.setResizingZone)
   const setGuidelines = useBuilderStore((state) => state.setGuidelines)
   const setActiveTooltip = useBuilderStore((state) => state.setActiveTooltip)
-  const setSelectedElementId = useBuilderStore((state) => state.setSelectedElementId)
+  const setSelectedElementId = useBuilderStore(
+    (state) => state.setSelectedElementId
+  )
   const updateElement = useBuilderStore((state) => state.updateElement)
-
 
   const getRelativePos = (e: React.MouseEvent | MouseEvent) => {
     if (!canvasRef.current) return { x: 0, y: 0 }
@@ -52,7 +55,10 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
     }
   }
 
-  const handleElementMouseDown = (e: React.MouseEvent, element: BuilderElement) => {
+  const handleElementMouseDown = (
+    e: React.MouseEvent,
+    element: BuilderElement
+  ) => {
     e.stopPropagation()
     setSelectedElementId(element.id)
     setDraggingId(element.id)
@@ -95,7 +101,6 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
     })
   }
 
-
   const handleResizeMouseDown = (
     e: React.MouseEvent,
     element: BuilderElement,
@@ -108,7 +113,9 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
   const handleMouseMove = (e: React.MouseEvent) => {
     if (draggingId) {
       const pos = getRelativePos(e)
-      const el = currentSlide.elements.find((x: BuilderElement) => x.id === draggingId)
+      const el = currentSlide.elements.find(
+        (x: BuilderElement) => x.id === draggingId
+      )
       if (!el) return
 
       const targetX = pos.x - dragOffset.x
@@ -145,7 +152,11 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
           { value: ox + ow, snapTo: ox + ow, lineAt: ox + ow },
           { value: ox - w, snapTo: ox - w, lineAt: ox },
           { value: ox + ow - w, snapTo: ox + ow - w, lineAt: ox + ow },
-          { value: ox + ow / 2 - w / 2, snapTo: ox + ow / 2 - w / 2, lineAt: ox + ow / 2 }
+          {
+            value: ox + ow / 2 - w / 2,
+            snapTo: ox + ow / 2 - w / 2,
+            lineAt: ox + ow / 2,
+          }
         )
 
         snapCandidatesY.push(
@@ -153,7 +164,11 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
           { value: oy + oh, snapTo: oy + oh, lineAt: oy + oh },
           { value: oy - h, snapTo: oy - h, lineAt: oy },
           { value: oy + oh - h, snapTo: oy + oh - h, lineAt: oy + oh },
-          { value: oy + oh / 2 - h / 2, snapTo: oy + oh / 2 - h / 2, lineAt: oy + oh / 2 }
+          {
+            value: oy + oh / 2 - h / 2,
+            snapTo: oy + oh / 2 - h / 2,
+            lineAt: oy + oh / 2,
+          }
         )
       })
 
@@ -206,13 +221,15 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
     }
 
     if (draggingZone) {
-      const element = currentSlide.elements.find((x: BuilderElement) => x.id === draggingZone.elementId)
+      const element = currentSlide.elements.find(
+        (x: BuilderElement) => x.id === draggingZone.elementId
+      )
       if (!element) return
 
       const pos = getRelativePosInElement(e, element)
 
       updateElement(currentSlideIndex, draggingZone.elementId, (el) => {
-        if (el.type !== "HOTSPOT") return el
+        if (el.type !== "HOTSPOT" && el.type !== "LABEL_IMAGE") return el
 
         const data = (el.data || {}) as unknown as {
           zones?: Array<HotspotZone>
@@ -223,8 +240,14 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
           const w = z.xMax - z.xMin
           const h = z.yMax - z.yMin
 
-          const newXMin = Math.max(0, Math.min(100 - w, pos.x - draggingZone.offsetX))
-          const newYMin = Math.max(0, Math.min(100 - h, pos.y - draggingZone.offsetY))
+          const newXMin = Math.max(
+            0,
+            Math.min(100 - w, pos.x - draggingZone.offsetX)
+          )
+          const newYMin = Math.max(
+            0,
+            Math.min(100 - h, pos.y - draggingZone.offsetY)
+          )
 
           return {
             ...z,
@@ -243,12 +266,14 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
     }
 
     if (resizingZone) {
-      const element = currentSlide.elements.find((x: BuilderElement) => x.id === resizingZone.elementId)
+      const element = currentSlide.elements.find(
+        (x: BuilderElement) => x.id === resizingZone.elementId
+      )
       if (element) {
         const pos = getRelativePosInElement(e, element)
 
         updateElement(currentSlideIndex, resizingZone.elementId, (el) => {
-          if (el.type !== "HOTSPOT") return el
+          if (el.type !== "HOTSPOT" && el.type !== "LABEL_IMAGE") return el
 
           const data = (el.data || {}) as unknown as {
             zones?: Array<HotspotZone>
@@ -283,7 +308,6 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
         })
       }
     }
-
 
     if (resizing) {
       const pos = getRelativePos(e)
@@ -325,7 +349,6 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
     setActiveTooltip(null)
   }
 
-
   return {
     handleCanvasMouseDown,
     handleElementMouseDown,
@@ -336,4 +359,3 @@ export function useCanvasEvents(canvasRef: React.RefObject<HTMLDivElement | null
     handleMouseUp,
   }
 }
-
