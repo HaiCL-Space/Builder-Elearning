@@ -38,10 +38,12 @@
 ### 4) Error and Logging Conventions
 
 - **Error strategy by layer**:
+  - **API Fetching Layer**: REST requests are wrapped in try/catch inside TanStack Query options (`queries.ts`). If the request fails (e.g. server is down), a warning is logged using `console.warn` and static in-memory fallback datasets are returned (`MOCK_COURSES`, `MOCK_LESSONS`, `MOCK_SLIDES`) to keep the app fully functional offline.
   - **Interaction Layer**: High-risk browser actions (such as HTML5 media playing `audio.play()`) are wrapped in `.catch()` promises to log issues silently to the developer console and prevent UI crashes.
   - **Form/Quiz Validation**: Missing answers or incomplete interaction inputs trigger a non-blocking UI alert modal (`setAlert` in the builder store or `setActiveAlert` in the viewer page) rather than throwing runtime errors.
-- **Logging style**: System flow actions (such as navigating slides, validating games, or clicking hotspots) write clear traces to the developer console `console.log()` for clean local debugging. No external cloud logging platform is integrated.
-- **Sensitive-data redaction rules**: There is no client sensitive data (e.g. user credentials or PII) handled in the current application. All slide state is statically seeded and in-memory.
+- **JWT Auto-Injection**: Outgoing requests through `api.ts` automatically intercept and check `useAuthStore` memory state. If `accessToken` is active, it injects an `Authorization: Bearer <token>` header.
+- **Logging style**: System flow actions (such as navigating slides, validating games, silent session refreshes, or clicking hotspots) write clear traces to the developer console `console.log()` for clean local debugging. No external cloud logging platform is integrated.
+- **Sensitive-data redaction rules**: User passwords and tokens are only passed through secure TLS channels. Refresh tokens are secured via `SameSite=Lax` cookies with `Secure` flags on production environments, and access tokens are kept solely in memory state to mitigate XSS exposure.
 
 ### 5) Testing Conventions
 

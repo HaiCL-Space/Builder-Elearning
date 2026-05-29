@@ -18,6 +18,8 @@
 .agents\skills\karpathy-guidelines\SKILL.md
 .agents\skills\motion-framer
 .agents\skills\motion-framer\SKILL.md
+.agents\skills\tanstack-query
+.agents\skills\tanstack-query\SKILL.md
 .agents\skills\vercel-react-best-practices
 .agents\skills\vercel-react-best-practices\AGENTS.md
 .agents\skills\vercel-react-best-practices\metadata.json
@@ -26,6 +28,7 @@
 .agents\skills\vercel-react-best-practices\SKILL.md
 .agents\skills\zustand-state-management
 .agents\skills\zustand-state-management\SKILL.md
+.env
 .gitignore
 .prettierignore
 .prettierrc
@@ -64,6 +67,7 @@ skills-lock.json
 src
 src\app
 src\app\providers
+src\app\providers\query-provider.tsx
 src\app\providers\theme-provider.tsx
 src\app\styles
 src\app\styles\index.css
@@ -71,12 +75,19 @@ src\App.tsx
 src\assets
 src\assets\react.svg
 src\entities
+src\entities\course
+src\entities\course\index.ts
+src\entities\course\model
 src\entities\element
 src\entities\element\index.ts
 src\entities\element\model
 src\entities\element\ui
+src\entities\lesson
+src\entities\lesson\index.ts
+src\entities\lesson\model
 src\entities\slide
 src\entities\slide\index.ts
+src\entities\slide\model
 src\entities\slide\ui
 src\main.tsx
 src\pages
@@ -85,13 +96,21 @@ src\pages\builder\index.ts
 src\pages\builder\lib
 src\pages\builder\model
 src\pages\builder\ui
+src\pages\login
+src\pages\login\index.ts
+src\pages\login\ui
 src\pages\viewer
 src\pages\viewer\index.ts
 src\pages\viewer\ui
 src\shared
 src\shared\api
+src\shared\api\api.ts
+src\shared\api\index.ts
 src\shared\api\mock-slides.ts
 src\shared\auth
+src\shared\auth\auth-store.ts
+src\shared\auth\auth.ts
+src\shared\auth\index.ts
 src\shared\lib
 src\shared\lib\builder-utils.ts
 src\shared\lib\color.ts
@@ -103,6 +122,7 @@ src\shared\ui\custom-alert-dialog.tsx
 src\shared\ui\fields.tsx
 src\shared\ui\label.tsx
 src\shared\ui\radio-group.tsx
+src\shared\ui\scroll-area.tsx
 tsconfig.app.json
 tsconfig.json
 tsconfig.node.json
@@ -123,7 +143,8 @@ vite.config.ts
       "dependencies": {
         "@fontsource-variable/inter": "^5.2.8",
         "@tailwindcss/vite": "^4.2.1",
-        "broker-core-sdk": "^1.0.3",
+        "@tanstack/react-query": "^5.100.14",
+        "broker-core-sdk": "^1.0.7",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "framer-motion": "^12.38.0",
@@ -139,6 +160,7 @@ vite.config.ts
       },
       "devDependencies": {
         "@eslint/js": "^9.39.4",
+        "@tanstack/react-query-devtools": "^5.100.14",
         "@types/node": "^24.12.0",
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
@@ -189,10 +211,8 @@ vite.config.ts
         "@babel/types": "^7.29.0",
         "@jridgewell/remapping": "^2.3.5",
         "convert-source-map": "^2.0.0",
-        "debug": "^4.1.0",
-        "gensync": "^1.0.0-beta.2",
 
-[TRUNCATED] Showing first 80 of 8173 lines.
+[TRUNCATED] Showing first 80 of 8231 lines.
 --- package.json ---
 {
   "name": "previewer",
@@ -210,7 +230,8 @@ vite.config.ts
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
     "@tailwindcss/vite": "^4.2.1",
-    "broker-core-sdk": "^1.0.3",
+    "@tanstack/react-query": "^5.100.14",
+    "broker-core-sdk": "^1.0.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
@@ -226,6 +247,7 @@ vite.config.ts
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@tanstack/react-query-devtools": "^5.100.14",
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -272,74 +294,74 @@ No .env.example or .env.template found. Identify required environment variables 
 .agents\skills\acquire-codebase-knowledge\scripts\scan.py:622: print_section("TODO / FIXME / HACK (production code only, test dirs excluded)", ["None found."], output_file)
 
 === GIT RECENT COMMITS (last 20) ===
+ba7f1c2 chore: update broker-core-sdk to version 1.0.7
+4b6af0d chore: bump broker-core-sdk to version 1.0.6
+552c78b feat: add mock slide data for real estate law course demonstration
+56d98cc feat: initialize builder application with api layer, core entities, and interactive canvas components
+6ffeb84 chore: bump broker-core-sdk to version 1.0.5
+2f5b93d feat: implement interactive memory card, swipe, and timed sprint elements with corresponding builder UI components
+87619b8 feat: implement sidebar UI for slide management and element insertion with auth store integration
+8a12a13 feat: implement TanStack Query for slide data management and integrate with builder state
+7ef1ba4 feat: implement authentication infrastructure and add builder state management store
+9e78420 feat: implement API service and authentication infrastructure with TanStack Query documentation
+37b271f feat: implement authentication system with login page and route protection logic
+940106b refactor: remove deprecated database integration service
+7925d95 feat: implement word scramble element and expand interactive action builder features
+f145356 feat: integrate React Doctor for automated performance auditing and analysis
+d058c86 feat: add comprehensive codebase documentation, builder utilities, and scaffolding for the editor interface
 f1c8149 feat: add mock slide data for real estate law course demonstration
 220e7ac feat: implement slide builder interface with interactive canvas, element management, and animation controls
 45e61d9 feat: add ViewerPage and integrate routing to switch between Builder and Viewer modes
 acd9606 fix: adjust positions and sizes of mock slide elements for better layout
 c9e130c feat: implement authentication and course browsing functionality with zustand state management
-a7119cd feat: implement builder left sidebar with element templates and slide management UI
-bac6c85 feat: implement builder canvas elements with animation support and interactive preview mode
-f852c3f feat: implement Hotspot element and integrate interactive canvas rendering logic
-db9ad19 chore: remove outdated implementation plan document
-982948f feat: implement element preview component with support for interactive quiz, matching, and sorting widgets
-9305b7f feat: add element-specific sidebar editors for builder components and update mock data structure
-f064447 feat: implement interactive element system with templates and diverse UI components
-87e5d98 feat: add ElementPreview component to render builder element types
-adf758b feat: implement element interaction system with ActionTab and builder state integration
-f07b68b feat: implement builder store and canvas element management using framer-motion
-1765c42 feat: implement animation configuration UI and state management with supporting codebase documentation
-0f034cb feat: implement action runner hook and integrate interactive quiz logic with spaced repetition support
-22e6f9a feat: implement QuizElement component and useActionRunner hook for interactive element support
-d5ec951 feat: implement video element preview component and add mock course data with interactive slides
-ba1ee50 chore: add AGENTS.md project rules and configuration guidelines for AI agent assistance
 
 === HIGH-CHURN FILES (last 90 days, top 20) ===
-  10 src/pages/builder/ui/canvas/CanvasElement.tsx
-   9 src/shared/api/mock-slides.ts
-   8 src/entities/element/ui/element-preview.tsx
-   6 src/pages/builder/lib/use-action-runner.ts
-   5 src/entities/slide/ui/slide-preview.tsx
-   5 src/pages/builder/model/use-builder-store.ts
-   5 src/pages/builder/ui/builder-page.tsx
-   5 src/App.tsx
-   5 src/entities/element/ui/matching-element.tsx
-   5 src/pages/builder/ui/canvas.tsx
-   5 docs/codebase/CONCERNS.md
-   5 docs/codebase/CONVENTIONS.md
-   5 docs/codebase/INTEGRATIONS.md
-   4 src/entities/element/ui/sorting-element.tsx
-   4 src/pages/builder/model/types.ts
-   4 src/entities/element/ui/hotspot-element.tsx
-   4 package-lock.json
-   4 package.json
-   4 docs/codebase/ARCHITECTURE.md
-   4 docs/codebase/TESTING.md
+  12 src/pages/builder/ui/canvas/CanvasElement.tsx
+  11 src/shared/api/mock-slides.ts
+   9 package-lock.json
+   9 package.json
+   9 src/App.tsx
+   9 src/entities/element/ui/element-preview.tsx
+   8 src/pages/builder/model/use-builder-store.ts
+   8 src/pages/builder/ui/builder-page.tsx
+   7 src/pages/builder/lib/use-action-runner.ts
+   7 src/pages/builder/ui/canvas.tsx
+   6 src/entities/element/ui/matching-element.tsx
+   6 src/entities/element/ui/sorting-element.tsx
+   6 src/pages/builder/ui/right-sidebar.tsx
+   6 docs/codebase/CONCERNS.md
+   6 docs/codebase/CONVENTIONS.md
+   6 docs/codebase/INTEGRATIONS.md
+   6 src/entities/slide/ui/slide-preview.tsx
+   5 src/entities/element/ui/hotspot-element.tsx
+   5 src/pages/viewer/ui/viewer-page.tsx
+   5 src/pages/builder/ui/left-sidebar.tsx
 
 === MONOREPO SIGNALS ===
 No monorepo signals detected.
 
 === CODE METRICS ===
-Total files scanned: 191
-Total lines of code: 18426
+Total files scanned: 211
+Total lines of code: 23115
 
 Files by language:
-  Other: 126
-  TypeScript/React: 47
-  TypeScript: 16
+  Other: 127
+  TypeScript/React: 55
+  TypeScript: 27
   JavaScript: 1
   Python: 1
 
 Top 10 largest files:
-package-lock.json: 213.4KB
+package-lock.json: 215.6KB
 .agents\skills\vercel-react-best-practices\AGENTS.md: 105.7KB
-src\shared\api\mock-slides.ts: 34.9KB
+src\shared\api\mock-slides.ts: 47.3KB
 data\luat-kinh-doanh-bat-dong-san-2023.md: 32.8KB
+.agents\skills\tanstack-query\SKILL.md: 31.9KB
 .agents\skills\acquire-codebase-knowledge\scripts\scan.py: 23.2KB
+src\entities\element\ui\crossword-element.tsx: 19.7KB
 .agents\skills\feature-sliced-design\SKILL.md: 19.6KB
 .agents\skills\feature-sliced-design\references\practical-examples.md: 18.1KB
-.agents\skills\feature-sliced-design\references\layer-structure.md: 14.5KB
-.agents\skills\feature-sliced-design\references\framework-integration.md: 14.1KB
-src\entities\slide\ui\slide-preview.tsx: 13.5KB
+src\pages\builder\ui\canvas\CanvasElement.tsx: 16.0KB
 
 === CI/CD PIPELINES ===
 No CI/CD pipelines detected.

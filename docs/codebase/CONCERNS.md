@@ -25,8 +25,8 @@ List the most important debt items only.
 
 | Risk | OWASP category (if applicable) | Evidence | Current mitigation | Gap |
 |------|--------------------------------|----------|--------------------|-----|
-| **Client-Side Game Validation Bypass** | Client-Side Security Controls | gameEngine is called directly inside browser runners. | Low risk because application currently operates as a presentation demo. | Players can modify javascript state in browser dev tools to bypass spaced repetition and answer checks. |
-| **Sensitive Data Exposure** | N/A | None. | No user PII or auth credentials handled in frontend. | None (runs fully in local environment). |
+| **Client-Side Game Validation Bypass** | Client-Side Security Controls | gameEngine and learningEngine are executed client-side in the browser. | Low risk because application currently operates as a presentation demo. | Players can modify javascript state in browser dev tools to bypass spaced repetition and answer checks. |
+| **Refresh Token Stored in Non-HttpOnly Cookie** | Broken Authentication / Sensitive Data Exposure | Cookie is written in client-side script using `document.cookie` in `auth.ts`. | Access token is stored strictly in memory Zustand state (`useAuthStore`). | The refresh token can be read by malicious client-side scripts in the event of an XSS vulnerability, as Javascript-set cookies cannot carry the `HttpOnly` flag. |
 
 ### 4) Performance and Scaling Concerns
 

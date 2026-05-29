@@ -17,54 +17,63 @@
 [index.html]
      │ (Vite Entry Module)
      ▼
-[src/main.tsx] ──► [src/app/providers/theme-provider.tsx] (Global theme context)
-     │
+[src/main.tsx] ──► [src/app/providers/query-provider.tsx] (React Query provider)
+     │         ──► [src/app/providers/theme-provider.tsx] (Global theme context)
      ▼
-[src/App.tsx] (Custom router checking window.location.pathname)
-     ├───► "/viewer" ──► [src/pages/viewer/ui/viewer-page.tsx] (Player mode)
-     └───► default   ──► [src/pages/builder/ui/builder-page.tsx] (Editor mode)
+[src/App.tsx] (Custom router with session restore & auth guards)
+     ├───► "/viewer" ──► [src/pages/viewer/ui/viewer-page.tsx] (Slide player mode)
+     ├───► "/login"  ──► [src/pages/login/ui/login-page.tsx] (Auth portal)
+     └───► "/edit"   ──► [src/pages/builder/ui/builder-page.tsx] (Editor mode)
                              │
-                             ▼ (central state control)
-                        [src/pages/builder/model/use-builder-store.ts]
+                             ▼ (loads via React Query)
+                         [src/entities/slide/model/queries.ts] (useSlidesQuery)
+                             │   ├──► Online: REST API (VITE_API_URL)
+                             │   └──► Offline: MOCK_SLIDES Fallback
+                             ▼ (state cloned for editing)
+                         [src/pages/builder/model/use-builder-store.ts] (Zustand)
                              │
                              ▼ (interactive canvas element wrapper)
-                        [src/pages/builder/ui/canvas/CanvasElement.tsx]
+                         [src/pages/builder/ui/canvas/CanvasElement.tsx]
                              │
                              ▼ (specific widgets from entities layer)
-                        [src/entities/element/ui/*-element.tsx]
+                         [src/entities/element/ui/*-element.tsx]
                              │
                              ▼ (evaluates interactions using core SDK)
-                        [broker-core-sdk (learningEngine/gameEngine)]
+                         [broker-core-sdk (learningEngine/gameEngine)]
 ```
 
 #### Detailed Flow Steps:
-1. **Entry Mounting**: Vite loads `index.html` which executes `src/main.tsx`. This mounts the React VDOM inside a `ThemeProvider` context and boots the `<App />` component.
-2. **Path Routing**: `App.tsx` reads `window.location.pathname`. If it begins with `/viewer`, the standalone `<ViewerPage />` player mounts. Otherwise, it defaults to mounting the `<BuilderPage />` editor.
-3. **State Bootstrapping**:
-   - The `<BuilderPage />` initializes the global Zustand store `useBuilderStore.ts` which clones the Vietnam Real Estate Law deck `MOCK_SLIDES` (located at `src/shared/api/mock-slides.ts`) using deep-cloning to allow users to modify elements locally.
-   - The `<ViewerPage />` reads from `MOCK_SLIDES` directly and maintains local state for slide pagination, visibility, and user quiz responses.
-4. **Canvas Rendering**: Page components render the canvas layout. Individual elements on slides are mapped via `CanvasElement.tsx` or `ElementRenderer` to domain-specific views in `src/entities/element/ui/` (e.g., `quiz-element.tsx`, `matching-element.tsx`, `hotspot-element.tsx`) to draw the actual interactive game boards.
-5. **Action Dispatching & SDK Evaluation**: When a user clicks a button, answers a quiz, or clicks a hotspot, the click is transformed into an `ElementAction` object (defined in `broker-core-sdk`).
-   - The action runner (`useActionRunner.ts` in the builder, or the local `executeAction` in the viewer) parses the action payload.
-   - If the action is `EVALUATE_ANSWER`, it calls `gameEngine.validateGameResult()` from the SDK to verify the answer.
-   - It then invokes `learningEngine.calculateNextReview()` and `learningEngine.checkMastery()` to retrieve the spaced-repetition metrics (next review date, card mastery state) and updates the local state to pop open the `<CustomAlertDialog />` feedback modal.
+
+1. **Entry Mounting**: Vite loads `index.html` which executes `src/main.tsx`. This mounts the React VDOM inside `<QueryProvider>` and `<ThemeProvider>` contexts, booting the `<App />` component.
+2. **Session Restoration & Auth Guarding**: On app initialization, `App.tsx` checks if a refresh token exists in cookies. If present, it executes a silent token refresh (`auth.refresh()`) to restore the user session in `useAuthStore`.
+3. **Path Routing**: `App.tsx` evaluates route guards based on path and auth status:
+   - `/edit` requires authentication. Unauthenticated users are redirected to `/login`.
+   - `/login` is guarded; authenticated users are redirected to `/edit`.
+   - `/viewer` is accessible standalone for course playing.
+4. **Data Syncing via TanStack Query**: Entities (`course`, `lesson`, `slide`) are fetched using query hooks (`useCoursesQuery`, `useLessonsQuery`, `useSlidesQuery`). If the remote API server (`VITE_API_URL` inside `.env`) is online, it retrieves real records; otherwise, it handles network failure by printing a warning and falling back gracefully to static mock data (`MOCK_COURSES`, `MOCK_LESSONS`, `MOCK_SLIDES`).
+5. **State Bootstrapping & Canvas Sync**:
+   - In `<BuilderPage />`, slides are fetched via `useSlidesQuery`. The slides are deep-cloned into Zustand (`useBuilderStore`) to enable drag-and-drop coordinate changes without mutating the query client cache.
+   - Saving slides triggers `useSaveSlidesMutation`. If the API fails, it simulates latency and saves a secure local backup in the browser's `localStorage` (`previewer_slides_backup_{lessonId}`).
+   - In `<ViewerPage />`, slides are rendered from static data or from the query cache.
+6. **Canvas Rendering**: Individual elements are mapped via `CanvasElement.tsx` to domain-specific views in `entities/element/ui` (matching, sorting, crossword, swipe, sprint, memory card, hotspot) to build active layouts.
+7. **Action Dispatching & SDK Evaluation**: Interactions generate `ElementAction` blocks. The action runner evaluates triggers (e.g. `EVALUATE_ANSWER`) using `gameEngine` and `learningEngine` from `broker-core-sdk` to determine success results and spaced repetition intervals, feeding updates into UI alerts to pop open the `<CustomAlertDialog />` feedback modal.
 
 ### 3) Layer/Module Responsibilities
 
-| Layer or module | Owns | Must not own | Evidence |
-|-----------------|------|--------------|----------|
-| `src/app/` | Global stylesheet bootstrap (`index.css`), React VDOM initial mounts, app-wide context providers (`theme-provider.tsx`). | Page layouts, business rules, API requests, state managers. | `src/app/providers/theme-provider.tsx` |
-| `src/pages/` | Page layout orchestration, drag-and-drop/resize canvas handlers, sidebars editing controls, route switching. | Primitive UI assets, specific slide element game logic. | `src/pages/builder/ui/builder-page.tsx`, `src/pages/viewer/ui/viewer-page.tsx` |
-| `src/entities/` | Domain-specific components (`quiz-element.tsx`, `fill-blank-element.tsx`) that display a specific course item. | Canvas grid guides, sidebar slide reordering state, main page layouts. | `src/entities/element/index.ts` |
-| `src/shared/` | Base UI primitives (`button.tsx`, `card.tsx`), mock dataset seed files (`mock-slides.ts`), structural helpers (`utils.ts`). | Core builder page editing styles, slide element game views. | `src/shared/ui/button.tsx`, `src/shared/lib/utils.ts` |
+| Layer or module | Owns                                                                                                                                                                               | Must not own                                                           | Evidence                                                                       |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `src/app/`      | Global stylesheet bootstrap (`index.css`), React VDOM initial mounts, app-wide context providers (`theme-provider.tsx`, `query-provider.tsx`).                                     | Page layouts, business rules, API requests, state managers.            | `src/app/providers/theme-provider.tsx`, `src/app/providers/query-provider.tsx` |
+| `src/pages/`    | Page layout orchestration, drag-and-drop/resize canvas handlers, sidebars editing controls, route switching.                                                                       | Primitive UI assets, specific slide element game logic.                | `src/pages/builder/ui/builder-page.tsx`, `src/pages/viewer/ui/viewer-page.tsx` |
+| `src/entities/` | Domain-specific slices (`course`, `lesson`, `slide`, `element`) carrying domain React Query hooks (`queries.ts`) or display elements (`quiz-element.tsx`).                         | Canvas grid guides, sidebar slide reordering state, main page layouts. | `src/entities/element/index.ts`                                                |
+| `src/shared/`   | Base UI primitives (`button.tsx`, `card.tsx`), mock datasets (`mock-slides.ts`), low-level helpers (`utils.ts`), central auth (`shared/auth/`), REST client (`shared/api/api.ts`). | Core builder page editing styles, slide element game views.            | `src/shared/ui/button.tsx`, `src/shared/lib/utils.ts`                          |
 
 ### 4) Reused Patterns
 
-| Pattern | Where found | Why it exists |
-|---------|-------------|---------------|
-| **Zustand Central Store** | `src/pages/builder/model/use-builder-store.ts` | Serves as the single source of truth for the course editor, syncing sidebar inputs, canvas positions, slide CRUD, and active UI states. |
+| Pattern                       | Where found                                                                         | Why it exists                                                                                                                                                                                          |
+| ----------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Zustand Central Store**     | `src/pages/builder/model/use-builder-store.ts`                                      | Serves as the single source of truth for the course editor, syncing sidebar inputs, canvas positions, slide CRUD, and active UI states.                                                                |
 | **Command Pattern (Actions)** | `src/pages/builder/lib/use-action-runner.ts`, `src/pages/viewer/ui/viewer-page.tsx` | Represents user interactions (slide jumps, media plays, answer evaluations, visibility toggling) as serializable `ElementAction` objects that can be executed uniformly regardless of the active page. |
-| **Provider/Context Pattern** | `src/app/providers/theme-provider.tsx` | Distributes global styling themes (light, dark, sunset, ocean) down the React hierarchy so that deep nested child elements react instantly to configuration changes. |
+| **Provider/Context Pattern**  | `src/app/providers/theme-provider.tsx`                                              | Distributes global styling themes (light, dark, sunset, ocean) down the React hierarchy so that deep nested child elements react instantly to configuration changes.                                   |
 
 ### 5) Known Architectural Risks
 

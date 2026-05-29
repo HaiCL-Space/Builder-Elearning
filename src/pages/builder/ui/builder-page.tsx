@@ -16,8 +16,8 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
     isPending: isQueryPending,
     isError: isQueryError,
     error: queryError,
-  } = useSlidesQuery("course-demo")
-  const saveMutation = useSaveSlidesMutation("course-demo")
+  } = useSlidesQuery("lesson-demo")
+  const saveMutation = useSaveSlidesMutation("lesson-demo")
 
   const slides = useBuilderStore((state) => state.slides)
   const currentSlideIndex = useBuilderStore((state) => state.currentSlideIndex)

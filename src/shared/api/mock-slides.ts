@@ -1,4 +1,4 @@
-import { ACTION_TRIGGERS, ACTION_TYPES, type Slide } from "broker-core-sdk"
+import { ACTION_TRIGGERS, ACTION_TYPES, type Slide, type Course, type Lesson } from "broker-core-sdk"
 
 export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
@@ -6,8 +6,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-intro",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 1,
     config: { aspectRatio: "16:9", theme: "dark" },
     elements: [
@@ -103,8 +103,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-principles",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 2,
     config: { aspectRatio: "16:9", theme: "light" },
     elements: [
@@ -238,8 +238,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-finance",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 3,
     config: { aspectRatio: "16:9", theme: "sunset" },
     elements: [
@@ -375,8 +375,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-payments",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 4,
     config: { aspectRatio: "16:9", theme: "ocean" },
     elements: [
@@ -480,8 +480,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-subdivision",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 5,
     config: { aspectRatio: "16:9", theme: "neon" },
     elements: [
@@ -570,8 +570,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-brokerage",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 6,
     config: { aspectRatio: "16:9", theme: "classic" },
     elements: [
@@ -666,8 +666,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-recommendations",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 7,
     config: { aspectRatio: "16:9", theme: "dark" },
     elements: [
@@ -789,8 +789,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-video",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 8,
     config: { aspectRatio: "16:9", theme: "ocean" },
     elements: [
@@ -883,8 +883,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-memory",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 9,
     config: { aspectRatio: "16:9", theme: "light" },
     elements: [
@@ -976,8 +976,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-sprint",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 10,
     config: { aspectRatio: "16:9", theme: "sunset" },
     elements: [
@@ -1067,8 +1067,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-scramble",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 11,
     config: { aspectRatio: "16:9", theme: "neon" },
     elements: [
@@ -1157,8 +1157,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-crossword",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 12,
     config: { aspectRatio: "16:9", theme: "neon" },
     elements: [
@@ -1266,8 +1266,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-branching",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 13,
     config: { aspectRatio: "16:9", theme: "dark" },
     elements: [
@@ -1399,8 +1399,8 @@ export const MOCK_SLIDES: Slide[] = [
   // =========================================================================
   {
     id: "slide-bds-labelimage",
-    tenant_id: "tenant-demo",
-    course_id: "course-bds",
+    tenantId: "tenant-demo",
+    lessonId: "lesson-demo",
     order: 14,
     config: { aspectRatio: "16:9", theme: "sunset" },
     elements: [
@@ -1506,3 +1506,30 @@ export const MOCK_SLIDES: Slide[] = [
     ],
   },
 ]
+
+
+export const MOCK_COURSES: Course[] = [
+  {
+    id: "course-bds",
+    tenantId: "tenant-demo",
+    title: "Luật Kinh Doanh Bất Động Sản 2023",
+    description: "Đề cương bài học chuyên sâu về cột mốc hoàn thiện thể chế & chuyên nghiệp hóa thị trường",
+    status: "published",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
+];
+
+export const MOCK_LESSONS: Lesson[] = [
+  {
+    id: "lesson-demo",
+    tenantId: "tenant-demo",
+    courseId: "course-bds",
+    title: "Chương I: Quy định chung và năng lực chủ đầu tư",
+    description: "Khái niệm cốt lõi, nguyên tắc hoạt động và năng lực tài chính",
+    order: 1,
+    status: "published",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
+];

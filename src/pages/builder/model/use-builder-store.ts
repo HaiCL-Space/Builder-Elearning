@@ -313,8 +313,8 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     const { slides } = get()
     const nextSlide = {
       id: `slide-${uid()}`,
-      tenant_id: "tenant-demo",
-      course_id: "course-demo",
+      tenantId: "tenant-demo",
+      lessonId: "lesson-demo",
       order: slides.length + 1,
       elements: [],
       config: { aspectRatio: "16:9", theme: "light" as const },

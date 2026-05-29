@@ -34,7 +34,7 @@ export function ViewerPage() {
     isPending,
     isError,
     error,
-  } = useSlidesQuery("course-demo")
+  } = useSlidesQuery("lesson-demo")
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
 

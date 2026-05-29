@@ -12,19 +12,19 @@ import type { Slide } from "broker-core-sdk"
 export const slideKeys = {
   all: ["slides"] as const,
   lists: () => [...slideKeys.all, "list"] as const,
-  list: (courseId: string) => [...slideKeys.lists(), { courseId }] as const,
+  list: (lessonId: string) => [...slideKeys.lists(), { lessonId }] as const,
   detail: (id: string) => [...slideKeys.all, "detail", id] as const,
 }
 
 // Option builder for Slide Query - facilitates prefetching or reuse
-export const slideQueryOptions = (courseId: string = "course-demo") =>
+export const slideQueryOptions = (lessonId: string = "lesson-demo") =>
   queryOptions<Slide[], Error>({
-    queryKey: slideKeys.list(courseId),
+    queryKey: slideKeys.list(lessonId),
     queryFn: async (): Promise<Slide[]> => {
       try {
         // Attempt to fetch slides from the actual backend
         const response = await api.get<Slide[] | { data: Slide[] }>(
-          `/courses/${courseId}/slides`
+          `/lessons/${lessonId}/slides`
         )
         if (Array.isArray(response)) {
           return response
@@ -42,8 +42,10 @@ export const slideQueryOptions = (courseId: string = "course-demo") =>
           `[React Query] Failed to fetch slides from backend API, using local MOCK_SLIDES fallback. Reason:`,
           error instanceof Error ? error.message : error
         )
-        // Fallback gracefully to MOCK_SLIDES for standalone offline operation
-        return MOCK_SLIDES
+        // Fallback gracefully to MOCK_SLIDES filtered by lessonId for standalone offline operation
+        return MOCK_SLIDES.filter(
+          (slide) => slide.lessonId === lessonId || slide.lesson_id === lessonId
+        )
       }
     },
   })
@@ -52,36 +54,36 @@ export const slideQueryOptions = (courseId: string = "course-demo") =>
  * Type-safe query hook to retrieve slides.
  * Highly robust: falls back to MOCK_SLIDES on API failure so the app never crashes.
  */
-export function useSlidesQuery(courseId: string = "course-demo") {
-  return useQuery(slideQueryOptions(courseId))
+export function useSlidesQuery(lessonId: string = "lesson-demo") {
+  return useQuery(slideQueryOptions(lessonId))
 }
 
 /**
  * Type-safe mutation hook to save slides.
  * Includes simulated latency and offline fallback storage for standard builder flow.
  */
-export function useSaveSlidesMutation(courseId: string = "course-demo") {
+export function useSaveSlidesMutation(lessonId: string = "lesson-demo") {
   const queryClient = useQueryClient()
 
   return useMutation<boolean, Error, Slide[]>({
-    mutationKey: [...slideKeys.all, "save", courseId],
+    mutationKey: [...slideKeys.all, "save", lessonId],
     mutationFn: async (slides: Slide[]): Promise<boolean> => {
       try {
         // Attempt actual PUT request to save the design state
-        await api.put(`/courses/${courseId}/slides`, { slides })
+        await api.put(`/lessons/${lessonId}/slides`, { slides })
         return true
       } catch (error) {
         console.warn(
           `[React Query] Failed to save slides to backend API, falling back to local simulation. Reason:`,
           error instanceof Error ? error.message : error
         )
-        // Simulate network latency (500ms) for professional UX spinner feedback
+        // Simulate network latency (600ms) for professional UX spinner feedback
         await new Promise<void>((resolve) => setTimeout(resolve, 600))
 
         // Save to localStorage as a robust local backup
         if (typeof window !== "undefined") {
           localStorage.setItem(
-            `previewer_slides_backup_${courseId}`,
+            `previewer_slides_backup_${lessonId}`,
             JSON.stringify(slides)
           )
         }
@@ -91,7 +93,7 @@ export function useSaveSlidesMutation(courseId: string = "course-demo") {
     onSuccess: (isOnlineSuccess) => {
       // Invalidate query to trigger fresh synchronization in the cache
       queryClient.invalidateQueries({
-        queryKey: slideKeys.list(courseId),
+        queryKey: slideKeys.list(lessonId),
       })
       console.log(
         isOnlineSuccess
@@ -101,3 +103,4 @@ export function useSaveSlidesMutation(courseId: string = "course-demo") {
     },
   })
 }
+
