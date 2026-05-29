@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { BuilderPage } from "./pages/builder"
 import { ViewerPage } from "./pages/viewer"
 import { LoginPage } from "@/pages/login"
+import { HomePage } from "@/pages/home"
 import { auth } from "@/shared/auth"
 
 export function App() {
@@ -80,13 +81,17 @@ export function App() {
   let resolvedPath = pathname
 
   if (resolvedPath === "/") {
-    resolvedPath = "/edit"
+    resolvedPath = "/home"
   }
 
-  if (resolvedPath === "/edit" && !isLoggedIn) {
+  if (resolvedPath === "/home" && !isLoggedIn) {
     resolvedPath = "/login"
   } else if (resolvedPath === "/login" && isLoggedIn) {
-    resolvedPath = "/edit"
+    resolvedPath = "/home"
+  }
+
+  if (resolvedPath.startsWith("/edit") && !isLoggedIn) {
+    resolvedPath = "/login"
   }
 
   // If a guard redirects, update state and browser history synchronously during render.
@@ -104,10 +109,14 @@ export function App() {
   }
 
   if (resolvedPath === "/login") {
-    return <LoginPage onLoginSuccess={() => navigate("/edit")} />
+    return <LoginPage onLoginSuccess={() => navigate("/home")} />
   }
 
-  if (resolvedPath === "/edit") {
+  if (resolvedPath === "/home") {
+    return <HomePage onLogout={handleLogout} />
+  }
+
+  if (resolvedPath.startsWith("/edit")) {
     return <BuilderPage onLogout={handleLogout} />
   }
 

@@ -11,6 +11,7 @@ import {
   Search,
   X,
   LogOut,
+  ArrowLeft,
 } from "lucide-react"
 import { ELEMENT_TYPES } from "@/pages/builder/model/templates"
 import type { ElementCategory } from "@/pages/builder/model/types"
@@ -336,15 +337,27 @@ export function LeftSidebar({
             </span>
           </div>
         </div>
-        {onLogout && (
+        <div className="flex items-center gap-1">
           <button
-            onClick={onLogout}
-            className="group/btn rounded-lg p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-600"
-            title="Đăng xuất"
+            onClick={() => {
+              window.history.pushState(null, "", "/home")
+              window.dispatchEvent(new PopStateEvent("popstate"))
+            }}
+            className="group/btn rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-150 hover:text-slate-700"
+            title="Quay lại Dashboard"
           >
-            <LogOut className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4" />
           </button>
-        )}
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="group/btn rounded-lg p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-600"
+              title="Đăng xuất"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
     </aside>
   )

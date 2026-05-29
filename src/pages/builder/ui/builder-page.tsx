@@ -10,14 +10,17 @@ import { CustomAlertDialog } from "@/shared/ui/custom-alert-dialog"
 import { useSlidesQuery, useSaveSlidesMutation } from "@/entities/slide"
 
 export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
+  const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "")
+  const lessonId = params.get("lessonId") || "lesson-demo"
+
   // 1. Fetch slides using TanStack Query v5
   const {
     data: fetchedSlides,
     isPending: isQueryPending,
     isError: isQueryError,
     error: queryError,
-  } = useSlidesQuery("lesson-demo")
-  const saveMutation = useSaveSlidesMutation("lesson-demo")
+  } = useSlidesQuery(lessonId)
+  const saveMutation = useSaveSlidesMutation(lessonId)
 
   const slides = useBuilderStore((state) => state.slides)
   const currentSlideIndex = useBuilderStore((state) => state.currentSlideIndex)

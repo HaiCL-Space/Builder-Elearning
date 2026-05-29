@@ -28,13 +28,16 @@ function getInitiallyHiddenElements(slide: Slide) {
 }
 
 export function ViewerPage() {
+  const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "")
+  const lessonId = params.get("lessonId") || "lesson-demo"
+
   // 1. Fetch slides dynamically using React Query v5
   const {
     data: slides = MOCK_SLIDES,
     isPending,
     isError,
     error,
-  } = useSlidesQuery("lesson-demo")
+  } = useSlidesQuery(lessonId)
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
 
@@ -349,12 +352,23 @@ export function ViewerPage() {
     <div className="flex h-screen w-full flex-col overflow-hidden bg-slate-950 text-slate-50">
       <div className="border-b border-white/10 bg-slate-950/80 px-4 py-3 backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
-          <div>
-            <div className="text-[11px] font-semibold tracking-[0.22em] text-cyan-300 uppercase">
-              Viewer
-            </div>
-            <div className="text-sm text-slate-300">
-              Slide {currentSlide.order} / {slides.length}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => {
+                window.history.pushState(null, "", "/home")
+                window.dispatchEvent(new PopStateEvent("popstate"))
+              }}
+              className="cursor-pointer flex items-center gap-1 rounded-full border border-white/20 bg-slate-900 px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition shadow-sm"
+            >
+              ❮ Dashboard
+            </button>
+            <div>
+              <div className="text-[11px] font-semibold tracking-[0.22em] text-cyan-300 uppercase">
+                Viewer
+              </div>
+              <div className="text-sm text-slate-300">
+                Slide {currentSlide.order} / {slides.length}
+              </div>
             </div>
           </div>
 
