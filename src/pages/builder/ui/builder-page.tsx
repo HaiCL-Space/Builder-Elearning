@@ -153,6 +153,56 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
   }
 
   // Safety fallback if slides are still empty
+  if (slides.length === 0) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-100 font-sans">
+        {/* Background Decorative Glow */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+          <div className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-cyan-900/10 blur-[120px]" />
+          <div className="absolute top-[30%] -right-[30%] w-[90%] h-[90%] rounded-full bg-indigo-900/10 blur-[130px]" />
+        </div>
+
+        <div className="relative z-10 flex max-w-md flex-col items-center gap-5 rounded-3xl border border-white/10 bg-slate-900/50 p-8 text-center shadow-2xl backdrop-blur-md animate-fade-in">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/5 text-cyan-400">
+            <svg
+              className="h-7 w-7 text-cyan-400"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-lg font-black text-white leading-tight">Bài học chưa có Slide</h2>
+            <p className="mt-2 text-xs leading-relaxed text-slate-400">
+              Bài học này hiện đang hoàn toàn trống. Hãy bắt đầu bằng cách khởi tạo slide đầu tiên để thiết lập lộ trình giảng dạy và thiết kế các câu hỏi tương tác.
+            </p>
+          </div>
+          <div className="flex w-full gap-3 mt-2 border-t border-white/5 pt-4">
+            <button
+              onClick={() => {
+                window.history.pushState(null, "", "/home")
+                window.dispatchEvent(new PopStateEvent("popstate"))
+              }}
+              className="flex-1 rounded-xl border border-white/15 py-2.5 text-xs font-bold text-slate-300 hover:bg-white/5 transition cursor-pointer select-none"
+            >
+              Quay lại
+            </button>
+            <button
+              onClick={() => handleAddSlide(lessonId)}
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 py-2.5 text-xs font-black text-slate-950 shadow-md shadow-cyan-500/10 hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0 transition cursor-pointer select-none"
+            >
+              Tạo Slide đầu tiên
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (!currentSlide) return null
 
   const handleNext = () =>
@@ -169,7 +219,7 @@ export function SlideBuilder({ onLogout }: { onLogout?: () => void } = {}) {
         slides={slides}
         currentSlideIndex={currentSlideIndex}
         onSelectSlide={handleSelectSlide}
-        onAddSlide={handleAddSlide}
+        onAddSlide={() => handleAddSlide(lessonId)}
         onDeleteSlide={handleDeleteSlide}
         onDuplicateSlide={handleDuplicateSlide}
         onMoveSlide={handleMoveSlide}

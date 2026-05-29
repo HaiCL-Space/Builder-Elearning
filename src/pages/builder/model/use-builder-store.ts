@@ -121,7 +121,7 @@ interface BuilderState {
   handleAddElement: (type: string) => void
   handleDeleteElement: (id: string) => void
   handleSelectSlide: (index: number) => void
-  handleAddSlide: () => void
+  handleAddSlide: (lessonId?: string) => void
   handleDeleteSlide: (index: number) => void
   handleDuplicateSlide: (index: number) => void
   handleMoveSlide: (index: number, direction: "up" | "down") => void
@@ -309,12 +309,12 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     })
   },
 
-  handleAddSlide: () => {
+  handleAddSlide: (lessonId?: string) => {
     const { slides } = get()
     const nextSlide = {
       id: `slide-${uid()}`,
       tenantId: "tenant-demo",
-      lessonId: "lesson-demo",
+      lessonId: lessonId || "lesson-demo",
       order: slides.length + 1,
       elements: [],
       config: { aspectRatio: "16:9", theme: "light" as const },
