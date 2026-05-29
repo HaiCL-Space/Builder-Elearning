@@ -21,15 +21,18 @@
      │         ──► [src/app/providers/theme-provider.tsx] (Global theme context)
      ▼
 [src/App.tsx] (Custom router with session restore & auth guards)
-     ├───► "/viewer" ──► [src/pages/viewer/ui/viewer-page.tsx] (Slide player mode)
      ├───► "/login"  ──► [src/pages/login/ui/login-page.tsx] (Auth portal)
-     └───► "/edit"   ──► [src/pages/builder/ui/builder-page.tsx] (Editor mode)
+     ├───► "/home"   ──► [src/pages/home/ui/HomePage.tsx] (Course/Lesson dashboard)
+     │                     │
+     │                     ├───► "Thiết kế" ────► "/edit?lessonId=..." ──► [src/pages/builder/ui/builder-page.tsx] (Editor mode)
+     │                     └───► "Trải nghiệm" ──► "/viewer?lessonId=..." ─► [src/pages/viewer/ui/viewer-page.tsx] (Slide player mode)
+     └───► "/viewer" ──► [src/pages/viewer/ui/viewer-page.tsx] (Direct viewer fallback)
                              │
                              ▼ (loads via React Query)
                          [src/entities/slide/model/queries.ts] (useSlidesQuery)
                              │   ├──► Online: REST API (VITE_API_URL)
                              │   └──► Offline: MOCK_SLIDES Fallback
-                             ▼ (state cloned for editing)
+                             ▼ (state cloned for editing in Builder mode)
                          [src/pages/builder/model/use-builder-store.ts] (Zustand)
                              │
                              ▼ (interactive canvas element wrapper)
@@ -47,12 +50,14 @@
 1. **Entry Mounting**: Vite loads `index.html` which executes `src/main.tsx`. This mounts the React VDOM inside `<QueryProvider>` and `<ThemeProvider>` contexts, booting the `<App />` component.
 2. **Session Restoration & Auth Guarding**: On app initialization, `App.tsx` checks if a refresh token exists in cookies. If present, it executes a silent token refresh (`auth.refresh()`) to restore the user session in `useAuthStore`.
 3. **Path Routing**: `App.tsx` evaluates route guards based on path and auth status:
-   - `/edit` requires authentication. Unauthenticated users are redirected to `/login`.
-   - `/login` is guarded; authenticated users are redirected to `/edit`.
-   - `/viewer` is accessible standalone for course playing.
+   - `/home` and `/edit` require authentication. Unauthenticated users are redirected to `/login`.
+   - `/login` is guarded; authenticated users are redirected to `/home`.
+   - `/viewer` is accessible standalone or for direct course playing via `lessonId`.
+   - `/` redirects directly to `/home`.
 4. **Data Syncing via TanStack Query**: Entities (`course`, `lesson`, `slide`) are fetched using query hooks (`useCoursesQuery`, `useLessonsQuery`, `useSlidesQuery`). If the remote API server (`VITE_API_URL` inside `.env`) is online, it retrieves real records; otherwise, it handles network failure by printing a warning and falling back gracefully to static mock data (`MOCK_COURSES`, `MOCK_LESSONS`, `MOCK_SLIDES`).
 5. **State Bootstrapping & Canvas Sync**:
-   - In `<BuilderPage />`, slides are fetched via `useSlidesQuery`. The slides are deep-cloned into Zustand (`useBuilderStore`) to enable drag-and-drop coordinate changes without mutating the query client cache.
+   - In `<HomePage />`, courses are loaded via `useCoursesQuery` and lessons are loaded via `useLessonsQuery(courseId)`. Editing courses uses mutation hooks (`useCreateCourseMutation`, `useUpdateCourseMutation`, `useDeleteCourseMutation`).
+   - In `<BuilderPage />`, slides are fetched via `useSlidesQuery(lessonId)`. The slides are deep-cloned into Zustand (`useBuilderStore`) to enable drag-and-drop coordinate changes without mutating the query client cache.
    - Saving slides triggers `useSaveSlidesMutation`. If the API fails, it simulates latency and saves a secure local backup in the browser's `localStorage` (`previewer_slides_backup_{lessonId}`).
    - In `<ViewerPage />`, slides are rendered from static data or from the query cache.
 6. **Canvas Rendering**: Individual elements are mapped via `CanvasElement.tsx` to domain-specific views in `entities/element/ui` (matching, sorting, crossword, swipe, sprint, memory card, hotspot) to build active layouts.
@@ -63,8 +68,8 @@
 | Layer or module | Owns                                                                                                                                                                               | Must not own                                                           | Evidence                                                                       |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | `src/app/`      | Global stylesheet bootstrap (`index.css`), React VDOM initial mounts, app-wide context providers (`theme-provider.tsx`, `query-provider.tsx`).                                     | Page layouts, business rules, API requests, state managers.            | `src/app/providers/theme-provider.tsx`, `src/app/providers/query-provider.tsx` |
-| `src/pages/`    | Page layout orchestration, drag-and-drop/resize canvas handlers, sidebars editing controls, route switching.                                                                       | Primitive UI assets, specific slide element game logic.                | `src/pages/builder/ui/builder-page.tsx`, `src/pages/viewer/ui/viewer-page.tsx` |
-| `src/entities/` | Domain-specific slices (`course`, `lesson`, `slide`, `element`) carrying domain React Query hooks (`queries.ts`) or display elements (`quiz-element.tsx`).                         | Canvas grid guides, sidebar slide reordering state, main page layouts. | `src/entities/element/index.ts`                                                |
+| `src/pages/`    | Page layout orchestration (course list dashboard `/home`, builder canvas `/edit`, slideshow player `/viewer`), drag-and-drop/resize canvas handlers, sidebars editing controls, route switching. | Primitive UI assets, specific slide element game logic.                | `src/pages/home/ui/HomePage.tsx`, `src/pages/builder/ui/builder-page.tsx`, `src/pages/viewer/ui/viewer-page.tsx` |
+| `src/entities/` | Domain-specific slices (`course`, `lesson`, `slide`, `element`) carrying domain React Query hooks (`queries.ts`) or display elements (`quiz-element.tsx`).                         | Canvas grid guides, sidebar slide reordering state, main page layouts. | `src/entities/element/index.ts`, `src/entities/course/model/queries.ts`        |
 | `src/shared/`   | Base UI primitives (`button.tsx`, `card.tsx`), mock datasets (`mock-slides.ts`), low-level helpers (`utils.ts`), central auth (`shared/auth/`), REST client (`shared/api/api.ts`). | Core builder page editing styles, slide element game views.            | `src/shared/ui/button.tsx`, `src/shared/lib/utils.ts`                          |
 
 ### 4) Reused Patterns

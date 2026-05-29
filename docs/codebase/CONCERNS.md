@@ -39,9 +39,11 @@ List the most important debt items only.
 
 | Area | Why fragile | Churn signal | Safe change strategy |
 |------|-------------|-------------|----------------------|
-| `src/pages/builder/ui/canvas/CanvasElement.tsx` | Controls canvas coordinates, boundary resize handles, hotspot maps, and isInteractive conditions. | **10 changes in git history** | Encapsulate helper components (like `ResizeHandles`, `DeleteButton`) into isolated files; introduce strict prop-types. |
-| `src/shared/api/mock-slides.ts` | Stores the entire educational slide seed configuration for Vietnam Real Estate Law. | **9 changes in git history** | Keep seed data structured as a static JSON array; perform typechecks on schemas against `broker-core-sdk`. |
-| `src/entities/element/ui/element-preview.tsx` | Serves as the central dispatcher routing components to specific interactive widgets. | **8 changes in git history** | Maintain strict switch-case maps; ensure all child elements implement unified Props interface. |
+| `src/shared/api/mock-slides.ts` | Stores the entire educational slide seed configuration for Vietnam Real Estate Law. | **12 changes in git history** | Keep seed data structured as a static JSON array; perform typechecks on schemas against `broker-core-sdk`. |
+| `src/pages/builder/ui/canvas/CanvasElement.tsx` | Controls canvas coordinates, boundary resize handles, hotspot maps, and isInteractive conditions. | **12 changes in git history** | Encapsulate helper components (like `ResizeHandles`, `DeleteButton`) into isolated files; introduce strict prop-types. |
+| `src/pages/builder/ui/builder-page.tsx` | Entry orchestrator component for the builder, mounting sidebars, canvas, and mutations. | **10 changes in git history** | Modularize section panels and control layouts; maintain clean state synchronization. |
+| `src/pages/builder/model/use-builder-store.ts` | Manages complex Zustand store mutations, dragging states, elements resizing, and interactive actions. | **9 changes in git history** | Document all state mutations clearly; enforce immutable update patterns. |
+| `src/entities/element/ui/element-preview.tsx` | Serves as the central dispatcher routing components to specific interactive widgets. | **9 changes in git history** | Maintain strict switch-case maps; ensure all child elements implement unified Props interface. |
 
 ### 6) `[ASK USER]` Questions
 
@@ -53,3 +55,4 @@ List the most important debt items only.
 - Clean type-checking of `npm run typecheck`.
 - Zero active references or definitions for `SlidePreviewApp` or duplicate `uid()`.
 - Successful verification of config paths inside Prettier environment.
+- Output from modern codebase scan in [codebase-scan.txt](file:///d:/Dev/Work/previewer/docs/codebase/.codebase-scan.txt).
