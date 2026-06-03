@@ -1,58 +1,60 @@
-# Codebase Concerns
+# Các Vấn đề và Rủi ro Kỹ thuật (Codebase Concerns)
 
-## Core Sections (Required)
+## Các phần cốt lõi (Bắt buộc)
 
-### 1) Top Risks (Prioritized)
+### 1) Rủi ro Hàng đầu (Top Risks - Theo thứ tự ưu tiên)
 
-| Severity | Concern | Evidence | Impact | Suggested action |
-|----------|---------|----------|--------|------------------|
-| **High** | **Zero Automated Testing Coverage** | No testing package dependencies or scripts inside `package.json` | Unchecked regression bugs when modifying complex state handlers or coordinate dragging mathematics. | User has noted that testing is not a project requirement, so this will remain zero-coverage. |
-| **Medium** | **Cross-Slice Layer Circular Coupling (FSD Violation)** | `ViewerPage` (in pages layer) imports `CanvasElement` directly from `src/pages/builder/ui/canvas/CanvasElement` | Violates FSD architectural boundaries; makes page layer components tightly coupled to independent slice internals. | Extract non-editing presentation logic of `CanvasElement` into a shared component inside `entities/element` or `shared/ui`. |
-| **Medium** | **Duplicated Action Dispatching Logic** | Redundant implementations of `ElementAction` handlers in `useActionRunner.ts` and `viewer-page.tsx` | Highly fragile system; adding or modifying a course interaction type requires editing multiple different files. | Consolidate action execution logic into a unified custom hook (e.g. `useElementActionRunner`) in `entities/element` or `shared/lib`. |
-| **Low** | **Synchronous Deep-Cloning Block** | Synchronous `JSON.parse(JSON.stringify(MOCK_SLIDES))` inside Zustand store initialization. | High memory footprint and blocking operation on the main UI thread during boot, causing frame drops on large decks. | Offload seed bootstrap to an asynchronous action or replace with a non-mutative structure using shallow object copies. |
+| Mức độ | Vấn đề | Minh chứng | Tác động | Giải pháp đề xuất |
+|---|---|---|---|---|
+| **Cao** | **Không có kiểm thử tự động (Zero Automated Testing Coverage)** | Không tồn tại bất kỳ gói thư viện kiểm thử tự động hoặc lệnh chạy test nào trong `package.json`. | Dễ phát sinh lỗi hồi quy (regression bugs) khi sửa đổi các hàm xử lý trạng thái store phức tạp hoặc các công thức tính toán tọa độ kéo thả trên canvas. | Khách hàng đã chỉ thị kiểm thử tự động không bắt buộc cho dự án này, do đó vấn đề này tạm thời giữ nguyên. |
+| **Trung bình** | **Vi phạm ranh giới phân lớp kiến trúc FSD (Circular Coupling)** | `ViewerPage` (nằm trong lớp `pages`) import trực tiếp component `CanvasElement` từ đường dẫn `src/pages/builder/ui/canvas/CanvasElement`. | Vi phạm nghiêm trọng quy tắc độc lập và một chiều của kiến trúc Feature-Sliced Design (FSD), làm cho lớp trang trình chiếu bị phụ thuộc chặt chẽ vào các cấu trúc nội bộ của trang thiết kế. | Tách logic hiển thị thuần túy của `CanvasElement` thành component dùng chung đặt tại `entities/element` hoặc `shared/ui`. |
+| **Trung bình** | **Trùng lặp Logic Xử lý Action (Duplicated Action Dispatching)** | Logic thực thi tương tác `ElementAction` đang được viết lặp lại tại `useActionRunner.ts` và `viewer-page.tsx`. | Hệ thống trở nên mỏng manh và dễ phát sinh lỗi đồng bộ; khi thêm mới hoặc sửa đổi một loại tương tác tương tác, lập trình viên buộc phải cập nhật thủ công nhiều file khác nhau. | Hợp nhất logic thực thi action vào một custom hook duy nhất (ví dụ: `useElementActionRunner`) đặt ở tầng `entities/element` hoặc `shared/lib`. |
+| **Thấp** | **Xử lý Clone dữ liệu đồng bộ gây chặn luồng UI (Synchronous Deep-Cloning)** | Thao tác đồng bộ deep-clone nặng bằng lệnh `JSON.parse(JSON.stringify(MOCK_SLIDES))` khi khởi tạo Zustand store. | Tiêu tốn nhiều bộ nhớ RAM và làm chặn (blocking) luồng UI chính của trình duyệt trong quá trình khởi động ứng dụng, dễ gây giật lag trên các thiết bị cấu hình yếu khi tải các bài giảng dung lượng lớn. | Chuyển việc nạp dữ liệu mồi sang một action bất đồng bộ hoặc thay thế bằng cơ chế cập nhật không đột biến (non-mutative) sử dụng shallow copy. |
 
-### 2) Technical Debt
+### 2) Nợ Kỹ thuật (Technical Debt)
 
-List the most important debt items only.
+Dưới đây là các khoản nợ kỹ thuật quan trọng nhất của dự án:
 
-| Debt item | Why it exists | Where | Risk if ignored | Suggested fix |
-|-----------|---------------|-------|-----------------|---------------|
-| **Resolved: Dead SlidePreview Component** | Purged in recent cleanup session | `src/entities/slide` | *No longer a risk* (deleted to clear 435 lines of duplicate/dead code). | Cleanup complete. Export references removed. |
-| **Resolved: Tailwind Stylesheet Path Mismatch** | realigned configs in recent cleanup session | `components.json`, `.prettierrc` | *No longer a risk* (successfully pointed to `src/app/styles/index.css`). | Path references aligned. Prettier Tailwind sorting fully operational. |
-| **Resolved: Unused Duplicated `uid()` Helper** | Purged in recent cleanup session | `src/shared/lib/builder-utils.ts` | *No longer a risk* (consolidated to `src/shared/lib/utils.ts`). | Removed dead function definition. |
+| Khoản nợ | Nguyên nhân tồn tại | Vị trí ảnh hưởng | Rủi ro nếu bỏ qua | Giải pháp đề xuất/Đã xử lý |
+|---|---|---|---|---|
+| **Đã giải quyết: Component SlidePreview bị thừa (Dead Code)** | Được loại bỏ hoàn toàn trong đợt dọn dẹp mã nguồn gần đây. | `src/entities/slide` | *Không còn rủi ro* (Đã xóa để giải phóng hơn 430 dòng code trùng lặp/thừa). | Dọn dẹp hoàn tất. Đã xóa các lệnh export liên quan. |
+| **Đã giải quyết: Lệch đường dẫn Stylesheet của Tailwind** | Đã căn chỉnh cấu hình đồng nhất trong đợt dọn dẹp gần đây. | `components.json`, `.prettierrc` | *Không còn rủi ro* (Đã trỏ chính xác về tệp stylesheet thực tế `src/app/styles/index.css`). | Đã đồng bộ cấu hình. Cơ chế tự động sắp xếp class Tailwind của Prettier hoạt động tốt. |
+| **Đã giải quyết: Hàm tiện ích `uid()` bị trùng lặp** | Được loại bỏ hoàn toàn trong đợt dọn dẹp mã nguồn gần đây. | `src/shared/lib/builder-utils.ts` | *Không còn rủi ro* (Đã hợp nhất và chỉ sử dụng một hàm `uid()` duy nhất định nghĩa tại `src/shared/lib/utils.ts`). | Đã xóa định nghĩa hàm thừa và cập nhật các import liên quan. |
 
-### 3) Security Concerns
+### 3) Rủi ro về Bảo mật (Security Concerns)
 
-| Risk | OWASP category (if applicable) | Evidence | Current mitigation | Gap |
-|------|--------------------------------|----------|--------------------|-----|
-| **Client-Side Game Validation Bypass** | Client-Side Security Controls | gameEngine and learningEngine are executed client-side in the browser. | Low risk because application currently operates as a presentation demo. | Players can modify javascript state in browser dev tools to bypass spaced repetition and answer checks. |
-| **Refresh Token Stored in Non-HttpOnly Cookie** | Broken Authentication / Sensitive Data Exposure | Cookie is written in client-side script using `document.cookie` in `auth.ts`. | Access token is stored strictly in memory Zustand state (`useAuthStore`). | The refresh token can be read by malicious client-side scripts in the event of an XSS vulnerability, as Javascript-set cookies cannot carry the `HttpOnly` flag. |
+| Rủi ro bảo mật | Phân loại OWASP | Minh chứng | Giải pháp giảm thiểu hiện tại | Điểm hạn chế (Gap) |
+|---|---|---|---|---|
+| **Người dùng có thể vượt qua kiểm tra kết quả trò chơi** | Client-Side Security Controls | Toàn bộ logic `gameEngine` và `learningEngine` đều chạy trực tiếp trên trình duyệt của người dùng. | Rủi ro thấp vì hiện tại ứng dụng hoạt động dưới dạng bản demo trình diễn học tập tĩnh. | Học viên am hiểu kỹ thuật có thể mở F12 Console để can thiệp biến trạng thái JavaScript nhằm vượt qua các bài kiểm tra hoặc đánh giá. |
+| **Refresh Token lưu trữ ở Cookie không có cờ HttpOnly** | Broken Authentication / Sensitive Data Exposure | Cookie refresh token được ghi từ mã nguồn phía client sử dụng lệnh `document.cookie` tại `auth.ts`. | Access token được lưu trữ nghiêm ngặt trong bộ nhớ tạm thời Zustand store (`useAuthStore`). | Nếu ứng dụng gặp lỗ hổng XSS, kẻ tấn công có thể đọc cookie này bằng mã độc chạy ở client do cookie do JavaScript tạo không thể mang cờ `HttpOnly`. |
 
-### 4) Performance and Scaling Concerns
+### 4) Vấn đề về Hiệu năng và Khả năng Mở rộng (Performance and Scaling Concerns)
 
-| Concern | Evidence | Current symptom | Scaling risk | Suggested improvement |
-|---------|----------|-----------------|-------------|-----------------------|
-| **Monolithic Mock Data File** | `mock-slides.ts` is 34.9KB and over 900 lines of hardcoded code. | Large file size; difficult for developers to review or modify. | Adding slides or rich media files will cause file to grow excessively, slowing down IDE compile times. | Partition deck sections into separate static JSON documents and fetch them dynamically. |
-| **Dynamic Re-renders on Store Subscriptions** | Zustand store holds both state and layout coordinate setters. | Changing coordinate positions during element dragging triggers global re-renders. | Dragging items on complex slides with dozens of elements will cause interface stutter and lagging drag overlays. | Use target selectors (`useBuilderStore(state => state.draggingId)`) to scope subscription scopes. |
+| Vấn đề hiệu năng | Minh chứng | Biểu hiện hiện tại | Rủi ro khi mở rộng | Giải pháp cải tiến |
+|---|---|---|---|---|
+| **Tệp dữ liệu Mock tĩnh quá lớn (Monolithic Mock Data)** | Tệp `mock-slides.ts` có dung lượng tới **47.3KB** và chứa hơn 1100 dòng code dữ liệu tĩnh viết cứng. | Kích thước file lớn gây khó khăn cho lập trình viên khi cần đọc, chỉnh sửa hoặc bảo trì nội dung bài giảng. | Khi thêm nhiều bài học mới hoặc chèn dữ liệu media phong phú, tệp tin này sẽ phình to quá mức gây chậm quá trình biên dịch và khởi chạy IDE. | Phân tách nội dung bài học thành các tệp JSON tĩnh riêng biệt và thực hiện tải động (dynamic fetching) khi cần thiết. |
+| **Re-render liên tục khi cập nhật Zustand store** | Zustand store lưu trữ cả dữ liệu trạng thái slide lẫn các hàm cập nhật tọa độ kéo thả phần tử. | Việc thay đổi tọa độ kéo thả liên tục kích hoạt re-render diện rộng toàn bộ canvas. | Kéo thả phần tử trên các slide chứa hàng chục widget phức tạp sẽ gây ra hiện tượng giật lag khung hình và phản hồi UI bị chậm trễ. | Áp dụng cơ chế lắng nghe có chọn lọc (Zustand selectors, ví dụ: `useBuilderStore(state => state.draggingId)`) để giới hạn phạm vi re-render. |
 
-### 5) Fragile/High-Churn Areas
+### 5) Các Vùng Code Dễ Lỗi và Có Tần Suất Thay Đổi Cao (Fragile/High-Churn Areas)
 
-| Area | Why fragile | Churn signal | Safe change strategy |
-|------|-------------|-------------|----------------------|
-| `src/shared/api/mock-slides.ts` | Stores the entire educational slide seed configuration for Vietnam Real Estate Law. | **12 changes in git history** | Keep seed data structured as a static JSON array; perform typechecks on schemas against `broker-core-sdk`. |
-| `src/pages/builder/ui/canvas/CanvasElement.tsx` | Controls canvas coordinates, boundary resize handles, hotspot maps, and isInteractive conditions. | **12 changes in git history** | Encapsulate helper components (like `ResizeHandles`, `DeleteButton`) into isolated files; introduce strict prop-types. |
-| `src/pages/builder/ui/builder-page.tsx` | Entry orchestrator component for the builder, mounting sidebars, canvas, and mutations. | **10 changes in git history** | Modularize section panels and control layouts; maintain clean state synchronization. |
-| `src/pages/builder/model/use-builder-store.ts` | Manages complex Zustand store mutations, dragging states, elements resizing, and interactive actions. | **9 changes in git history** | Document all state mutations clearly; enforce immutable update patterns. |
-| `src/entities/element/ui/element-preview.tsx` | Serves as the central dispatcher routing components to specific interactive widgets. | **9 changes in git history** | Maintain strict switch-case maps; ensure all child elements implement unified Props interface. |
+Dựa trên dữ liệu git history thu thập mới nhất, dưới đây là các tệp nguồn có tần suất thay đổi lớn nhất trong vòng 90 ngày qua:
 
-### 6) `[ASK USER]` Questions
+| Tệp tin nguồn | Lý do dễ lỗi / thay đổi nhiều | Tần suất (Git commit) | Chiến lược can thiệp an toàn |
+|---|---|---|---|
+| `src/shared/api/mock-slides.ts` | Chứa toàn bộ dữ liệu bài học mẫu phục vụ demo khóa học Luật Kinh doanh Bất động sản Việt Nam. | **12 lần thay đổi** | Giữ cấu trúc dữ liệu dưới dạng JSON tĩnh rõ ràng; thực hiện chạy typecheck đối chiếu kiểu dữ liệu với `broker-core-sdk`. |
+| `src/pages/builder/ui/canvas/CanvasElement.tsx` | Điều khiển tọa độ canvas thiết kế, các điểm mốc thay đổi kích thước, bản đồ vùng hotspot và trạng thái tương tác. | **12 lần thay đổi** | Tách nhỏ các component con bổ trợ (như `ResizeHandles`, `DeleteButton`) ra các tệp riêng biệt; khai báo kiểu prop-types chặt chẽ. |
+| `src/pages/builder/ui/builder-page.tsx` | Component đóng vai trò điều phối chính cho trang thiết kế, quản lý các sidebar, canvas và các mutation lưu dữ liệu. | **11 lần thay đổi** | Module hóa các phân vùng giao diện và bảng điều khiển; đảm bảo đồng bộ hóa trạng thái an toàn. |
+| `src/pages/builder/model/use-builder-store.ts` | Quản lý các mutation trạng thái phức tạp trong Zustand store, từ tọa độ dragging, resize đến CRUD slide. | **10 lần thay đổi** | Ghi tài liệu giải thích rõ ràng cho mọi hành động thay đổi trạng thái; áp dụng mô hình cập nhật không đột biến (immutable updates). |
+| `src/entities/element/ui/element-preview.tsx` | Bộ điều phối trung tâm để định tuyến hiển thị các widget tương tác nghiệp vụ tương ứng. | **9 lần thay đổi** | Đảm bảo cấu trúc switch-case tường minh; yêu cầu mọi widget con tuân thủ một chuẩn interface Props thống nhất. |
 
-1. [ASK USER] Should we extract `CanvasElement` layout and view logic from the `pages/builder` slice into the shared `entities/element` layer to fully resolve the circular FSD layer coupling risk?
-2. [ASK USER] Would you like us to extract a unified `useElementActionRunner` hook to consolidate duplicated action dispatchers in `useActionRunner.ts` and `viewer-page.tsx`?
+### 6) Các câu hỏi cần làm rõ với người dùng `[ASK USER]`
 
-### 7) Evidence
+1. **[ASK USER]** Chúng ta có nên tách logic hiển thị và bố cục của `CanvasElement` ra khỏi slice `pages/builder` đưa vào tầng dùng chung `entities/element` để giải quyết triệt để rủi ro liên kết vòng (circular coupling) của kiến trúc FSD không?
+2. **[ASK USER]** Bạn có muốn chúng tôi tách một custom hook chung `useElementActionRunner` để hợp nhất các bộ xử lý gửi nhận action đang bị trùng lặp trong `useActionRunner.ts` và `viewer-page.tsx` không?
 
-- Clean type-checking of `npm run typecheck`.
-- Zero active references or definitions for `SlidePreviewApp` or duplicate `uid()`.
-- Successful verification of config paths inside Prettier environment.
-- Output from modern codebase scan in [codebase-scan.txt](file:///d:/Dev/Work/previewer/docs/codebase/.codebase-scan.txt).
+### 7) Minh chứng (Evidence)
+
+- Lệnh kiểm tra kiểu dữ liệu `npm run typecheck` thành công hoàn toàn.
+- Không còn bất kỳ khai báo hay tham chiếu nào tới component đã xóa `SlidePreviewApp` hay hàm tiện ích trùng lặp `uid()`.
+- Xác nhận các đường dẫn stylesheet của Tailwind hoạt động chính xác trong cấu hình định dạng Prettier.
+- Kết quả quét cấu trúc codebase được cập nhật mới nhất tại [codebase-scan.txt](file:///d:/Dev/Work/previewer/docs/codebase/.codebase-scan.txt).

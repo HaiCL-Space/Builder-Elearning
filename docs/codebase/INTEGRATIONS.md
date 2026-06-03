@@ -1,47 +1,47 @@
-# External Integrations
+# Tích hợp Hệ thống Bên ngoài (External Integrations)
 
-## Core Sections (Required)
+## Các phần cốt lõi (Bắt buộc)
 
-### 1) Integration Inventory
+### 1) Danh mục Tích hợp (Integration Inventory)
 
-| System | Type (API/DB/Queue/etc) | Purpose | Auth model | Criticality | Evidence |
-|--------|---------------------------|---------|------------|-------------|----------|
-| REST API Backend | **REST API Connection** | Manages authentication, courses catalog, lessons lists, and slide layouts | Stateless JWT Token (Access token in memory; Refresh token in Cookie) | **High** | `src/shared/api/api.ts`, `.env` |
-| `broker-core-sdk` | **Local NPM Dependency** | Provides unified TypeScript schemas and core validation/spaced-repetition learning engines. | None (runs fully locally in the browser). | **High** | `package.json`, `src/pages/builder/lib/use-action-runner.ts` |
-| `Zustand` | **In-memory Client Store** | Manages current slide deck modifications, canvas item layout coordinates, slide order arrays, and user interaction alerts. | None (runs in-memory client-side). | **High** | `package.json`, `src/pages/builder/model/use-builder-store.ts`, `src/shared/auth/auth-store.ts` |
+| Hệ thống | Loại tích hợp | Mục đích | Mô hình xác thực | Mức độ quan trọng | Minh chứng |
+|---|---|---|---|---|---|
+| REST API Backend | **Kết nối REST API** | Quản lý xác thực, danh mục khóa học, bài giảng và bố cục các slide | Token JWT không trạng thái (Access token trong bộ nhớ store; Refresh token lưu trong Cookie) | **Cao** | `src/shared/api/api.ts`, `.env` |
+| `broker-core-sdk` | **Thư viện cài đặt cục bộ (NPM)** | Cung cấp các định nghĩa kiểu dữ liệu (Schemas) TypeScript dùng chung và các động cơ xác thực kết quả học tập/chu kỳ lặp lại ngắt quãng | Không có (chạy hoàn toàn cục bộ trên trình duyệt client) | **Cao** | `package.json`, `src/pages/builder/lib/use-action-runner.ts` |
+| `Zustand` | **Bộ nhớ lưu trữ Client (In-memory Store)** | Quản lý các sửa đổi của slide hiện tại, tọa độ canvas thiết kế, danh sách slide và các popup cảnh báo tương tác | Không có (chạy trực tiếp trên RAM của trình duyệt client) | **Cao** | `package.json`, `src/pages/builder/model/use-builder-store.ts`, `src/shared/auth/auth-store.ts` |
 
-### 2) Data Stores
+### 2) Các Kho lưu trữ Dữ liệu (Data Stores)
 
-| Store | Role | Access layer | Key risk | Evidence |
-|-------|------|--------------|----------|----------|
-| Zustand State Store | Holds active slide deck edits (`useBuilderStore`) and user tokens/profile (`useAuthStore`) in memory. | `src/pages/builder/model/use-builder-store.ts`, `src/shared/auth/auth-store.ts` | State size could degrade performance; page refresh wipes unsaved modifications if offline backup fails. | `package.json` |
-| Browser Local Storage | Stores local slide backups under key `previewer_slides_backup_${lessonId}` when the REST API fails to save layouts. | `src/entities/slide/model/queries.ts` | Size limits (typically 5MB); potential storage corruption or manual clearing by the user. | `queries.ts:L85` |
-| Browser Cookies | Stores the session refresh token (`refreshToken`) for automatic silent REST session restoration on boot. | `src/shared/auth/auth.ts` | Cookie expiration or clearing logs out the user; CSRF risks if SameSite rules are ignored (mitigated by Lax/Strict). | `auth.ts:L30` |
-| Browser HTML5 Audio | System audio playback for interactive game success/failure indicators. | `src/pages/builder/lib/use-action-runner.ts` | Browser autoplay blocking policies may reject media plays before user clicks. | `use-action-runner.ts` |
+| Kho lưu trữ | Vai trò | Tầng truy cập | Rủi ro chính | Minh chứng |
+|---|---|---|---|---|
+| Zustand State Store | Duy trì trạng thái sửa đổi slide hiện tại (`useBuilderStore`) và thông tin đăng nhập/profile người dùng (`useAuthStore`) trong bộ nhớ RAM tạm thời. | `src/pages/builder/model/use-builder-store.ts`, `src/shared/auth/auth-store.ts` | Dung lượng dữ liệu lớn có thể gây giật màn hình; F5 trình duyệt sẽ xóa sạch dữ liệu chưa lưu nếu cơ chế sao lưu ngoại tuyến gặp lỗi. | `package.json` |
+| Trình duyệt Local Storage | Lưu trữ bản sao lưu slide ngoại tuyến dưới khóa `previewer_slides_backup_${lessonId}` khi REST API gặp lỗi không lưu được slide. | `src/entities/slide/model/queries.ts` | Giới hạn dung lượng (thông thường là 5MB); nguy cơ dữ liệu bị hỏng hoặc người dùng xóa sạch cache trình duyệt. | `queries.ts:L85` |
+| Cookies của Trình duyệt | Lưu trữ refresh token (`refreshToken`) dùng để tự động thiết lập lại phiên làm việc REST API ngầm khi mở lại ứng dụng. | `src/shared/auth/auth.ts` | Cookie hết hạn hoặc bị xóa sẽ bắt buộc người dùng đăng nhập lại; rủi ro CSRF nếu không cấu hình cờ SameSite (hiện đã giảm thiểu bằng SameSite=Lax/Strict). | `auth.ts:L30` |
+| Bộ phát HTML5 Audio | Phát âm thanh phản hồi khi học viên chọn câu trả lời Đúng/Sai trong slide tương tác. | `src/pages/builder/lib/use-action-runner.ts` | Chính sách chặn tự động phát (Autoplay block policies) của trình duyệt sẽ từ chối phát âm thanh nếu người dùng chưa tương tác click vào trang. | `use-action-runner.ts` |
 
-### 3) Secrets and Credentials Handling
+### 3) Quản lý Thông tin Bảo mật và Đăng nhập (Secrets and Credentials Handling)
 
-- **Credential sources**: Loaded from `.env` via `VITE_API_URL` which configures backend paths (defaults to `http://localhost:8001/v1`).
-- **Authorization Flow**: User submits credentials to `/auth/login`. The server returns an access token, refresh token, and user profile. The access token is stored in `useAuthStore` memory and is automatically injected as a `Bearer` token by `api.ts`.
-- **Session Lifecycle**: The refresh token is saved in a cookie with explicit maximum age. The client background scheduler (`scheduleTokenRefresh` in `auth.ts`) triggers `/auth/refresh-token` 30 seconds before expiration to renew tokens.
-- **Hardcoding checks**: Checked. All endpoint secrets are dynamically mapped via Vite `import.meta.env` properties.
+- **Nguồn cấp thông tin bí mật**: Địa chỉ URL của REST API được cấu hình thông qua biến môi trường `VITE_API_URL` (mặc định trỏ về `http://localhost:8001/v1` nếu không có cấu hình khác).
+- **Luồng Xác thực**: Người dùng nhập tài khoản/mật khẩu và gửi tới `/auth/login`. Server phản hồi kèm access token, refresh token và profile người dùng. Access token được lưu trong bộ nhớ tạm thời của `useAuthStore` và tự động đính kèm vào header `Authorization: Bearer <token>` thông qua middleware của REST client `api.ts`.
+- **Chu kỳ Phiên làm việc**: Refresh token được lưu trong cookie trình duyệt với cấu hình thời gian sống rõ ràng. Client thiết lập một tác vụ hẹn giờ ngầm (`scheduleTokenRefresh` trong `auth.ts`) để gửi yêu cầu làm mới token `/auth/refresh-token` trước khi token hiện tại hết hạn 30 giây.
+- **Kiểm tra ghi cứng mật khẩu (Hardcoding Check)**: Đã kiểm tra. Toàn bộ các địa chỉ API endpoint và cấu hình môi trường đều được ánh xạ động qua biến môi trường Vite `import.meta.env` thay vì ghi trực tiếp vào mã nguồn.
 
-### 4) Reliability and Failure Behavior
+### 4) Độ tin cậy và Xử lý khi Gặp lỗi (Reliability and Failure Behavior)
 
-- **Retry/backoff behavior**: TanStack Query is configured with `retry: 1` for queries to limit loading blockages while gracefully failing over to mock data.
-- **Timeout/Latency Simulation**: Slide saving simulation includes a 600ms latency buffer during offline fallbacks to provide natural spinner feedback.
-- **Circuit-breaker or fallback behavior**:
-  - **Data Queries Failover**: If `/courses`, `/lessons`, or `/slides` requests fail, the application logs warning alerts and falls back to static seed data (`MOCK_COURSES`, `MOCK_LESSONS`, `MOCK_SLIDES`), keeping the viewer fully functional.
-  - **Save Failover**: If saving design layouts to `/lessons/:id/slides` fails, the system catches the error, triggers an offline warning trace, and writes the design state to `localStorage` under `previewer_slides_backup_${lessonId}`, guaranteeing the user's progress is never lost.
-  - **Audio Fallbacks**: Audio plays catch browser autoplay block rules to prevent UI crash freezes.
+- **Hành vi thử lại/Độ trễ lùi (Retry/Backoff)**: TanStack Query được cấu hình thử lại 1 lần duy nhất (`retry: 1`) khi tải dữ liệu để tránh làm treo ứng dụng quá lâu, sau đó lập tức kích hoạt fallback để chuyển sang hiển thị dữ liệu mock tĩnh.
+- **Giả lập Trễ lưu trữ (Latency Simulation)**: Khi API lưu slide bị lỗi và hệ thống chuyển sang lưu dự phòng ngoại tuyến, ứng dụng cố tình tạo một khoảng trễ giả lập 600ms để hiển thị vòng xoay spinner tự nhiên trên giao diện người dùng.
+- **Cơ chế Dự phòng (Circuit-breaker / Fallback)**:
+  - **Dự phòng Tải dữ liệu**: Khi các API lấy dữ liệu khóa học `/courses`, bài giảng `/lessons`, hoặc slide `/slides` gặp lỗi, ứng dụng sẽ in cảnh báo ra console và lấy nguồn dữ liệu mẫu tĩnh (`MOCK_COURSES`, `MOCK_LESSONS`, `MOCK_SLIDES`) để giao diện trình chiếu bài giảng hoạt động bình thường offline.
+  - **Dự phòng Lưu trữ**: Khi tác vụ lưu thiết kế slide tới `/lessons/:id/slides` gặp lỗi (mất mạng hoặc lỗi server), hệ thống bắt lỗi này, hiển thị thông báo cảnh báo lưu ngoại tuyến lên UI, và ghi đè dữ liệu thiết kế vào `localStorage` của trình duyệt dưới khóa `previewer_slides_backup_${lessonId}`, đảm bảo tiến trình thiết kế của giáo viên không bao giờ bị mất.
+  - **Dự phòng Âm thanh**: Logic gọi audio được bọc catch để tránh làm treo ứng dụng React khi gặp chính sách bảo mật trình duyệt chặn autoplay.
 
-### 5) Observability for Integrations
+### 5) Khả năng Giám sát Tích hợp (Observability for Integrations)
 
-- **Logging around external calls**: Login flows, silent refreshes, queries, database syncs, and offline local fallbacks are fully traced using detailed `console.log` / `console.warn` console prints.
-- **Metrics/telemetry coverage**: No remote telemetry engines are connected. Standard browser developer tools provide developer visibility.
+- **Ghi nhật ký cuộc gọi ngoài (Logging)**: Mọi sự kiện đăng nhập, cập nhật token ngầm, truy vấn dữ liệu, lưu dữ liệu và kích hoạt cơ chế fallback ngoại tuyến đều được in chi tiết ra màn hình console của trình duyệt bằng các hàm `console.log` / `console.warn` phục vụ việc gỡ lỗi nhanh.
+- **Hệ thống Đo lường tập trung (Telemetry)**: Dự án hiện tại chạy độc lập và không kết nối với bất kỳ nền tảng phân tích hay đo lường từ xa nào (như Sentry hay Google Analytics). Việc theo dõi hiệu năng và lỗi hoàn toàn dựa trên Developer Tools của trình duyệt.
 
-### 6) Evidence
+### 6) Minh chứng (Evidence)
 
 - [package.json](file:///d:/Dev/Work/previewer/package.json)
-- [src/pages/builder/lib/use-action-runner.ts](file:///d:/Dev/Work/previewer/src/pages/builder/lib/use-action-runner.ts) (local SDK integration)
-- [src/pages/viewer/ui/viewer-page.tsx](file:///d:/Dev/Work/previewer/src/pages/viewer/ui/viewer-page.tsx) (local gameEngine integration)
+- [src/pages/builder/lib/use-action-runner.ts](file:///d:/Dev/Work/previewer/src/pages/builder/lib/use-action-runner.ts) (Tích hợp SDK đánh giá kết quả tại chỗ)
+- [src/pages/viewer/ui/viewer-page.tsx](file:///d:/Dev/Work/previewer/src/pages/viewer/ui/viewer-page.tsx) (Tích hợp Động cơ Game cục bộ)

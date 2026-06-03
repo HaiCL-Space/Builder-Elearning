@@ -32,15 +32,6 @@
 .gitignore
 .prettierignore
 .prettierrc
-.roo
-.roo\rules-architect
-.roo\rules-architect\AGENTS.md
-.roo\rules-ask
-.roo\rules-ask\AGENTS.md
-.roo\rules-code
-.roo\rules-code\AGENTS.md
-.roo\rules-debug
-.roo\rules-debug\AGENTS.md
 .vscode
 .vscode\settings.json
 AGENTS.md
@@ -63,7 +54,6 @@ package-lock.json
 package.json
 public
 public\vite.svg
-skills-lock.json
 src
 src\app
 src\app\providers
@@ -297,6 +287,8 @@ No .env.example or .env.template found. Identify required environment variables 
 .agents\skills\acquire-codebase-knowledge\scripts\scan.py:622: print_section("TODO / FIXME / HACK (production code only, test dirs excluded)", ["None found."], output_file)
 
 === GIT RECENT COMMITS (last 20) ===
+f1ebfe8 feat: implement builder store and initial page scaffolding for lesson management
+453a95e docs: add codebase documentation covering architecture, project structure, concerns, and scan summary
 1f73833 feat: implement slide viewer page with dynamic content rendering and interaction handling
 ccdc3a7 feat: implement initial slide viewer page and architecture documentation
 ba7f1c2 chore: update broker-core-sdk to version 1.0.7
@@ -315,40 +307,38 @@ ba7f1c2 chore: update broker-core-sdk to version 1.0.7
 f145356 feat: integrate React Doctor for automated performance auditing and analysis
 d058c86 feat: add comprehensive codebase documentation, builder utilities, and scaffolding for the editor interface
 f1c8149 feat: add mock slide data for real estate law course demonstration
-220e7ac feat: implement slide builder interface with interactive canvas, element management, and animation controls
-45e61d9 feat: add ViewerPage and integrate routing to switch between Builder and Viewer modes
 
 === HIGH-CHURN FILES (last 90 days, top 20) ===
   12 src/shared/api/mock-slides.ts
   12 src/pages/builder/ui/canvas/CanvasElement.tsx
+  11 src/pages/builder/ui/builder-page.tsx
+  10 src/pages/builder/model/use-builder-store.ts
   10 src/App.tsx
-  10 src/pages/builder/ui/builder-page.tsx
-   9 src/pages/builder/model/use-builder-store.ts
    9 package-lock.json
    9 package.json
    9 src/entities/element/ui/element-preview.tsx
-   7 src/pages/viewer/ui/viewer-page.tsx
-   7 docs/codebase/CONCERNS.md
+   8 src/pages/viewer/ui/viewer-page.tsx
+   8 docs/codebase/CONCERNS.md
+   7 docs/codebase/ARCHITECTURE.md
    7 docs/codebase/CONVENTIONS.md
    7 docs/codebase/INTEGRATIONS.md
    7 src/pages/builder/lib/use-action-runner.ts
    7 src/pages/builder/ui/canvas.tsx
+   6 docs/codebase/STRUCTURE.md
    6 src/pages/builder/ui/left-sidebar.tsx
-   6 docs/codebase/ARCHITECTURE.md
    6 src/entities/element/ui/matching-element.tsx
    6 src/entities/element/ui/sorting-element.tsx
    6 src/pages/builder/ui/right-sidebar.tsx
-   6 src/entities/slide/ui/slide-preview.tsx
 
 === MONOREPO SIGNALS ===
 No monorepo signals detected.
 
 === CODE METRICS ===
-Total files scanned: 215
-Total lines of code: 24184
+Total files scanned: 210
+Total lines of code: 24684
 
 Files by language:
-  Other: 127
+  Other: 122
   TypeScript/React: 58
   TypeScript: 28
   JavaScript: 1
@@ -364,7 +354,7 @@ data\luat-kinh-doanh-bat-dong-san-2023.md: 32.8KB
 src\pages\home\ui\HomePage.tsx: 22.0KB
 src\entities\element\ui\crossword-element.tsx: 19.7KB
 .agents\skills\feature-sliced-design\SKILL.md: 19.6KB
-.agents\skills\feature-sliced-design\references\practical-examples.md: 18.1KB
+src\pages\viewer\ui\viewer-page.tsx: 18.3KB
 
 === CI/CD PIPELINES ===
 No CI/CD pipelines detected.

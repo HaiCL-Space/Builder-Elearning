@@ -1,60 +1,60 @@
-# Coding Conventions
+# Quy ước Lập trình (Coding Conventions)
 
-## Core Sections (Required)
+## Các phần cốt lõi (Bắt buộc)
 
-### 1) Naming Rules
+### 1) Quy tắc Đặt tên (Naming Rules)
 
-| Item | Rule | Example | Evidence |
-|------|------|---------|----------|
+| Thành phần | Quy tắc | Ví dụ | Minh chứng |
+|---|---|---|---|
 | React Components | **PascalCase** | `CanvasElement.tsx`, `CustomAlertDialog.tsx` | `src/pages/builder/ui/canvas/` |
-| Directories / Slices | **kebab-case** | `theme-provider`, `builder-utils` | `src/app/providers/`, `src/shared/lib/` |
-| Functions and Hooks | **camelCase** | `useActionRunner()`, `handleAction()` | `src/pages/builder/lib/use-action-runner.ts` |
-| Types and Interfaces | **PascalCase** | `BuilderElement`, `BuilderState` | `src/pages/builder/model/types.ts` |
-| Constants / Configs | **UPPER_SNAKE_CASE** | `MOCK_SLIDES`, `THEME_BACKGROUNDS` | `src/shared/api/mock-slides.ts` |
+| Thư mục / Slices | **kebab-case** | `theme-provider`, `builder-utils` | `src/app/providers/`, `src/shared/lib/` |
+| Hàm và Hooks | **camelCase** | `useActionRunner()`, `handleAction()` | `src/pages/builder/lib/use-action-runner.ts` |
+| Kiểu dữ liệu / Interfaces | **PascalCase** | `BuilderElement`, `BuilderState` | `src/pages/builder/model/types.ts` |
+| Hằng số / Tập cấu hình | **UPPER_SNAKE_CASE** | `MOCK_SLIDES`, `THEME_BACKGROUNDS` | `src/shared/api/mock-slides.ts` |
 
-### 2) Formatting and Linting
+### 2) Định dạng Code và Linter (Formatting and Linting)
 
-- **Formatter**: Prettier. Configured via [.prettierrc](file:///d:/Dev/Work/previewer/.prettierrc):
-  - No semicolons (`semi: false`).
-  - Standard double quotes (`singleQuote: false`).
-  - Tab spacing of 2 spaces (`tabWidth: 2`).
-  - Strict line wrapping at 80 characters (`printWidth: 80`).
-  - Integrated `prettier-plugin-tailwindcss` for class sorting.
-  - Aligned style target point: `"tailwindStylesheet": "src/app/styles/index.css"`.
-- **Linter**: ESLint. Configured via [eslint.config.js](file:///d:/Dev/Work/previewer/eslint.config.js):
-  - Extends recommended flat configs for JS (`js.configs.recommended`), TS (`tseslint.configs.recommended`), and React (`reactHooks.configs.flat.recommended`, `reactRefresh.configs.vite`).
-- **Most relevant enforced rules**: Enforces React Hook declaration order, forbids explicit `any` casting, and requires strict type assertions.
-- **Run commands**:
-  - `npm run format` (formats codebase files with Prettier)
-  - `npm run lint` (runs ESLint validation and scans for type errors)
-  - `npm run typecheck` (runs typescript compiler type-audits)
+- **Công cụ định dạng (Formatter)**: Prettier. Cấu hình thông qua tệp [.prettierrc](file:///d:/Dev/Work/previewer/.prettierrc):
+  - Không sử dụng dấu chấm phẩy cuối dòng (`semi: false`).
+  - Sử dụng dấu nháy kép tiêu chuẩn (`singleQuote: false`).
+  - Khoảng cách lùi dòng là 2 dấu cách (`tabWidth: 2`).
+  - Độ dài tối đa của dòng code là 80 ký tự (`printWidth: 80`).
+  - Sử dụng plugin `prettier-plugin-tailwindcss` để tự động sắp xếp class Tailwind.
+  - Định rõ đường dẫn tệp stylesheet chứa các biến lớp Tailwind: `"tailwindStylesheet": "src/app/styles/index.css"`.
+- **Công cụ kiểm tra lỗi tĩnh (Linter)**: ESLint. Cấu hình thông qua tệp [eslint.config.js](file:///d:/Dev/Work/previewer/eslint.config.js):
+  - Mở rộng các tập quy tắc flat config khuyến nghị dành cho JS (`js.configs.recommended`), TS (`tseslint.configs.recommended`), và React (`reactHooks.configs.flat.recommended`, `reactRefresh.configs.vite`).
+- **Các quy tắc nghiêm ngặt được áp dụng**: Bắt buộc tuân thủ thứ tự khai báo React Hook, cấm ép kiểu `any` tùy ý, và yêu cầu khai báo rõ ràng kiểu dữ liệu nghiêm ngặt trong TypeScript.
+- **Các câu lệnh vận hành**:
+  - `npm run format` (tự động định dạng toàn bộ các tệp tin `.ts`, `.tsx` bằng Prettier).
+  - `npm run lint` (quét lỗi và cảnh báo linter thông qua ESLint).
+  - `npm run typecheck` (chạy trình biên dịch tsc kiểm tra lỗi kiểu dữ liệu).
 
-### 3) Import and Module Conventions
+### 3) Quy ước Import và Phân tách Module (Import and Module Conventions)
 
-- **Import grouping/order**: Standard ES imports. CSS stylesheets and React core libraries are imported at the top, followed by absolute `@/` alias paths, then relative layout files.
-- **Alias vs relative import policy**: Path alias `@/` mapping to `src/` is strictly enforced for cross-layer imports (e.g. `@/shared/ui/button`). Deep relative imports across layers (such as `../../shared/ui`) are prohibited.
-- **Public exports/barrel policy**: FSD public API boundaries are created using barrel files (`index.ts`) at slice and segment entry points. Slices must import from these public barrels instead of target file internals.
+- **Thứ tự/Nhóm các lệnh import**: Tuân thủ chuẩn ES imports. Các thư viện CSS toàn cục và React core được khai báo trên cùng, tiếp theo là các đường dẫn import tuyệt đối bắt đầu bằng alias `@/`, và cuối cùng là các file layout tương đối cục bộ.
+- **Quy định sử dụng Alias path**: Đường dẫn alias tuyệt đối `@/` trỏ tới `src/` là bắt buộc đối với tất cả các import liên lớp (ví dụ: `@/shared/ui/button`). Nghiêm cấm sử dụng import tương đối sâu (ví dụ: `../../shared/ui`) khi vượt qua ranh giới giữa các lớp kiến trúc.
+- **Quy tắc xuất bản Public API (Barrel policy)**: Áp dụng tệp entry `index.ts` ở cấp độ ngoài cùng của các slices và segments. Các thư mục bên ngoài khi cần tương tác với slice chỉ được phép import thông qua tệp `index.ts` công khai này thay vì chọc sâu vào các file cấu trúc nội bộ của slice.
 
-### 4) Error and Logging Conventions
+### 4) Quy ước Ghi log và Xử lý Lỗi (Error and Logging Conventions)
 
-- **Error strategy by layer**:
-  - **API Fetching Layer**: REST requests are wrapped in try/catch inside TanStack Query options (`queries.ts`). If the request fails (e.g. server is down), a warning is logged using `console.warn` and static in-memory fallback datasets are returned (`MOCK_COURSES`, `MOCK_LESSONS`, `MOCK_SLIDES`) to keep the app fully functional offline.
-  - **Interaction Layer**: High-risk browser actions (such as HTML5 media playing `audio.play()`) are wrapped in `.catch()` promises to log issues silently to the developer console and prevent UI crashes.
-  - **Form/Quiz Validation**: Missing answers or incomplete interaction inputs trigger a non-blocking UI alert modal (`setAlert` in the builder store or `setActiveAlert` in the viewer page) rather than throwing runtime errors.
-- **JWT Auto-Injection**: Outgoing requests through `api.ts` automatically intercept and check `useAuthStore` memory state. If `accessToken` is active, it injects an `Authorization: Bearer <token>` header.
-- **Logging style**: System flow actions (such as navigating slides, validating games, silent session refreshes, or clicking hotspots) write clear traces to the developer console `console.log()` for clean local debugging. No external cloud logging platform is integrated.
-- **Sensitive-data redaction rules**: User passwords and tokens are only passed through secure TLS channels. Refresh tokens are secured via `SameSite=Lax` cookies with `Secure` flags on production environments, and access tokens are kept solely in memory state to mitigate XSS exposure.
+- **Chiến lược xử lý lỗi theo từng phân lớp**:
+  - **Tầng gọi API**: Các truy vấn REST được bọc trong khối `try/catch` của TanStack Query (`queries.ts`). Khi kết nối bị lỗi hoặc server offline, hệ thống sẽ ghi log cảnh báo (`console.warn`) và tự động trả về các tập dữ liệu giả lập mẫu (`MOCK_COURSES`, `MOCK_LESSONS`, `MOCK_SLIDES`) để đảm bảo ứng dụng không bị lỗi ngắt quãng và vẫn chạy offline bình thường.
+  - **Tầng tương tác UI**: Các thao tác trình duyệt có độ rủi ro (như kích hoạt phát âm thanh `audio.play()`) được bọc trong các promise `.catch()` để ghi log lỗi ngầm vào console thay vì gây treo luồng UI.
+  - **Tầng xác thực Form/Quiz**: Trả lời câu hỏi thiếu thông tin hoặc sai định dạng sẽ kích hoạt modal cảnh báo UI (`setAlert` trong builder store hoặc `setActiveAlert` trong viewer page) thay vì sinh ra lỗi runtime phá hỏng ứng dụng.
+- **Tự động tiêm Token JWT (JWT Auto-Injection)**: Mọi yêu cầu gọi API thông qua REST client `api.ts` đều đi qua bộ lọc chặn (interceptors) để lấy `accessToken` từ bộ nhớ của `useAuthStore` và tự động đính kèm vào tiêu đề `Authorization: Bearer <token>`.
+- **Phong cách ghi log**: Các thao tác hệ thống (chuyển slide, nộp bài kiểm tra tương tác, làm mới phiên đăng nhập ngầm, nhấn hotspot, v.v.) được ghi nhận rõ ràng vào console trình duyệt thông qua `console.log()` để lập trình viên dễ dàng theo dõi và debug cục bộ. Dự án hiện chưa tích hợp nền tảng thu thập nhật ký tập trung bên thứ ba nào.
+- **Quy định bảo mật dữ liệu nhạy cảm**: Mật khẩu và token chỉ truyền qua các kênh TLS an toàn. Refresh token được lưu trong Cookie và cấu hình cờ `SameSite=Lax` cùng cờ `Secure` trên môi trường production; Access token chỉ được duy trì trong bộ nhớ tạm thời của Zustand store để hạn chế tối đa rủi ro tấn công XSS.
 
-### 5) Testing Conventions
+### 5) Quy ước Kiểm thử (Testing Conventions)
 
-- **Test file naming/location rule**: None. The project currently has no automated tests configured.
-- **Mocking strategy norm**: N/A.
-- **Coverage expectation**: N/A.
+- **Quy tắc đặt tên file/Thư mục test**: Không áp dụng. Dự án hiện chưa thiết lập bộ công cụ test tự động.
+- **Chiến lược mock dữ liệu trong test**: Không áp dụng.
+- **Kỳ vọng độ bao phủ kiểm thử (Coverage)**: Không áp dụng.
 
-### 6) Evidence
+### 6) Minh chứng (Evidence)
 
 - [eslint.config.js](file:///d:/Dev/Work/previewer/eslint.config.js)
 - [.prettierrc](file:///d:/Dev/Work/previewer/.prettierrc)
-- [tsconfig.app.json](file:///d:/Dev/Work/previewer/tsconfig.app.json) (Strict types config)
-- [src/pages/builder/lib/use-action-runner.ts](file:///d:/Dev/Work/previewer/src/pages/builder/lib/use-action-runner.ts) (Audio try/catch pattern)
-- [src/entities/element/index.ts](file:///d:/Dev/Work/previewer/src/entities/element/index.ts) (Barrel export convention)
+- [tsconfig.app.json](file:///d:/Dev/Work/previewer/tsconfig.app.json) (Cấu hình kiểm tra kiểu dữ liệu nghiêm ngặt)
+- [src/pages/builder/lib/use-action-runner.ts](file:///d:/Dev/Work/previewer/src/pages/builder/lib/use-action-runner.ts) (Cơ chế try/catch khi phát nhạc tương tác)
+- [src/entities/element/index.ts](file:///d:/Dev/Work/previewer/src/entities/element/index.ts) (Tệp barrel file mẫu của lớp entities)
